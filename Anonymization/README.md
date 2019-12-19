@@ -6,4 +6,4 @@ This uses opencv. Edit the code to enter the original video nam,e and the output
 
 TODO: pass input parameters by argument.
 
-![usage image](/Artusage.gif "Usage")
+![usage image](/Art/usage.gif "Usage")
