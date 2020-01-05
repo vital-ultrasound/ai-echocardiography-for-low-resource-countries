@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
-
-
 # convert DICOM files to AVI files of a defined size (natively 112 x 112)
 
 import re
@@ -29,18 +26,6 @@ import math
 destinationFolder = "C:\\Users\\huynh\\OneDrive\\Máy tính\\GEMS_IMG\\AVI"
 
 
-# In[3]:
-
-
-# Dependencies you might need to run code
-# Commonly missing
-
-#!pip install pydicom
-#!pip install opencv-python
-
-
-# In[4]:
-
 
 def mask(output):
     dimension = output.shape[0]
@@ -57,9 +42,6 @@ def mask(output):
     #print(maskedImage.shape)
     
     return maskedImage
-
-
-# In[5]:
 
 
 def makeVideo(fileToProcess, destinationFolder):
@@ -124,19 +106,11 @@ def makeVideo(fileToProcess, destinationFolder):
     return 0
 
 
-# In[1]:
-
 
 fileToProcess = "C:\\Users\\huynh\\OneDrive\\Máy tính\\GEMS_IMG\\JD141706\\a4c\\K13EA882" 
 
 
-# In[11]:
-
-
 makeVideo(fileToProcess, destinationFolder) #runing code
-
-
-# In[9]:
 
 
 # Question: How to iterates through a folder, including subfolders, 
