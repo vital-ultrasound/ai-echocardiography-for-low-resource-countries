@@ -106,6 +106,10 @@ def makeVideo(fileToProcess, destinationFolder):
     return 0
 
 
+count = 0
+    
+cropSize = (112,112)
+
 
 fileToProcess = "C:\\Users\\huynh\\OneDrive\\Máy tính\\GEMS_IMG\\JD141706\\a4c\\K13EA882" 
 
