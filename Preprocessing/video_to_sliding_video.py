@@ -62,5 +62,5 @@ if __name__ == '__main__':
     # optional input parameters
     # new video size
 
-    boxwidth = (80, 60)  # rows x columns the size of the video will be twice this
+    boxwidth = (64, 64)  # rows x columns the size of the video will be twice this
     VideoToSlidingVideo(videofile_in, videofile_out, boxwidth)
