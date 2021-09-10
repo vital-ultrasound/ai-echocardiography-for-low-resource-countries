@@ -1,9 +1,18 @@
-# Echo processing repository
-Part of the VITAL project
+# Automatic Biometric Recognition from echocardiography data 
 
-Author: Alberto Gomez and Nhat Phung Tran Huy
+## Summary 
+This repository contains code for: 
+* anonimisation of video clips
+* preprocessing of ultrasound datasets
 
-# Summary
+## Clone repository
+After generating your SSH keys as suggested [here](https://docs.gitlab.com/ee/ssh/), then you can clone the repository by typing (or copying) the following in a terminal:
+```
+git clone git@gitlab.com:vital-ultrasound/echocardiography.git
+```
 
-This repository has
-* code to anonymise video clips 
+## Contributors
+Alberto Gomez [@gomezalberto](https://gitlab.com/gomezalberto)   
+Hamideh Kerdegari [@hamidehkerdegari](https://gitlab.com/hamidehkerdegari)   
+Nhat Phung Tran Huy [@nhatpth](https://gitlab.com/nhatpth)  
+Miguel Xochicale [@mxochicale](https://gitlab.com/mxochicale)   
