@@ -7,5 +7,5 @@ conda activate veCARUS
 python ConvertDICOMtoAVI.py
 ```
 
-## Reference 
-`ConvertDICOMtoAVI.py` was taken from https://github.com/echonet/dynamic/blob/master/scripts/ConvertDICOMToAVI.ipynb   
+## Reference
+* David Ouyang is the author of [`ConvertDICOMtoAVI.py`](https://github.com/echonet/dynamic/blob/master/scripts/ConvertDICOMToAVI.ipynb).   
