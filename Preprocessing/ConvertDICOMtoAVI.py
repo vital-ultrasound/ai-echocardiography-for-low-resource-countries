@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# convert DICOM files to AVI files of a defined size (natively 112 x 112)
-
 import re
 import os, os.path
 from os.path import splitext
@@ -23,41 +21,39 @@ import sys
 from shutil import copy
 import math
 
-destinationFolder = "C:\\Users\\huynh\\OneDrive\\Máy tính\\GEMS_IMG\\AVI"
-
-
 
 def mask(output):
     dimension = output.shape[0]
     
     # Mask pixels outside of scanning sector
     m1, m2 = np.meshgrid(np.arange(dimension), np.arange(dimension))
-    
 
     mask = ((m1+m2)>int(dimension/2) + int(dimension/10)) 
     mask *=  ((m1-m2)<int(dimension/2) + int(dimension/10))
     mask = np.reshape(mask, (dimension, dimension)).astype(np.int8)
     maskedImage = cv2.bitwise_and(output, output, mask = mask)
-    
-    #print(maskedImage.shape)
-    
+
     return maskedImage
 
 
 def makeVideo(fileToProcess, destinationFolder):
     try:
-        fileName = fileToProcess.split('\\')[-1] #\\ if windows, / if on mac or sherlock
-                                                 #hex(abs(hash(fileToProcess.split('/')[-1]))).upper()
+        fileName = fileToProcess.split('/')[-1]  # \\ if GNU/linux OS
+        # fileName = fileToProcess.split('\\')[-1] #\\ if Windows OS
+        # fileName = hex(abs(hash(fileToProcess.split('/')[-1]))).upper() ##/ if on mac or sherlock
 
         if not os.path.isdir(os.path.join(destinationFolder,fileName)):
+
+            cropSize = (112, 112)
 
             dataset = dicom.dcmread(fileToProcess, force=True)
             testarray = dataset.pixel_array
 
+            ## yCrop mean
             frame0 = testarray[0]
             mean = np.mean(frame0, axis=1)
-            mean = np.mean(mean, axis=1)
-            yCrop = np.where(mean<1)[0][0]
+            mean = np.mean(mean)
+            yCrop = np.where(mean<90)[0][0]
             testarray = testarray[:, yCrop:, :, :]
 
             bias = int(np.abs(testarray.shape[2] - testarray.shape[1])/2)
@@ -66,7 +62,6 @@ def makeVideo(fileToProcess, destinationFolder):
                     testarray = testarray[:, :, bias:-bias, :]
                 else:
                     testarray = testarray[:, bias:-bias, :, :]
-
 
             print(testarray.shape)
             frames,height,width,channels = testarray.shape
@@ -106,16 +101,16 @@ def makeVideo(fileToProcess, destinationFolder):
     return 0
 
 
-count = 0
-    
-cropSize = (112,112)
+def main():
+    # destinationFolder = "C:\\Users\\huynh\\OneDrive\\Máy tính\\GEMS_IMG\\AVI"
+    destinationFolder = "/home/mx19/datasets/vital/01NVb-003-001/T1/preprocessed-data/DICOM2AVI"
+    # fileToProcess = "C:\\Users\\huynh\\OneDrive\\Máy tính\\GEMS_IMG\\JD141706\\a4c\\K13EA882"
+    # fileToProcess = "/home/mx19/datasets/vital/01NVb-003-001/T1/_T145245/K61FES84" # shape (846, 1538, 3), mean 85.36389250108367
+    fileToProcess = "/home/mx19/datasets/vital/01NVb-003-001/T1/_T145245/K61G7OG2"  # shape (96, 846, 1538, 3), mean 88.75089433843549
 
+    makeVideo(fileToProcess, destinationFolder)
 
-fileToProcess = "C:\\Users\\huynh\\OneDrive\\Máy tính\\GEMS_IMG\\JD141706\\a4c\\K13EA882" 
+if __name__=='__main__':
+    main()
 
-
-makeVideo(fileToProcess, destinationFolder) #runing code
-
-
-# Question: How to iterates through a folder, including subfolders, 
-
+    # Question: How to iterates through a folder, including subfolders,
