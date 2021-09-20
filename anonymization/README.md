@@ -18,7 +18,7 @@ where `videoin` is the original video, `video_anonymized` is the anonymized vide
 blocks can be removed by selecting a the values of `A`, `B`, `C`, and `D` accordingly. In the picture below, the values were 300 1550 60 850.
 
 
-![usage image](Art/ffmpeg.png)
+![usage image](art/ffmpeg.png)
 
 2. anonymize_video_blackblock.sh 
 
@@ -29,7 +29,7 @@ bash anonymize_video_blackblock.sh videoin.mp4 video_anonymized.mp4 A B C D
 ```
 where `videoin` is the original video, `video_anonymized` is the anonymized video with a black frame around the ultrasound image, and `A`, `B`, `C`, and `D` are the bounds (in pixels) of the block to be blacked out, as shown below. 
 
-![usage image](Art/ffmpeg2.png)
+![usage image](art/ffmpeg2.png)
 
 blocks can be removed by selecting a the values of `A`, `B`, `C`, and `D` accordingly. In the picture below, the values were 300 1550 60 850.
 
@@ -41,7 +41,7 @@ This uses opencv. Edit the code to enter the original video nam,e and the output
 
 TODO: pass input parameters by argument.
 
-![usage image](Art/usage.gif)
+![usage image](art/usage.gif)
 
 
 
