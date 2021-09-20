@@ -1,4 +1,4 @@
-# Real-time artificial-intelligence-empowered echocardiography
+# Real-time artificial-intelligence-based echocardiography
 
 ## Summary 
 This repository contains code, data and documentation on the implementation of real-time artificial-intelligence-empowered echocardiography.

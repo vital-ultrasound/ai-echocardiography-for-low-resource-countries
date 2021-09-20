@@ -1,11 +1,10 @@
 # Preprocessing of Cardiac Ultrasound data
 
-## ConvertDICOMtoAVI.py
+## convertDICOMtoAVI.py
 The script converts DICOM files into AVI files of a size defined by `cropSize = (112, 112)`.
-David Ouyang is the author of [`ConvertDICOMtoAVI.py`](https://github.com/echonet/dynamic/blob/master/scripts/ConvertDICOMToAVI.ipynb). 
 ```
 conda activate veCARUS 
-python ConvertDICOMtoAVI.py
+python convertDICOMtoAVI.py --homedatapath $HOME/datasets/vital
 ```
 
 ## DICOM Metadata 
@@ -111,5 +110,5 @@ Dataset.file_meta -------------------------------
 
 
 ## Reference
-* https://github.com/echonet/
-* 
+* David Ouyang is the author of [`ConvertDICOMtoAVI.py`](https://github.com/echonet/dynamic/blob/master/scripts/ConvertDICOMToAVI.ipynb).
+* See more https://github.com/echonet/ 
