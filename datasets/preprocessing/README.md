@@ -1,7 +1,7 @@
-# Preprocessing of Cardiac Ultrasound data
+# Preprocessing Cardiac Ultrasound data
 
 ## convertDICOMtoAVI.py
-The script converts DICOM files into AVI files of a size defined by `cropSize = (112, 112)`.
+The script converts DICOM files into AVI files.
 ```
 conda activate veCARUS 
 python convertDICOMtoAVI.py --homedatapath $HOME/datasets/vital

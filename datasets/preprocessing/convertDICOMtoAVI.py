@@ -119,7 +119,6 @@ def main():
         count += 1
         VideoPath_DICOMfile_i = os.path.join(pathToProcess, DICOMfile_i)
         print(f' + DICOMfile_i (', {DICOMfile_i}, '=' , {count} , '/' , {total_number_of_DICOMfiles})
-        # print(f' + DICOMfile_i (', {DICOMfile_i}, ')=')
         if not os.path.exists(os.path.join(destinationFolder, DICOMfile_i + ".avi")):
             makeVideo(VideoPath_DICOMfile_i, destinationFolder, cropSize)
         else:
