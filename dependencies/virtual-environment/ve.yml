@@ -1,6 +1,6 @@
 ## Usage:
 ## conda env create -f env.yml
-name: veCARUS
+name: veAECHO
 channels:
    - conda-forge
 #  - pytorch

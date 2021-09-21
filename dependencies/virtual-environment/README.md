@@ -6,7 +6,7 @@
 Using `env.yml` create an environment
 ```
 conda deactivate
-conda env create -f env.yml
+conda env create -f ve.yml
 conda activate $VE
 ```
 
