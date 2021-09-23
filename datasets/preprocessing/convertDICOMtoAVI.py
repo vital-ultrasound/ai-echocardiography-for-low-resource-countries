@@ -74,8 +74,15 @@ def makeVideo(fileToProcess, destinationFolder, cropSize):
 
             dataset = dicom.dcmread(fileToProcess, force=True)
             # print(dataset) # Print metadata
-            print(f'  DICOM_i[0x0008, 0x1030]:  {dataset[0x0008, 0x1030]}')# e.g. Study Description  LO: 'Lung / Cons/Eff'
-            print(f'  DICOM_i[0x7fe0, 0x0010]:  {dataset[0x7fe0, 0x0010]}')  # e.g. Pixel Data
+            print(f'    metaDICOM:  {dataset[0x0008, 0x1030]}') # Study Description  LO: 'Lung / Cons/Eff'
+            print(f'    metaDICOM:  {dataset[0x7fe0, 0x0010]}') # Pixel Data
+            print(f'    metaDICOM:  {dataset[0x0018, 0x0040]}') # Cine Rate
+            print(f'    metaDICOM:  {dataset[0x0018, 0x1242]}') # Actual Frame Duration
+            print(f'    metaDICOM:  {dataset[0x0018, 0x1063]}')  #  Frame Time
+            print(f'    metaDICOM:  {dataset[0x0018, 0x1066]}')  # Frame Delay
+            print(f'    metaDICOM:  {dataset[0x0018, 0x1088]}')  # Heart Rate
+            print(f'    metaDICOM:  {dataset[0x0028, 0x0008]}')  # Number of Frames
+            print(f'    metaDICOM:  {dataset[0x0028, 0x0009]}')  # Frame Increment Pointer
 
             testarray = dataset.pixel_array
 
@@ -107,7 +114,7 @@ def makeVideo(fileToProcess, destinationFolder, cropSize):
         else:
             print(fileName,"hasAlreadyBeenProcessed")
     except:
-        print("   :warning: Something failed, not sure what, have to debug", fileName)
+        print(":WARNING: Something failed, not sure what, have to debug", fileName)
     return 0
 
 
@@ -128,7 +135,7 @@ def main():
     cropSize = (1538, 846)  ## Frame Resolution
     for DICOMfiles_path_i in main_DICOMfiles_path:
         day_i=DICOMfiles_path_i[53:55]
-        print(f'Day:',{day_i})
+        print(f'>>>>> Day:',{day_i})
         DICOMfiles_path_i_ = os.listdir(DICOMfiles_path_i)
         total_number_of_DICOMfiles = len(DICOMfiles_path_i_)
 
@@ -142,7 +149,7 @@ def main():
             if not os.path.exists(destinationFolder_DICOMfile_i_AVI_):
                 makeVideo(VideoPath_DICOMfile_i, destinationFolder_DICOMfile_i_, cropSize)
             else:
-                 print("  :warning: Already did this file", DICOMfile_i)
+                 print(":WARNING: Already did this file", DICOMfile_i)
 
 if __name__=='__main__':
     main()
