@@ -4,7 +4,7 @@
 The script converts DICOM files into AVI files.
 ```
 conda activate ve-AICU
-python convertDICOMtoAVI.py --homedatapath $HOME/datasets/vital
+python convertDICOMtoAVI.py --datapath $HOME/datasets/vital --rawdatapath raw-datasets/01NVb-003-001 --preprocesseddatapath preprocessed-datasets/01NVb-003-001
 ```
 
 ## DICOM Metadata 

@@ -25,6 +25,12 @@ def asciiart():
                     """)
     # Reference: https://patorjk.com/software/taag/#p=testall&f=JS%20Stick%20Letters&t=ai-echo%0A
 
+def fast_scandir(dirname):
+    subfolders= [f.path for f in os.scandir(dirname) if f.is_dir()]
+    for dirname in list(subfolders):
+        subfolders.extend(fast_scandir(dirname))
+    return subfolders
+
 def mask(output):
     dimension = output.shape[0]
     # Mask pixels outside of scanning sector
@@ -61,10 +67,16 @@ def makeVideo(fileToProcess, destinationFolder, cropSize):
         # fileName = hex(abs(hash(fileToProcess.split('/')[-1]))).upper() ##/ if on mac or sherlock
 
         if not os.path.isdir(os.path.join(destinationFolder,fileName)):
+            try:
+                os.makedirs(destinationFolder)
+            except FileExistsError:
+                pass
 
             dataset = dicom.dcmread(fileToProcess, force=True)
             # print(dataset) # Print metadata
-            print(f' {dataset[0x0008, 0x1030]}')# e.g. Study Description  LO: 'Lung / Cons/Eff'
+            print(f'  DICOM_i[0x0008, 0x1030]:  {dataset[0x0008, 0x1030]}')# e.g. Study Description  LO: 'Lung / Cons/Eff'
+            print(f'  DICOM_i[0x7fe0, 0x0010]:  {dataset[0x7fe0, 0x0010]}')  # e.g. Pixel Data
+
             testarray = dataset.pixel_array
 
             frames,height,width,channels = testarray.shape
@@ -102,27 +114,35 @@ def makeVideo(fileToProcess, destinationFolder, cropSize):
 def main():
     asciiart()
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--homedatapath', required=True, help='Specify the dataset path.')
+    parser.add_argument('--datapath', required=True, help='Specify the dataset path.')
+    parser.add_argument('--rawdatapath', required=True, help='Specify rawdataset path.')
+    parser.add_argument('--preprocesseddatapath', required=True, help='Specify rawdataset path.')
     args = parser.parse_args()
 
     ## Data Paths
-    pathToProcess = os.path.join(args.homedatapath, 'raw-datasets/01NVb-003-001/T1/_T145245')
-    destinationFolder = os.path.join(args.homedatapath, 'preprocessed-datasets/01NVb-003-001/T1')
-
-    DICOMfiles_path = os.listdir(pathToProcess)
-    total_number_of_DICOMfiles = len(DICOMfiles_path)
+    pathToProcess = os.path.join(args.datapath, args.rawdatapath )
+    destinationFolder = os.path.join(args.datapath, args.preprocesseddatapath )
+    number_of_paths=len(fast_scandir(pathToProcess))
+    main_DICOMfiles_path=fast_scandir(pathToProcess)[int(number_of_paths/2):number_of_paths]
 
     cropSize = (1538, 846)  ## Frame Resolution
+    for DICOMfiles_path_i in main_DICOMfiles_path:
+        day_i=DICOMfiles_path_i[53:55]
+        print(f'Day:',{day_i})
+        DICOMfiles_path_i_ = os.listdir(DICOMfiles_path_i)
+        total_number_of_DICOMfiles = len(DICOMfiles_path_i_)
 
-    count = 0
-    for DICOMfile_i in DICOMfiles_path:
-        count += 1
-        VideoPath_DICOMfile_i = os.path.join(pathToProcess, DICOMfile_i)
-        print(f' + DICOMfile_i (', {DICOMfile_i}, '=' , {count} , '/' , {total_number_of_DICOMfiles})
-        if not os.path.exists(os.path.join(destinationFolder, DICOMfile_i + ".avi")):
-            makeVideo(VideoPath_DICOMfile_i, destinationFolder, cropSize)
-        else:
-             print("  :warning: Already did this file", DICOMfile_i)
+        count = 0
+        for DICOMfile_i in DICOMfiles_path_i_:
+            count += 1
+            VideoPath_DICOMfile_i = os.path.join(DICOMfiles_path_i, DICOMfile_i)
+            print(f'  DICOMfile_i:', {DICOMfile_i}, ';' , {count} , '/' , {total_number_of_DICOMfiles})
+            destinationFolder_DICOMfile_i_ = os.path.join(destinationFolder, day_i)
+            destinationFolder_DICOMfile_i_AVI_ = os.path.join(destinationFolder_DICOMfile_i_, DICOMfile_i + ".avi")
+            if not os.path.exists(destinationFolder_DICOMfile_i_AVI_):
+                makeVideo(VideoPath_DICOMfile_i, destinationFolder_DICOMfile_i_, cropSize)
+            else:
+                 print("  :warning: Already did this file", DICOMfile_i)
 
 if __name__=='__main__':
     main()
