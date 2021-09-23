@@ -106,8 +106,8 @@ def main():
     args = parser.parse_args()
 
     ## Data Paths
-    pathToProcess = os.path.join(args.homedatapath, '01NVb-003-001/T3/preprocessed-data/tests-dicoms')
-    destinationFolder = os.path.join(args.homedatapath, '01NVb-003-001/T3/preprocessed-data/DICOM2AVI')
+    pathToProcess = os.path.join(args.homedatapath, 'raw-datasets/01NVb-003-001/T1/_T145245')
+    destinationFolder = os.path.join(args.homedatapath, 'preprocessed-datasets/01NVb-003-001/T1')
 
     DICOMfiles_path = os.listdir(pathToProcess)
     total_number_of_DICOMfiles = len(DICOMfiles_path)

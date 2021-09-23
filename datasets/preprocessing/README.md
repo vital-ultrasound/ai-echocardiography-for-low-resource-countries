@@ -3,7 +3,7 @@
 ## convertDICOMtoAVI.py
 The script converts DICOM files into AVI files.
 ```
-conda activate veCARUS 
+conda activate ve-AICU
 python convertDICOMtoAVI.py --homedatapath $HOME/datasets/vital
 ```
 

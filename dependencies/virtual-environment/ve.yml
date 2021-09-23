@@ -15,4 +15,4 @@ dependencies:
   - pip
   - pip:
      - pydicom
-     #- opencv-python
+     - opencv-python
