@@ -1,15 +1,18 @@
 ## Usage:
-## conda env create -f env.yml
-name: veAECHO
+## conda env create -f ve.yml
+name: ve-AICU
 channels:
-   - conda-forge
-#  - pytorch
-#  - defaults
+  - pytorch
+  - nvidia
+  - defaults
+#  - conda-forge
 dependencies:
-  - python=3.8
-  - numpy
+  - python=3.8.*
+  - pytorch=1.9.1
+  - cudatoolkit=11.1
   - matplotlib
+  - numpy
   - pip
   - pip:
-     - opencv-python
      - pydicom
+     #- opencv-python

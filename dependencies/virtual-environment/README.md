@@ -5,15 +5,13 @@
 ### Creation
 Using `env.yml` create an environment
 ```
-conda deactivate
 conda env create -f ve.yml
 conda activate $VE
 ```
 
 ### Update env
 ```
-conda env update --file env.yml  --prune
-conda activate $VE
+bash update-ve.bash
 ```
 "The --prune option causes conda to remove any dependencies that are no longer required from the environment."
 https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
@@ -22,7 +20,7 @@ https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environme
 ### Run env 
 Open a terminal and run: 
 ```
-conda activate timeseries
+conda activate $VE
 ```
 
 ## rename vitual environment
@@ -31,14 +29,13 @@ conda activate timeseries
 conda create --name new_name --copy --clone old_name
 conda remove --name old_name --all # or its alias: `conda env remove --name old_name`
 ```
-exmaple
+example
 ```
 conda create --name ve-python38-cuda11 --copy --clone ve-python38-cuda112
 conda remove --name ve-python38-cuda112 --all
 ```
 
 ## list env
-
 You can list all discoverable environments with `conda info --envs`.
 
 ## Manual creation 
@@ -55,9 +52,8 @@ conda activate testing
 ```
 
 
-* deactivate your tensorflow conda env 
+* deactivate your conda env 
 ```
-conda deactivate
 conda deactivate
 ```
 
@@ -71,5 +67,3 @@ conda remove -n testing --all
 ## Learn more
 * https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
 * https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c
-
-
