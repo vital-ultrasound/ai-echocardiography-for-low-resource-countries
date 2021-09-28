@@ -4,7 +4,8 @@
 The script converts DICOM files into AVI files.
 ```
 conda activate ve-AICU
-python convertDICOMtoAVI.py --datapath $HOME/datasets/vital --rawdatapath raw-datasets/01NVb-003-001 --preprocesseddatapath preprocessed-datasets/01NVb-003-001
+cd $HOME/vital-us/echocardiography/datasets/preprocessing
+python convertDICOMtoAVI.py --datapath $HOME/datasets/vital-us --participant_ID 01NVb-003-001
 ```
 
 ## DICOM Metadata 
@@ -30,7 +31,7 @@ Dataset.file_meta -------------------------------
 (0008, 002a) Acquisition DateTime                DT: '20200605144830.000'
 (0008, 0030) Study Time                          TM: '144314'
 (0008, 0031) Series Time                         TM: '144314'
-**(0008, 0033) Content Time                        TM: '144830'**
+(0008, 0033) Content Time                        TM: '144830'
 (0008, 0050) Accession Number                    SH: ''
 (0008, 0060) Modality                            CS: 'US'
 (0008, 0070) Manufacturer                        LO: 'GE Healthcare Ultrasound'
@@ -41,8 +42,8 @@ Dataset.file_meta -------------------------------
 (0008, 1070) Operators' Name                     PN: '01NVB'
 (0008, 1090) Manufacturer's Model Name           LO: 'VenueGo'
 (0008, 2142) Start Trim                          IS: '1'
-**(0008, 2143) Stop Trim                           IS: '95'**
-**(0008, 2144) Recommended Display Frame Rate      IS: '22'**
+(0008, 2143) Stop Trim                           IS: '95'
+(0008, 2144) Recommended Display Frame Rate      IS: '22'
 (0010, 0010) Patient's Name                      PN: 'TVH'
 (0010, 0020) Patient ID                          LO: '01nvb-003-001-3'
 (0010, 0030) Patient's Birth Date                DA: '19350101'
@@ -53,30 +54,30 @@ Dataset.file_meta -------------------------------
    (0010, 0020) Patient ID                          LO: '01nvb-003-001-3'
    (0010, 0022) Type of Patient ID                  CS: 'TEXT'
    ---------
-**(0018, 0040) Cine Rate                           IS: '22'**
-**(0018, 0072) Effective Duration                  DS: '4.17255'**
+(0018, 0040) Cine Rate                           IS: '22'
+(0018, 0072) Effective Duration                  DS: '4.17255'
 (0018, 1020) Software Versions                   LO: 'VenueGo:302.74.1'
-**(0018, 1063) Frame Time                          DS: '44.3889'**
+(0018, 1063) Frame Time                          DS: '44.3889'
 (0018, 1066) Frame Delay                         DS: '0.0'
-**(0018, 1088) Heart Rate                          IS: '-1'**
-**(0018, 1242) Actual Frame Duration               IS: '44'**
+(0018, 1088) Heart Rate                          IS: '-1'
+(0018, 1242) Actual Frame Duration               IS: '44'
 (0018, 1244) Preferred Playback Sequencing       US: 0
-**(0018, 5020) Processing Function                 LO: 'Lung / Cons/Eff'**
+(0018, 5020) Processing Function                 LO: 'Lung / Cons/Eff'
 (0018, 6011)  Sequence of Ultrasound Regions  1 item(s) ---- 
    (0018, 6012) Region Spatial Format               US: 1
    (0018, 6014) Region Data Type                    US: 1
    (0018, 6016) Region Flags                        UL: 0
-   **(0018, 6018) Region Location Min X0              UL: 182**
+   (0018, 6018) Region Location Min X0              UL: 182
    (0018, 601a) Region Location Min Y0              UL: 50
-   **(0018, 601c) Region Location Max X1              UL: 1356**
+   (0018, 601c) Region Location Max X1              UL: 1356
    (0018, 601e) Region Location Max Y1              UL: 838
-   **(0018, 6020) Reference Pixel X0                  SL: 587**
-   **(0018, 6022) Reference Pixel Y0                  SL: 60**
+   (0018, 6020) Reference Pixel X0                  SL: 587
+   (0018, 6022) Reference Pixel Y0                  SL: 60
    (0018, 6024) Physical Units X Direction          US: 3
    (0018, 6026) Physical Units Y Direction          US: 3
-   **(0018, 602c) Physical Delta X                    FD: 0.01236996**
-   **(0018, 602e) Physical Delta Y                    FD: 0.01236996**
-   **(0018, 6030) Transducer Frequency                UL: 2000**
+   (0018, 602c) Physical Delta X                    FD: 0.01236996
+   (0018, 602e) Physical Delta Y                    FD: 0.01236996
+   (0018, 6030) Transducer Frequency                UL: 2000
    ---------
 (0020, 000d) Study Instance UID                  UI: 1.2.840.113619.2.446.364.1591368194.1.1
 (0020, 000e) Series Instance UID                 UI: 1.2.840.113619.2.446.364.1591368194.2.1
@@ -104,11 +105,10 @@ Dataset.file_meta -------------------------------
    (0020, 000d) Study Instance UID                  UI: 1.2.840.113619.2.446.364.1591368194.1.1
    ---------
 (6007, 0010) Private Creator                     LO: 'nhiemB'
-**(7fe0, 0010) Pixel Data                          OB: Array of 16337558 elements**
+(7fe0, 0010) Pixel Data                          OB: Array of 16337558 elements
 (fffc, fffc) Data Set Trailing Padding           OB: b'\x00\x00'
 ```
 
-
 ## Reference
-* David Ouyang is the author of [`ConvertDICOMtoAVI.py`](https://github.com/echonet/dynamic/blob/master/scripts/ConvertDICOMToAVI.ipynb).
-* See more https://github.com/echonet/ 
+* David Ouyang is the author of [`ConvertDICOMtoAVI.py`](https://github.com/echonet/dynamic/blob/master/scripts/ConvertDICOMToAVI.ipynb)  
+* See more https://github.com/echonet/   
