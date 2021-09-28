@@ -9,10 +9,14 @@ Run the script
 ```
 bash anonymize_video.sh videoin.mp4 video_anonymized.mp4 A B C D
 ```
-where `videoin` is the original video, `video_anonymized` is the anonymized video with a black frame around the ultrasound image, and `A`, `B`, `C`, and `D` are the bounds (in pixels) of the inside image, as shown below.
-The coloured boxes will appear black -colours are only for illustration.
-blocks can be removed by selecting a the values of `A`, `B`, `C`, and `D` accordingly. In the picture below, the values were 300 1550 60 850.  
-![usage image](art/ffmpeg.png)
+where `videoin.mp4` is the original video, `video_anonymized.mp4` is the anonymized video with a black frame around the ultrasound image, and `A`, `B`, `C`, and `D` are the bounds (in pixels) of the inside image. 
+See this example: 
+```
+bash anonymize_video.sh $HOME/datasets/vital-us/raw-datasets/01NVb-003-001/T1/01NVb-003-001-echo.mp4 $HOME/datasets/vital-us/preprocessed-datasets/01NVb-003-001-echo-anonymised.mp4 250 1700 80 900 
+```
+ 
+![usage image](art/ffmpeg.png)  
+**Figure 1** The coloured boxes will appear black -colours are only for illustration and bounds (in pixels) are 300 1550 60 850. 
 
 2. `anonymize_video_blackblock.sh`  
 Run the script
@@ -21,10 +25,13 @@ bash anonymize_video_blackblock.sh videoin.mp4 video_anonymized.mp4 A B C D
 ```
 where `videoin` is the original video, `video_anonymized` is the anonymized video with a black frame around the ultrasound image. 
 `A`, `B`, `C`, and `D` are the bounds (in pixels) of the block to be blacked out, as shown below.   
-![usage image](art/ffmpeg2.png)
+See this example: 
+```
+bash anonymize_video_blackblock.sh $HOME/datasets/vital-us/raw-datasets/01NVb-003-001/T1/01NVb-003-001-echo.mp4 $HOME/datasets/vital-us/preprocessed-datasets/01NVb-003-001-echo-anonymised.mp4 250 1700 80 900 
+```
 
-blocks can be removed by selecting a the values of `A`, `B`, `C`, and `D` accordingly. 
-In the picture below, the values were 300 1550 60 850.
+![usage image](art/ffmpeg2.png)  
+**Figure 2** The coloured boxes will appear black -colours are only for illustration and bounds (in pixels) are 300 1550 60 850.
 
 ## OpenCV python-based method (slower)
 This uses opencv. 
