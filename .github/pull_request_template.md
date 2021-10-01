@@ -19,7 +19,7 @@ Please delete options accordingly to the description.
 <!-- You do not need to complete all the items by the time you submit the pull request, but most likely the changes will only be merged if all the tasks are done. -->
 
 <!-- Write an `x` in all the boxes that apply -->
-- [ ] I have read the [`CONTRIBUTING`](https://github.com/fepegar/torchio/blob/master/CONTRIBUTING.rst) docs and have a developer setup (especially important are `pre-commit`and `pytest`)
+- [ ] I have read the [`CONTRIBUTING`](https://github.com/vital-ultrasound/echocardiography/blob/main/CONTRIBUTING.rst) docs and have a developer setup (especially important are `pre-commit`and `pytest`)
 - [ ] My code is properly tested
 - [ ] My code follows the style guidelines 
 - [ ] My code does not contain unused elements. If so, I documented why it needs to.
