@@ -12,7 +12,7 @@ bash anonymize_video.sh videoin.mp4 video_anonymized.mp4 A B C D
 where `videoin.mp4` is the original video, `video_anonymized.mp4` is the anonymised video with a black frame around the ultrasound image, and `A`, `B`, `C`, and `D` are the bounds (in pixels) of the inside image. 
 See this example: 
 ```
-bash anonymize_video.sh $HOME/datasets/vital-us/raw-datasets/01NVb-003-001/T1/01NVb-003-001-echo.mp4 $HOME/datasets/vital-us/preprocessed-datasets/01NVb-003-001-echo-anonymised.mp4 250 1700 80 900 
+bash anonymise_video.sh $HOME/datasets/vital-us/raw-datasets/01NVb-003-001/T1/01NVb-003-001-echo.mp4 $HOME/datasets/vital-us/preprocessed-datasets/01NVb-003-001-echo-anonymised.mp4 250 1700 80 900 
 ```
 where `$HOME` is the concatenated  home with user paths. 
  
@@ -35,11 +35,12 @@ where `$HOME` is the concatenated  home with user paths.
 ![usage image](art/ffmpeg2.png)  
 **Figure 2** The coloured boxes will appear black -colours are only for illustration and bounds (in pixels) are 300 1550 60 850.
 
-## OpenCV-python-based method (slower)
-This uses opencv. 
-Edit the code to enter the original video nam,e and the output name. 
-If you know the crop box, you can also pass it as argument, otherwise a window will show for you to select the region to be preserved.
-
-TODO: pass input parameters by argument.
-
+## openCV-based method (slower)
+Run the script with the use of your virtual environment
+``` 
+conda activate ve-AICO
+python anonimise_video_using_opencv.py --videofile_in $HOME/datasets/vital-us/raw-datasets/01NVb-003-001/T1/01NVb-003-001-echo.mp4 --videofile_out $HOME/datasets/vital-us/preprocessed-datasets/tmp/01NVb-003-001-echo-anonymised.mp4 --bounds 331 107 1477 823  
+``` 
+The script show a window where you will select the region or interest to be preserved.  
+Otherwise, you can also pass it as argument `bounds = 76, 28, 526, 421`.   
 ![usage image](art/usage.gif)
