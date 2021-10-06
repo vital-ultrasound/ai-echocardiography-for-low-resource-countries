@@ -4,10 +4,20 @@
 
 ### Local dataset path
 ```
-cd $HOME/datasets/vital
+cd $HOME/datasets/vital-us/echocardiography
 ```
 
-### Datasets tree 
+### Raw video datasets tree
+
+``` 
+
+...
+ 
+
+```
+
+
+### Raw datasets tree 
 ```
 * 01NVb
 	* Group 1-ECHO+LUS
@@ -66,9 +76,10 @@ cd $HOME/datasets/vital
 ``` 
 
 
-## Preprocessed Data
 
 
+
+## Potential Preprocessed Data
 ``` 
 * 01NVb-003-001
     * T1
@@ -106,11 +117,8 @@ cd $HOME/datasets/vital
         * ...
         * 2CV-NNN       
    
-   
-   
 *  ... 
-    
-    
+     
 * 01NVb-003-079
     * T1
     * T2
@@ -122,5 +130,4 @@ cd $HOME/datasets/vital
     * T2        
 
         
-
 ``` 
