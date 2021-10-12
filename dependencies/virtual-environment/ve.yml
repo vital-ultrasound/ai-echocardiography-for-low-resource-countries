@@ -1,6 +1,6 @@
 ## Usage:
 ## conda env create -f ve.yml
-name: ve-AICU
+name: rt-ai-echo-VE
 channels:
   - pytorch
   - nvidia

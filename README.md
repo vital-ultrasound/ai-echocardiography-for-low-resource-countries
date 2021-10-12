@@ -7,6 +7,7 @@ Echocardiography (echo) is also known as cardiac ultrasound (CUS) and it is the 
 ## Clone repository
 After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), then you can clone the repository by typing (or copying) the following in a terminal:
 ```
+cd && mkdir -p vital-us && cd vital-us
 git clone git@github.com:vital-ultrasound/echocardiography.git
 ```
 
