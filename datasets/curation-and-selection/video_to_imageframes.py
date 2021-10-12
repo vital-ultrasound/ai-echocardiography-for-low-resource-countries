@@ -3,6 +3,22 @@ import argparse
 import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
+from time import time
+
+
+def timer_func(func):
+    """
+    This function shows the execution time of
+    the function object passed
+    """
+    def wrap_func(*args, **kwargs):
+        t1 = time()
+        result = func(*args, **kwargs)
+        t2 = time()
+        print(f'Function {func.__name__!r} executed in {(t2 - t1):.4f}s')
+        return result
+
+    return wrap_func
 
 
 def msec_to_timestamp(current_timestamp: float):
@@ -13,9 +29,11 @@ def msec_to_timestamp(current_timestamp: float):
     seconds = int(np.floor(current_timestamp / 1000) % 60)
     ms = current_timestamp - np.floor(current_timestamp / 1000) * 1000
     current_contour_frame_time = '{:02d}:{:02d}:{:.3f}'.format(minutes, seconds, ms)
+
     return current_contour_frame_time
 
 
+@timer_func
 def maks_for_captured_us_image(image_frame_array_3ch: np.ndarray):
     """
     Mask pixels outside of scanning sector
@@ -30,7 +48,7 @@ def maks_for_captured_us_image(image_frame_array_3ch: np.ndarray):
 
     return maskedImage
 
-
+@timer_func
 def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, bounds=None):
     """
      Computes Channel Measurements per Frame
