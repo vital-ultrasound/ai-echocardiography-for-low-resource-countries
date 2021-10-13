@@ -3,10 +3,7 @@ This path contains json files of different participants.
 The following is an example of the content of each participant. 
 
 ## Participant Number 
-Please, use this naming
-
-for new json files. 
-Please rewrite jason files and be sure to add an commit message using `#IssueNumer annotation type and initial of Name and Surname of the annorator` to be sure all changes can be tracked.
+Please rewrite jason files and be sure to add a commit message using `#IssueNumer annotation type and initial of Name and Surname of the annorator` to be sure all changes can be tracked.
 ### Log
 * [insert-date-time]: Name LastName and short description 
 * e.g. [12Oct2021_11h58m00s]: Nhat Phung verified json files for each day.

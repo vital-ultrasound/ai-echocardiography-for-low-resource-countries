@@ -3,7 +3,14 @@ The following are instructions for user to label and annotate ultrasound echocar
 
 ## 1. Download datasets
 1.1 Download datasets from the filezilla server.    
-The key files are:   
+It is suggested that you create a path for datasets as showing below:
+``` 
+cd 
+mkdir -p datasets/vital-us/echocardiography/videos/ ## create path for datasets 
+cd $HOME/datasets/vital-us/echocardiography/videos/ ## change path  
+mkdir -p 01NVb-003-072/T1 ## participant name
+```
+Then you can download the following files from filezilla:
 ``` 
  /01NVb/01NVb/Group 1-ECHO + LUS/01NVb-003-070/T1/01NVb-003-072-1 echo.mp4
  /01NVb/01NVb/Group 1-ECHO + LUS/01NVb-003-070/T2/01NVb-003-072-2 echo.mp4
@@ -11,7 +18,7 @@ The key files are:
 ```
 
 1.2 Save files in your local machine.
-For instance, files are organised as follows where "mx19@sie113-lap" is the username with machinename:
+For instance, files are organised as follows where "mx19@sie113-lap" is the username with machine name:
 ``` 
 mx19@sie133-lap:~/datasets/vital-us/echocardiography/videos/01NVb-003-072$ ls -lR
 .:
@@ -58,7 +65,8 @@ With your mouse scroll the time line of the video to verify annotation(s).
 2.5 Save annotations in json files and only leave two json files (last most updates files).     
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessiblity to the files.  
 
-## References 
+## References
 * [VGG Image Annotator (VIA)](https://www.robots.ox.ac.uk/~vgg/software/via/)
+* [VIA software](https://www.robots.ox.ac.uk/~vgg/software/via/app/via_video_annotator.html)
 * [Echocardiography Essentials: Mastering the apical four-chamber view (4CV)](https://www.youtube.com/watch?v=KNrumyLdTGs)  
 
