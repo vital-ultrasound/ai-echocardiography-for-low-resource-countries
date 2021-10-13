@@ -1,4 +1,4 @@
-# Annotated json files 
+# json files with annotations  
 This path contains json files of different participants.
 The following is an example of the content of each participant. 
 
@@ -9,7 +9,7 @@ Please rewrite jason files and be sure to add a commit message using `#IssueNume
 * e.g. [12Oct2021_11h58m00s]: Nhat Phung verified json files for each day.
 
 ### Timeline figure  
-e.g. 
+* e.g.: 
 ![fig](01NVb_003_072/annotations.png)
 
 ### Metadata in json files
