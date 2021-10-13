@@ -11,6 +11,7 @@ def timer_func(func):
     This function shows the execution time of
     the function object passed
     """
+
     def wrap_func(*args, **kwargs):
         t1 = time()
         result = func(*args, **kwargs)
@@ -41,12 +42,18 @@ def maks_for_captured_us_image(image_frame_array_3ch: np.ndarray):
     image_frame_array_BW_1ch = cv.cvtColor(image_frame_array_3ch, cv.COLOR_RGB2GRAY)
     mask = np.zeros_like(image_frame_array_BW_1ch)
     top_square_for_review_number_mask = np.array([(275, 5), (296, 5), (296, 25), (275, 25)])
-    scan_arc_mask = np.array([(1050, 120), (1054, 120), (1800, 980), (300, 980)])
     store_indicator_mask = np.array([(1452, 987), (1607, 987), (1607, 1073), (1452, 1073)])
-    cv.fillPoly(mask, [top_square_for_review_number_mask, scan_arc_mask, store_indicator_mask], (255, 255, 0))
+    scan_arc_mask_v00 = np.array([(1050, 120), (1054, 120), (1800, 980), (300, 980)])
+
+    x_data = np.array([1050, 1532, 1428, 1310, 1188, 1053, 938, 835, 747, 645, 568, 1041])
+    y_data = np.array([133, 759, 830, 879, 911, 922, 915, 890, 862, 812, 760, 133])
+    scan_arc_mask_v01 = np.vstack((x_data, y_data)).astype(np.int32).T
+
+    cv.fillPoly(mask, [top_square_for_review_number_mask, store_indicator_mask, scan_arc_mask_v01], (255, 255, 0))
     maskedImage = cv.bitwise_and(image_frame_array_3ch, image_frame_array_3ch, mask=mask)
 
     return maskedImage
+
 
 @timer_func
 def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, bounds=None):
@@ -80,7 +87,7 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, bounds=None):
         frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
         frame_timestamp = msec_to_timestamp(frame_msec)
 
-        if image_frame_index % 2000 == 0:
+        if image_frame_index % 1 == 0:
             print(f'  Frame_index/number_of_frames={image_frame_index}/{nframes},  frame_timestamp={frame_timestamp}')
             print(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index))
 
@@ -169,7 +176,9 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, bounds=None):
     plt.title('Average difference over NZNNZ')
     plt.legend()
     plt.savefig(image_frames_path + '/output.jpg')
-    # plt.show()
+
+    cap.release()
+    cv.destroyAllWindows()
 
 
 if __name__ == '__main__':
@@ -180,8 +189,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     Video_to_ImageFrame(args.videofile_in, args.image_frames_path, args.bounds)
-
-## BLURS
-# # # print(image.shape)
-#     plt.imshow(masked_image_frame_array_3ch_i)
-#     plt.show()
