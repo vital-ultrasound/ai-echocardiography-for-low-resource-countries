@@ -1,4 +1,4 @@
-# Annotated json files
+# Annotated video files in json files
 
 ## Log 
 * [12Oct2021_11h58m00s]: Nhat Phung verified json files for each day.
