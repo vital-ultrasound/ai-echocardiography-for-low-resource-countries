@@ -1,9 +1,13 @@
-# json files with annotations  
-This path contains json files of different participants.
-The following is an example of the content of each participant. 
+# Annotations of Four Chamber View (4CV) in json files    
+This path contains json files of different participants for annotations of Four Chamber View (4CV) in json files.
+ 
+## Instructions for User
+Create a new directory when adding a new participant using the [template](01NVb_003_000_template).
+To be sure all changes can be tracked, please add json files and be sure to add a commit message using `#IssueNumer annotation type, initials of Name and Surname of the annorator and short description of the commit` 
 
-## Participant Number 
-Please rewrite jason files and be sure to add a commit message using `#IssueNumer annotation type and initial of Name and Surname of the annorator` to be sure all changes can be tracked.
+## Example: Participant Number 
+The following is an example of the content of one participant.
+
 ### Log
 * [insert-date-time]: Name LastName and short description 
 * e.g. [12Oct2021_11h58m00s]: Nhat Phung verified json files for each day.

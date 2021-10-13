@@ -1,8 +1,8 @@
-# Annotated json files
+# Annotated video files in json files
 
 ## Logs
-* [13Oct2021-5AM]: Annotations by Nhat Phug 
-* [13Oct2021-12PM]; Verification by Miguel Xochicale 
+* [13Oct2021-05h30m00s]; Nhat Phug added annotations 
+* [13Oct2021-12h20m00s]; Miguel Xochicale performed verification and documentation  
 
 ## Timeline of the annotations 
 ![fig](annotations.png)
