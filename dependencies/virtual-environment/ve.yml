@@ -1,10 +1,12 @@
-## Usage:
+## USAGE
 ## conda env create -f ve.yml
+## conda env update --file ve.yml  --prune
 name: rt-ai-echo-VE
 channels:
   - pytorch
   - nvidia
   - defaults
+  - jmcmurray #https://anaconda.org/jmcmurray/json
 #  - conda-forge
 dependencies:
   - python=3.8.*
@@ -13,6 +15,7 @@ dependencies:
   - matplotlib
   - numpy
   - pip
+  - json
   - pip:
      - pydicom
      - opencv-python
