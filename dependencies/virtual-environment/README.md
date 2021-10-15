@@ -38,6 +38,14 @@ conda remove --name ve-python38-cuda112 --all
 ## list env
 You can list all discoverable environments with `conda info --envs`.
 
+
+## Removing packages
+Use the terminal or an Anaconda Prompt for the following steps  [:books:](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html#removing-packages). 
+To remove a package such as SciPy in an environment such as myenv:
+```
+ conda remove -n myenv scipy
+```
+
 ## Manual creation 
 * create an virtual environment
 ```
