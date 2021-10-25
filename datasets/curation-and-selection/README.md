@@ -13,8 +13,8 @@ The script converts mp4 videos to png image frames of masked videos (Fig 1).
 * Example for `01NVb-003-071/`  
 Before running the script, make sure to edit [config.yml](config.yml) file with the right paths.
 ``` 
-conda activate rt-ai-echo-VE
 cd $HOME/vital-us/echocardiography/datasets/curation-and-selection
+conda activate rt-ai-echo-VE
 python video_to_imageframes.py --config config.yml  
 ```
 

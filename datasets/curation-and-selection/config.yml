@@ -1,14 +1,14 @@
-# 01NVb-003-072/T1
-videofile_in: '/home/mx19/datasets/vital-us/echocardiography/videos/01NVb-003-072/T1/01NVb-003-072-1-echo.mp4'
-image_frames_path: '/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T1/masked4CV'
-path_with_json_file: '/home/mx19/datasets/vital-us/echocardiography/json/01NVb-003-072/01NVb_003_072_T1_4CV.json'
-bounds:
-
-## 01NVb-003-072/T2
-#videofile_in: '/home/mx19/datasets/vital-us/echocardiography/videos/01NVb-003-072/T2/01NVb-003-072-2-echo-cont.mp4'
-#image_frames_path: '/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/masked4CV'
-#path_with_json_file: '/home/mx19/datasets/vital-us/echocardiography/json/01NVb-003-072/01NVb_003_072_T2_4CV.json'
+## 01NVb-003-072/T1
+#videofile_in: '/home/mx19/datasets/vital-us/echocardiography/videos/01NVb-003-072/T1/01NVb-003-072-1-echo.mp4'
+#image_frames_path: '/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T1/masked4CV'
+#path_with_json_file: '/home/mx19/datasets/vital-us/echocardiography/json/01NVb-003-072/01NVb_003_072_T1_4CV.json'
 #bounds:
+
+# 01NVb-003-072/T2
+videofile_in: '/home/mx19/datasets/vital-us/echocardiography/videos/01NVb-003-072/T2/01NVb-003-072-2-echo-cont.mp4'
+image_frames_path: '/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/masked4CV'
+path_with_json_file: '/home/mx19/datasets/vital-us/echocardiography/json/01NVb-003-072/01NVb_003_072_T2_4CV.json'
+bounds:
 
 ## 01NVb-003-072/T3
 #videofile_in: '/home/mx19/datasets/vital-us/echocardiography/videos/01NVb-003-072/T3/01NVb-003-072-3-echo.mp4'
