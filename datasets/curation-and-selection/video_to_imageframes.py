@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 from time import time
-from typing import Tuple
+from typing import Tuple, List
 
 import cv2 as cv
 import matplotlib.pyplot as plt
@@ -79,15 +79,23 @@ def maks_for_captured_us_image(image_frame_array_3ch: np.ndarray):
     maskedImage = cv.bitwise_and(image_frame_array_3ch, image_frame_array_3ch, mask=mask)
 
     # JUST FOR QUICK VISUALISATION OF THE MASKS
-    # plt.imshow(image_frame_array_BW_1ch)
-    # plt.imshow(maskedImage)
-    # plt.show()
 
     return maskedImage
 
+@timer_func
+def cropped_image_frame(image_frame_array_3ch: np.ndarray, bounds: List):
+    cropped_image_frame = image_frame_array_3ch[
+                      int(bounds['start_y']):int(bounds['start_y'] + bounds['height']),
+                      int(bounds['start_x']):int(bounds['start_x'] + bounds['width']), :]
+    return cropped_image_frame
+
+def show_image(ima_array: np.ndarray) -> None:
+    plt.imshow(ima_array)
+    plt.show()
+
 
 @timer_func
-def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_json_file: str, bounds=None):
+def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_json_file: str, bounds: List):
     """
      Computes Channel Measurements per Frame
      bounds: (start_x  ,start_y, width, heigh )
@@ -152,9 +160,7 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_jso
 
                             print(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index))
 
-                            # cropped_image_frame = image_frame[in/t(bounds[1]):int(bounds[1] + bounds[3]), int(bounds[0]):int(bounds[0] + bounds[2]), :]
                             masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
-
 
                             Rch_image_frame_array = masked_image_frame_array_3ch_i[..., 2].astype(float)
                             Gch_image_frame_array = masked_image_frame_array_3ch_i[..., 1].astype(float)
@@ -222,17 +228,12 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_jso
                                                                         fontScale,
                                                                         color, thickness,
                                                                         cv.LINE_AA)
+                            cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index), masked_image_frame_array_3ch_i)
 
-
-
-                            cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index),
-                                       masked_image_frame_array_3ch_i)
-
-
+                            # cropped_image_frame_= cropped_image_frame(image_frame_array_3ch_i, bounds)
+                            # cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index), cropped_image_frame_)
 
         image_frame_index += 1
-
-
 
     plt.subplot(1, 3, 1)
     plt.plot(rg, 'r-', label='r-g')
@@ -254,7 +255,6 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_jso
     plt.legend()
     plt.savefig(image_frames_path + '/output.jpg')
 
-
     cap.release()
     cv.destroyAllWindows()
 
@@ -267,4 +267,4 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    Video_to_ImageFrame(config['videofile_in'], config['image_frames_path'], config['path_with_json_file'])
+    Video_to_ImageFrame(config['videofile_in'], config['image_frames_path'], config['path_with_json_file'], config['bounds'])
