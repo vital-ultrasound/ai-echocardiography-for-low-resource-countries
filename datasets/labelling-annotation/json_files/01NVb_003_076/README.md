@@ -1,6 +1,7 @@
 # Annotated video files in json files
 
 ## Logs
+* [25Oct2021-08h31h00s]: Miguel Xochicale performed verification where `01NVb_003_076_T1_4CV.json` not matched 
 * [13Oct2021-22h20m00s]; Miguel Xochicale performed verification and documentation 
 * [13Oct2021-05h30m00s]; Nhat Phug added annotations
 

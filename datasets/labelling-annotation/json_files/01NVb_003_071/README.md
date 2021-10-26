@@ -1,6 +1,7 @@
 # Annotated video files in json files
 
 ## Logs
+* [25Oct2021-08h31h00s]: Miguel Xochicale performed verification and documentation
 * [13Oct2021-05h30m00s]; Nhat Phug added annotations 
 * [13Oct2021-12h20m00s]; Miguel Xochicale performed verification and documentation  
 
