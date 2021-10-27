@@ -58,7 +58,7 @@ def convert_sec_to_min_sec_ms(timestamp_in_secs: float) -> Tuple[float]:
 
 
 @timer_func
-def maks_for_captured_us_image(image_frame_array_3ch: np.ndarray):
+def maks_for_captured_us_image(image_frame_array_3ch: np.ndarray) -> np.ndarray:
     """
     Mask pixels outside of scanning sector
     """
@@ -78,16 +78,125 @@ def maks_for_captured_us_image(image_frame_array_3ch: np.ndarray):
                 (255, 255, 0))
     maskedImage = cv.bitwise_and(image_frame_array_3ch, image_frame_array_3ch, mask=mask)
 
-    # JUST FOR QUICK VISUALISATION OF THE MASKS
-
     return maskedImage
 
+
 @timer_func
-def cropped_image_frame(image_frame_array_3ch: np.ndarray, bounds: List):
-    cropped_image_frame = image_frame_array_3ch[
-                      int(bounds['start_y']):int(bounds['start_y'] + bounds['height']),
-                      int(bounds['start_x']):int(bounds['start_x'] + bounds['width']), :]
-    return cropped_image_frame
+def annotated_image_frame(masked_image_frame_array_3ch_i: np.ndarray, rg: np.ndarray, rb: np.ndarray, gb: np.ndarray,
+                          nnz_rg: np.ndarray, nnz_rb: np.ndarray, nnz_gb: np.ndarray, nz_rg: np.ndarray,
+                          nz_rb: np.ndarray, nz_gb: np.ndarray) -> np.ndarray:
+    """
+    Adds annotations for colour features on the image frame
+    """
+    Rch_image_frame_array = masked_image_frame_array_3ch_i[..., 2].astype(float)
+    Gch_image_frame_array = masked_image_frame_array_3ch_i[..., 1].astype(float)
+    Bch_image_frame_array = masked_image_frame_array_3ch_i[..., 0].astype(float)
+
+    # image wide rgb
+    rg.append(np.mean(np.abs(Rch_image_frame_array - Gch_image_frame_array)))
+    rb.append(np.mean(np.abs(Rch_image_frame_array - Bch_image_frame_array)))
+    gb.append(np.mean(np.abs(Gch_image_frame_array - Bch_image_frame_array)))
+    # n pixels not gray
+    nnz_rg.append(np.count_nonzero(np.abs(Rch_image_frame_array - Gch_image_frame_array) > 1))
+    nnz_rb.append(np.count_nonzero(np.abs(Rch_image_frame_array - Bch_image_frame_array) > 1))
+    nnz_gb.append(np.count_nonzero(np.abs(Gch_image_frame_array - Bch_image_frame_array) > 1))
+    # statistics of non gray pixels
+    nz_rg.append(np.mean((Rch_image_frame_array - Gch_image_frame_array)[
+                             np.abs(Rch_image_frame_array - Gch_image_frame_array) > 1]))
+    nz_rb.append(np.mean((Rch_image_frame_array - Bch_image_frame_array)[
+                             np.abs(Rch_image_frame_array - Bch_image_frame_array) > 1]))
+    nz_gb.append(np.mean((Gch_image_frame_array - Bch_image_frame_array)[
+                             np.abs(Gch_image_frame_array - Bch_image_frame_array) > 1]))
+
+    font = cv.FONT_HERSHEY_SIMPLEX
+    fontScale = 1
+    color = (0, 0, 255)
+    thickness = 2
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'R-G: {:.2f}'.format(rg[-1]),
+                                                (50, 100), font, fontScale, color, thickness,
+                                                cv.LINE_AA)
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'R-B: {:.2f}'.format(rb[-1]),
+                                                (50, 150), font, fontScale, color, thickness,
+                                                cv.LINE_AA)
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'G-B: {:.2f}'.format(gb[-1]),
+                                                (50, 200), font, fontScale, color, thickness,
+                                                cv.LINE_AA)
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'R-G nnz: {}'.format(nnz_rg[-1]), (50, 250), font,
+                                                fontScale,
+                                                color, thickness,
+                                                cv.LINE_AA)
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'R-B nnz: {}'.format(nnz_rb[-1]), (50, 300), font,
+                                                fontScale,
+                                                color, thickness,
+                                                cv.LINE_AA)
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'G-B nnz: {}'.format(nnz_gb[-1]), (50, 350), font,
+                                                fontScale,
+                                                color, thickness,
+                                                cv.LINE_AA)
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'R-G nz: {:.2f}'.format(nz_rg[-1]), (50, 400), font,
+                                                fontScale,
+                                                color, thickness,
+                                                cv.LINE_AA)
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'R-B nz: {:.2f}'.format(nz_rb[-1]), (50, 450), font,
+                                                fontScale,
+                                                color, thickness,
+                                                cv.LINE_AA)
+    masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
+                                                'G-B nz: {:.2f}'.format(nz_gb[-1]), (50, 500), font,
+                                                fontScale,
+                                                color, thickness,
+                                                cv.LINE_AA)
+
+    return masked_image_frame_array_3ch_i
+
+
+@timer_func
+def plotting_colour_features(image_frames_path: str,
+                             rg: np.ndarray, rb: np.ndarray, gb: np.ndarray,
+                             nnz_rg: np.ndarray, nnz_rb: np.ndarray, nnz_gb: np.ndarray,
+                             nz_rg: np.ndarray, nz_rb: np.ndarray, nz_gb: np.ndarray) -> None:
+    """
+    Plotting colour features and save plot at [image_frames_path + '/output.jpg']
+    """
+    plt.subplot(1, 3, 1)
+    plt.plot(rg, 'r-', label='r-g')
+    plt.plot(rb, 'g-', label='r-b')
+    plt.plot(gb, 'b-', label='g-b')
+    plt.legend()
+    plt.title('Average Absolute difference')
+    plt.subplot(1, 3, 2)
+    plt.plot(nnz_rg, 'r-', label='r-g')
+    plt.plot(nnz_rb, 'g-', label='r-b')
+    plt.plot(nnz_gb, 'b-', label='g-b')
+    plt.title('NNZ in subtraction')
+    plt.legend()
+    plt.subplot(1, 3, 3)
+    plt.plot(nz_rg, 'r-', label='r-g')
+    plt.plot(nz_rb, 'g-', label='r-b')
+    plt.plot(nz_gb, 'b-', label='g-b')
+    plt.title('Average difference over NZNNZ')
+    plt.legend()
+    plt.savefig(image_frames_path + '/output.jpg')
+
+
+@timer_func
+def cropped_image_frame(image_frame_array_3ch: np.ndarray, bounds: List) -> np.ndarray:
+    """
+    Crop image with bounds: (start_x, start_y, width, height)
+    """
+    cropped_image_frame_ = image_frame_array_3ch[
+                           int(bounds['start_y']):int(bounds['start_y'] + bounds['height']),
+                           int(bounds['start_x']):int(bounds['start_x'] + bounds['width']), :]
+    return cropped_image_frame_
+
 
 def show_image(ima_array: np.ndarray) -> None:
     plt.imshow(ima_array)
@@ -97,8 +206,7 @@ def show_image(ima_array: np.ndarray) -> None:
 @timer_func
 def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_json_file: str, bounds: List):
     """
-     Computes Channel Measurements per Frame
-     bounds: (start_x  ,start_y, width, heigh )
+     Extract clips (images frames) from json metadata from mp4 videos.
     """
     cap = cv.VideoCapture(videofile_in)
     if cap.isOpened() == False:
@@ -120,12 +228,11 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_jso
     image_frame_index = 0
     start_label_timestamps = []
     end_label_timestamps = []
-    rg, rb, gb = [], [], []
-    nnz_rg, nnz_rb, nnz_gb = [], [], []
-    nz_rg, nz_rb, nz_gb = [], [], []
+    rg, rb, gb = [], [], []  # Average Absolute difference
+    nnz_rg, nnz_rb, nnz_gb = [], [], []  # NNZ in subtraction
+    nz_rg, nz_rb, nz_gb = [], [], []  # Average difference over NZNNZ
 
     ## Extracting timestams in json files for labelled of four chamber views (4CV)
-    # print(path_with_json_file)
     with open(path_with_json_file, "r") as json_file:
         json_data = json.load(json_file)
         for key in json_data['metadata']:
@@ -137,7 +244,7 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_jso
             end_label_timestamps = np.append(end_label_timestamps, end_label)
 
     length_of_timestamp_vector = len(start_label)
-    number_of_labelled_clips = int(len(start_label_timestamps)/length_of_timestamp_vector)
+    number_of_labelled_clips = int(len(start_label_timestamps) / length_of_timestamp_vector)
 
     while True:
         success, image_frame_array_3ch_i = cap.read()
@@ -147,113 +254,37 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_jso
         current_frame_timestamp = msec_to_timestamp(frame_msec)
 
         if image_frame_index % 1 == 0:
-            print(f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
+            print(
+                f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
 
             for clips_i in range(0, number_of_labelled_clips):
 
                 ## condition for  minute_label
-                if (current_frame_timestamp[0] >=  int(start_label_timestamps[clips_i*length_of_timestamp_vector]) ) & (current_frame_timestamp[0] <= int(end_label_timestamps[clips_i*length_of_timestamp_vector]) ):
+                if (current_frame_timestamp[0] >= int(start_label_timestamps[clips_i * length_of_timestamp_vector])) & (
+                        current_frame_timestamp[0] <= int(end_label_timestamps[clips_i * length_of_timestamp_vector])):
                     ## condition for second label
-                    if (current_frame_timestamp[1] >= int(start_label_timestamps[ (clips_i * length_of_timestamp_vector) + 1 ])   ) & (current_frame_timestamp[1] <= int(end_label_timestamps[ (clips_i * length_of_timestamp_vector) + 1 ]) ):
+                    if (current_frame_timestamp[1] >= int(
+                            start_label_timestamps[(clips_i * length_of_timestamp_vector) + 1])) & (
+                            current_frame_timestamp[1] <= int(
+                        end_label_timestamps[(clips_i * length_of_timestamp_vector) + 1])):
                         # # DOUBLE CHECK THIS ONE condition for milliseconds label
                         # if ( int(float(current_frame_timestamp[2])) >=  int(float(start_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ) & ( int(float(current_frame_timestamp[2]))  <=   int(float(end_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ):
 
-                            print(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index))
+                        print(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index))
 
-                            masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
+                        masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
+                        annotated_masked_image_frame_array_3ch_i = annotated_image_frame(masked_image_frame_array_3ch_i,
+                                                                                         rg, rb, gb, nnz_rg, nnz_rb,
+                                                                                         nnz_gb, nz_rg, nz_rb, nz_gb)
+                        cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index),
+                                   annotated_masked_image_frame_array_3ch_i)
 
-                            Rch_image_frame_array = masked_image_frame_array_3ch_i[..., 2].astype(float)
-                            Gch_image_frame_array = masked_image_frame_array_3ch_i[..., 1].astype(float)
-                            Bch_image_frame_array = masked_image_frame_array_3ch_i[..., 0].astype(float)
-
-                            # image wide rgb
-                            rg.append(np.mean(np.abs(Rch_image_frame_array - Gch_image_frame_array)))
-                            rb.append(np.mean(np.abs(Rch_image_frame_array - Bch_image_frame_array)))
-                            gb.append(np.mean(np.abs(Gch_image_frame_array - Bch_image_frame_array)))
-                            # n pixels not gray
-                            nnz_rg.append(np.count_nonzero(np.abs(Rch_image_frame_array - Gch_image_frame_array) > 1))
-                            nnz_rb.append(np.count_nonzero(np.abs(Rch_image_frame_array - Bch_image_frame_array) > 1))
-                            nnz_gb.append(np.count_nonzero(np.abs(Gch_image_frame_array - Bch_image_frame_array) > 1))
-                            # statistics of non gray pixels
-                            nz_rg.append(np.mean((Rch_image_frame_array - Gch_image_frame_array)[
-                                                     np.abs(Rch_image_frame_array - Gch_image_frame_array) > 1]))
-                            nz_rb.append(np.mean((Rch_image_frame_array - Bch_image_frame_array)[
-                                                     np.abs(Rch_image_frame_array - Bch_image_frame_array) > 1]))
-                            nz_gb.append(np.mean((Gch_image_frame_array - Bch_image_frame_array)[
-                                                     np.abs(Gch_image_frame_array - Bch_image_frame_array) > 1]))
-
-                            font = cv.FONT_HERSHEY_SIMPLEX
-                            fontScale = 1
-                            color = (0, 0, 255)
-                            thickness = 2
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'R-G: {:.2f}'.format(rg[-1]),
-                                                                        (50, 100), font, fontScale, color, thickness,
-                                                                        cv.LINE_AA)
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'R-B: {:.2f}'.format(rb[-1]),
-                                                                        (50, 150), font, fontScale, color, thickness,
-                                                                        cv.LINE_AA)
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'G-B: {:.2f}'.format(gb[-1]),
-                                                                        (50, 200), font, fontScale, color, thickness,
-                                                                        cv.LINE_AA)
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'R-G nnz: {}'.format(nnz_rg[-1]), (50, 250), font,
-                                                                        fontScale,
-                                                                        color, thickness,
-                                                                        cv.LINE_AA)
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'R-B nnz: {}'.format(nnz_rb[-1]), (50, 300), font,
-                                                                        fontScale,
-                                                                        color, thickness,
-                                                                        cv.LINE_AA)
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'G-B nnz: {}'.format(nnz_gb[-1]), (50, 350), font,
-                                                                        fontScale,
-                                                                        color, thickness,
-                                                                        cv.LINE_AA)
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'R-G nz: {:.2f}'.format(nz_rg[-1]), (50, 400), font,
-                                                                        fontScale,
-                                                                        color, thickness,
-                                                                        cv.LINE_AA)
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'R-B nz: {:.2f}'.format(nz_rb[-1]), (50, 450), font,
-                                                                        fontScale,
-                                                                        color, thickness,
-                                                                        cv.LINE_AA)
-                            masked_image_frame_array_3ch_i = cv.putText(masked_image_frame_array_3ch_i,
-                                                                        'G-B nz: {:.2f}'.format(nz_gb[-1]), (50, 500), font,
-                                                                        fontScale,
-                                                                        color, thickness,
-                                                                        cv.LINE_AA)
-                            cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index), masked_image_frame_array_3ch_i)
-
-                            # cropped_image_frame_= cropped_image_frame(image_frame_array_3ch_i, bounds)
-                            # cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index), cropped_image_frame_)
+                        # cropped_image_frame_= cropped_image_frame(image_frame_array_3ch_i, bounds)
+                        # cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index), cropped_image_frame_)
 
         image_frame_index += 1
 
-    plt.subplot(1, 3, 1)
-    plt.plot(rg, 'r-', label='r-g')
-    plt.plot(rb, 'g-', label='r-b')
-    plt.plot(gb, 'b-', label='g-b')
-    plt.legend()
-    plt.title('Average Absolute difference')
-    plt.subplot(1, 3, 2)
-    plt.plot(nnz_rg, 'r-', label='r-g')
-    plt.plot(nnz_rb, 'g-', label='r-b')
-    plt.plot(nnz_gb, 'b-', label='g-b')
-    plt.title('NNZ in subtraction')
-    plt.legend()
-    plt.subplot(1, 3, 3)
-    plt.plot(nz_rg, 'r-', label='r-g')
-    plt.plot(nz_rb, 'g-', label='r-b')
-    plt.plot(nz_gb, 'b-', label='g-b')
-    plt.title('Average difference over NZNNZ')
-    plt.legend()
-    plt.savefig(image_frames_path + '/output.jpg')
+    plotting_colour_features(image_frames_path, rg, rb, gb, nnz_rg, nnz_rb, nnz_gb, nz_rg, nz_rb, nz_gb)
 
     cap.release()
     cv.destroyAllWindows()
@@ -267,4 +298,5 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    Video_to_ImageFrame(config['videofile_in'], config['image_frames_path'], config['path_with_json_file'], config['bounds'])
+    Video_to_ImageFrame(config['videofile_in'], config['image_frames_path'], config['path_with_json_file'],
+                        config['bounds'])
