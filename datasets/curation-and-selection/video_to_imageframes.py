@@ -258,7 +258,6 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_jso
                 f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
 
             for clips_i in range(0, number_of_labelled_clips):
-
                 ## condition for  minute_label
                 if (current_frame_timestamp[0] >= int(start_label_timestamps[clips_i * length_of_timestamp_vector])) & (
                         current_frame_timestamp[0] <= int(end_label_timestamps[clips_i * length_of_timestamp_vector])):
@@ -270,21 +269,24 @@ def Video_to_ImageFrame(videofile_in: str, image_frames_path: str, path_with_jso
                         # # DOUBLE CHECK THIS ONE condition for milliseconds label
                         # if ( int(float(current_frame_timestamp[2])) >=  int(float(start_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ) & ( int(float(current_frame_timestamp[2]))  <=   int(float(end_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ):
 
-                        print(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index))
+                        # TODO: the following commented lines will be addressed in #14
+                        # masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
+                        # annotated_masked_image_frame_array_3ch_i = annotated_image_frame(masked_image_frame_array_3ch_i,
+                        #                                                                  rg, rb, gb, nnz_rg, nnz_rb,
+                        #                                                                  nnz_gb, nz_rg, nz_rb, nz_gb)
+                        # cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index),
+                        #            annotated_masked_image_frame_array_3ch_i)
 
-                        masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
-                        annotated_masked_image_frame_array_3ch_i = annotated_image_frame(masked_image_frame_array_3ch_i,
-                                                                                         rg, rb, gb, nnz_rg, nnz_rb,
-                                                                                         nnz_gb, nz_rg, nz_rb, nz_gb)
-                        cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index),
-                                   annotated_masked_image_frame_array_3ch_i)
+                        cropped_image_frame_ = cropped_image_frame(image_frame_array_3ch_i, bounds)
+                        image_file_name_with_path = image_frames_path + '/clip{:03d}'.format(clips_i + 1) + '_nframe{:05d}_of_{}.png'.format(image_frame_index,nframes-1)
+                        print(image_file_name_with_path)
+                        cv.imwrite(image_file_name_with_path, cropped_image_frame_)
 
-                        # cropped_image_frame_= cropped_image_frame(image_frame_array_3ch_i, bounds)
-                        # cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index), cropped_image_frame_)
 
         image_frame_index += 1
 
-    plotting_colour_features(image_frames_path, rg, rb, gb, nnz_rg, nnz_rb, nnz_gb, nz_rg, nz_rb, nz_gb)
+    # TODO: the following commented lines will be addressed in #14
+    # plotting_colour_features(image_frames_path, rg, rb, gb, nnz_rg, nnz_rb, nnz_gb, nz_rg, nz_rb, nz_gb)
 
     cap.release()
     cv.destroyAllWindows()
