@@ -4,8 +4,8 @@ It it suggested that datasets in the local machine are placed in the following l
 ``` 
 cd $HOME/datasets/vital-us/echocardiography/videos/
 ```
-## Scripts 
 
+## Scripts
 ### [`video_to_imageframes.py`](video_to_imageframes.py)
 The script converts mp4 videos to png image frames of masked videos (Fig 1).
 ![fig](masked-captured-image-frame.png)

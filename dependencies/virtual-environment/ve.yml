@@ -17,6 +17,7 @@ dependencies:
   - pip
   - json
   - pyyaml
+  - tqdm
   - pip:
      - pydicom
      - opencv-python
