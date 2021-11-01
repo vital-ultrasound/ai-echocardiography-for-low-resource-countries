@@ -48,23 +48,30 @@ python video_channel_measurement.py --videofile_in $HOME/datasets/vital-us/raw-d
 ## Curated datasets 
 
 ## Cropped Four Chamber View datasets
-
-* paths 
+* Paths 
 ``` 
 mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072$ tree -d
 .
 ├── T1
 │   └── cropped_us_image
+│       ├── animations
+│       └── clip001
 ├── T2
 │   └── cropped_us_image
+│       ├── animations
+│       ├── clip001
+│       ├── clip002
+│       └── clip003
 └── T3
     └── cropped_us_image
+        ├── animations
+        ├── clip001
+        └── clip002
 
-6 directories
-        
+15 directories
 ``` 
 
-* paths, filenames and human readable size
+* paths, filenames and human-readable size
 ```
 mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072$ tree -fh
 .
@@ -168,5 +175,18 @@ g
 
 6 directories, 689 files
 
-
 ```
+
+* Videos and gifs
+```
+mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/cropped_us_image/animations$ tree -h
+.
+├── [ 10M]  clip001.avi
+├── [ 42M]  clip001.gif
+├── [5.1M]  clip002.avi
+├── [ 21M]  clip002.gif
+├── [5.3M]  clip003.avi
+└── [ 21M]  clip003.gif
+
+0 directories, 6 files
+``` 
