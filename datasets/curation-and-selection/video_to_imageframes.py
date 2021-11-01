@@ -238,7 +238,6 @@ def convert_frames_to_video(videofile_with_destinationFolder: str, filaName: str
 @timer_func
 def Video_to_ImageFrame(videofile_in: str,
                         image_frames_path: str,
-                        video_image_frames_path: str,
                         path_with_json_file: str,
                         bounds: List = None):
     """
@@ -253,6 +252,7 @@ def Video_to_ImageFrame(videofile_in: str,
     frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
     fps = int(np.ceil(cap.get(cv.CAP_PROP_FPS)))
     nframes = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+
     # Print video features
     print(f'  ')
     print(f'  Frame_height={frame_height},  frame_width={frame_width} fps={fps} nframes={nframes} ')
@@ -260,9 +260,6 @@ def Video_to_ImageFrame(videofile_in: str,
 
     if not os.path.isdir(image_frames_path):
         os.makedirs(image_frames_path)
-
-    if not os.path.isdir(video_image_frames_path):
-        os.makedirs(video_image_frames_path)
 
     image_frame_index = 0
     start_label_timestamps = []
@@ -285,13 +282,6 @@ def Video_to_ImageFrame(videofile_in: str,
     length_of_timestamp_vector = len(start_label)
     number_of_labelled_clips = int(len(start_label_timestamps) / length_of_timestamp_vector)
 
-    # Create paths and video filenames
-    for clips_i_ in range(0, 1):
-        video_file_name_with_path = video_image_frames_path + '/video_clip{:03d}.avi'.format(
-            clips_i_ + 1)
-        fourcc = cv.VideoWriter_fourcc('M', 'J', 'P', 'G')
-        video_writer = cv.VideoWriter(video_file_name_with_path, fourcc, fps, (810, 1130))
-
     while True:
         success, image_frame_array_3ch_i = cap.read()
         if not success:
@@ -299,12 +289,11 @@ def Video_to_ImageFrame(videofile_in: str,
         frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
         current_frame_timestamp = msec_to_timestamp(frame_msec)
 
-        if image_frame_index % 50 == 0: ## jump index every MOD vallue (idx % MOD)
+        if image_frame_index % 1 == 0: ## jump index every MOD vallue (idx % MOD)
             print(
                 f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
 
             for clips_i in range(0, number_of_labelled_clips):
-                print(clips_i)
                 ## condition for  minute_label
                 if (current_frame_timestamp[0] >= int(start_label_timestamps[clips_i * length_of_timestamp_vector])) & (
                         current_frame_timestamp[0] <= int(end_label_timestamps[clips_i * length_of_timestamp_vector])):
@@ -325,24 +314,15 @@ def Video_to_ImageFrame(videofile_in: str,
                         #            annotated_masked_image_frame_array_3ch_i)
 
                         cropped_image_frame_ = cropped_image_frame(image_frame_array_3ch_i, bounds)
-
-                        if clips_i == 0:
-                            print('HHHHHHHHHHHH')
-                            video_file_name_with_path = video_image_frames_path + '/video_clip{:03d}.avi'.format(clips_i_ + 1)
-                            print(video_file_name_with_path)
-                            show_image(cropped_image_frame_)
-                            video_writer.write(cropped_image_frame_)
-
-                        # convert_frames_to_video(video_file_name_with_path)
-
-                        # cropped_image_frame_ = cropped_image_frame(image_frame_array_3ch_i, bounds)
-                        # image_file_name_with_path = image_frames_path + '/clip{:03d}'.format(clips_i + 1) + '_nframe{:05d}_of_{}.png'.format(image_frame_index,nframes-1)
-                        # print(image_file_name_with_path)
-                        # cv.imwrite(image_file_name_with_path, cropped_image_frame_)
+                        file_name_with_path = image_frames_path + '/clip{:03d}'.format(clips_i + 1)
+                        if not os.path.isdir(file_name_with_path):
+                            os.makedirs(file_name_with_path)
+                        image_file_name_with_path = file_name_with_path + '/nframe{:05d}_of_{}.png'.format(image_frame_index,nframes-1)
+                        print(image_file_name_with_path)
+                        cv.imwrite(image_file_name_with_path, cropped_image_frame_)
 
         image_frame_index += 1
 
-    # video_writer.release()
 
     # TODO: the following commented lines will be addressed in #14
     # plotting_colour_features(image_frames_path, rg, rb, gb, nnz_rg, nnz_rb, nnz_gb, nz_rg, nz_rb, nz_gb)
@@ -361,6 +341,5 @@ if __name__ == '__main__':
 
     Video_to_ImageFrame(config['videofile_in'],
                         config['image_frames_path'],
-                        config['video_image_frames_path'],
                         config['path_with_json_file'],
                         config['bounds'])

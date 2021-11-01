@@ -7,6 +7,7 @@ channels:
   - nvidia
   - defaults
   - jmcmurray #https://anaconda.org/jmcmurray/json
+  - anaconda
 #  - conda-forge
 dependencies:
   - python=3.8.*
@@ -18,6 +19,7 @@ dependencies:
   - json
   - pyyaml
   - tqdm
+  - pillow
   - pip:
      - pydicom
      - opencv-python
