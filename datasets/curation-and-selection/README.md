@@ -8,15 +8,15 @@ cd $HOME/datasets/vital-us/echocardiography/videos/
 ## Scripts
 ### [`video_to_imageframes.py`](video_to_imageframes.py)
 The script converts mp4 videos to png image frames of masked videos (Fig 1).
-![fig](masked-captured-image-frame.png)
+![fig](../figures/masked-captured-image-frame.png)
 **Fig 1** Example of masks (green geometric forms) in the capture ultrasound image.
 
 * Example for `01NVb-003-071/`  
 Before running the script, make sure to edit [config.yml](config.yml) file with the right paths.
-``` 
+```
+conda activate rt-ai-echo-VE 
 cd $HOME/repositories/echocardiography/datasets/curation-and-selection
-conda activate rt-ai-echo-VE
-python video_to_imageframes.py --config config.yml  
+python video_to_imageframes.py --config ../config_files/config_v2i.yml  
 ```
 
 * Terminal output for `01NVb-003-072/`
