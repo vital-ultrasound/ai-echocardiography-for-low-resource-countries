@@ -1,34 +1,7 @@
-
-#### 01NVb-003-072/T1
-#image_folder: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T1/cropped_us_image/clip001"
-#videofileName: "clip001.avi"
-#video_name: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T1/cropped_us_image/animations/"
-#fps: 30
-
-
-### 01NVb-003-072/T2
-#image_folder: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/cropped_us_image/clip001"
-#videofileName: "clip001.avi"
-#video_name: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/cropped_us_image/animations/"
-#fps: 30
-
-#image_folder: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/cropped_us_image/clip002"
-#videofileName: "clip002.avi"
-#video_name: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/cropped_us_image/animations/"
-#fps: 30
-
+### 01NVb-003-072/
+participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/"
+video_output_pathname: 'animations'
 image_folder: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/cropped_us_image/clip003"
 videofileName: "clip003.avi"
 video_name: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/cropped_us_image/animations/"
 fps: 30
-
-#### 01NVb-003-072/T3
-#image_folder: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T3/cropped_us_image/clip001"
-#videofileName: "clip001.avi"
-#video_name: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T3/cropped_us_image/animations/"
-#fps: 30
-
-#image_folder: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T3/cropped_us_image/clip002"
-#videofileName: "clip002.avi"
-#video_name: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T3/cropped_us_image/animations/"
-#fps: 30
