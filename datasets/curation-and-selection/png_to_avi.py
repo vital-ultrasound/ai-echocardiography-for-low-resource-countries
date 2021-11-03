@@ -6,23 +6,15 @@ import yaml
 from tqdm import tqdm
 
 
-def conver_pngframes_to_avi(image_folder: str,
-                            videofileName: str,
-                            video_name: str,
-                            fps: int,
-                            participant_directory: str = None,
-                            video_output_pathname: str = None
+def conver_pngframes_to_avi(participant_directory: str,
+                            video_output_pathname: str,
+                            fps: int
                             ) -> None:
     """
     Convert image frames in png format to an avi file with a given fps.
     """
-    if not os.path.isdir(os.path.join(video_name, videofileName)):
-        try:
-            os.makedirs(video_name)
-        except FileExistsError:
-            pass
 
-    for T_days_i in  sorted(os.listdir(participant_directory))  :
+    for T_days_i in sorted(os.listdir(participant_directory))  :
         days_i_path = participant_directory + T_days_i
         for preprocessed_frame_path_i in  sorted(os.listdir(days_i_path))  :
             preprocessed_frame_path = days_i_path + '/' + preprocessed_frame_path_i
@@ -30,8 +22,6 @@ def conver_pngframes_to_avi(image_folder: str,
             for clips_i in sorted(os.listdir(preprocessed_frame_path)):
                 if clips_i[0] == 'c':
                     clips_i_path = preprocessed_frame_path + '/' + clips_i
-                    # print(clips_i)
-                    # print(clips_i_path)
 
                     images = [img for img in sorted(os.listdir(clips_i_path)) if img.endswith(".png")]
                     frame = cv2.imread(os.path.join(clips_i_path, images[0]))
@@ -40,6 +30,12 @@ def conver_pngframes_to_avi(image_folder: str,
 
                     fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
                     path_preprocessed_frame_path_ = preprocessed_frame_path + '/' + video_output_pathname + '/'
+                    if not os.path.isdir(os.path.join(path_preprocessed_frame_path_)):
+                        try:
+                            os.makedirs(path_preprocessed_frame_path_)
+                        except FileExistsError:
+                            pass
+
                     path_clips_i_avi = path_preprocessed_frame_path_ + clips_i + '.avi'
                     print(path_clips_i_avi)
                     video = cv2.VideoWriter(path_clips_i_avi, fourcc, fps, (width, height))
@@ -47,8 +43,8 @@ def conver_pngframes_to_avi(image_folder: str,
                     for image in tqdm(images):
                         video.write(cv2.imread(os.path.join(clips_i_path, image)))
 
-                    # cv2.destroyAllWindows()
-                    # video.release()
+                    cv2.destroyAllWindows()
+                    video.release()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -58,10 +54,8 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    conver_pngframes_to_avi(config['image_folder'],
-                            config['videofileName'],
-                            config['video_name'],
-                            config['fps'],
+    conver_pngframes_to_avi(
                             config['participant_directory'],
-                            config['video_output_pathname']
+                            config['video_output_pathname'],
+                            config['fps'],
     )

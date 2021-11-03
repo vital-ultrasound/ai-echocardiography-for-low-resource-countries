@@ -1,6 +1,6 @@
 # Curation and selection of US imaging datasets
 Python scripts made use of the `rt-ai-echo-VE` virtual environment which should be started in the terminal  (by typing or copying and paste) `conda activate rt-ai-echo-VE`. 
-It it suggested that datasets in the local machine are placed in the following location:
+It is suggested that datasets in the local machine are placed in the following location:
 ``` 
 cd $HOME/datasets/vital-us/echocardiography/videos/
 ```
