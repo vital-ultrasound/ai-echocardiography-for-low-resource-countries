@@ -26,6 +26,14 @@ python video_to_imageframes.py --config ../config_files/config_v2i.yml
   Function 'Video_to_ImageFrame' executed in 54.9318s
 ```
 
+### [`png_to_avi.py`](png_to_avi.py)
+Terminal commands:
+```
+conda activate rt-ai-echo-VE
+cd $HOME/repositories/echocardiography/datasets/curation-and-selection
+python png_to_avi.py --config ../config_files/config_i2v.yml
+```
+
 
 ### [`video2sliding-video.py`](video_to_sliding_video.py)
 Terminal commands:
