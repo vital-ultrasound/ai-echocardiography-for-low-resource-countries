@@ -218,117 +218,130 @@ def convert_frames_to_video(videofile_with_destinationFolder: str, filaName: str
     print(videofile_with_destinationFolder)
     # out = cv.VideoWriter(videofile_with_destinationFolder, fourcc, fps, cropSize)
 
-    #
-        #     for i in range(frames):
-        #         outputA = USframes_array[i,:,:,0]
-        #         smallOutput = outputA[0:int(height), 0:int(width)] #outputA[0:846, 0:1538]
-        #
-        #         output = cv2.resize(smallOutput, cropSize, interpolation=cv2.INTER_CUBIC)
-        #         # output = mask(output) # With mask
-        #         out.write(cv2.merge([output, output,output]))
-        #
-        #     out.release()
-        #
-        # else:
-        #     print(fileName,"hasAlreadyBeenProcessed")
-        #
-
 
 
 @timer_func
-def Video_to_ImageFrame(videofile_in: str,
-                        image_frames_path: str,
-                        path_with_json_file: str,
+def Video_to_ImageFrame(
+                        participant_directory: str,
+                        preprocessed_datasets_path: str,
+                        video_output_pathname: str,
+                        participant_path_json_file: str,
                         bounds: List = None):
+    """Video_to_ImageFrame
+    Extract clips (images frames) from json metadata from mp4 videos.
+    Args:
+        participant_directory (str): self-explanatory variable
+        video_output_pathname (str): self-explanatory variable
+    Return:
+        None
     """
-     Extract clips (images frames) from json metadata from mp4 videos.
-    """
-    cap = cv.VideoCapture(videofile_in)
-    if cap.isOpened() == False:
-        print('Unable to read video ' + videofile_in)
 
-    # Get parameters of input video
-    frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
-    frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
-    fps = int(np.ceil(cap.get(cv.CAP_PROP_FPS)))
-    nframes = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+    ## Create list of json files
+    json_files = [ ]
+    for json_i  in enumerate( sorted(os.listdir(participant_path_json_file))  ):
+        json_files_path = participant_path_json_file + '/' + json_i[1]
+        json_files.append(json_files_path)
 
-    # Print video features
-    print(f'  ')
-    print(f'  Frame_height={frame_height},  frame_width={frame_width} fps={fps} nframes={nframes} ')
-    print(f'  ')
+    participant_directory_name = participant_directory.split("/")[-1]
 
-    if not os.path.isdir(image_frames_path):
-        os.makedirs(image_frames_path)
+    for T_days_i in enumerate( sorted(os.listdir(participant_directory))  ):
+        days_i_path = participant_directory + '/' + T_days_i[1]
+        json_file_i=json_files[T_days_i[0]]
+        video_out_path = preprocessed_datasets_path + '/' + participant_directory_name + '/' + T_days_i[1] + '/' + video_output_pathname
 
-    image_frame_index = 0
-    start_label_timestamps = []
-    end_label_timestamps = []
-    rg, rb, gb = [], [], []  # Average Absolute difference
-    nnz_rg, nnz_rb, nnz_gb = [], [], []  # NNZ in subtraction
-    nz_rg, nz_rb, nz_gb = [], [], []  # Average difference over NZNNZ
+        for video_file_name_i in  sorted(os.listdir(days_i_path)):
+            path_video_file_name_i = days_i_path + '/' + video_file_name_i
+            if path_video_file_name_i.endswith('.mp4'):
+                print(path_video_file_name_i)
+                print(json_file_i)
+                print(video_out_path)
 
-    ## Extracting timestams in json files for labelled of four chamber views (4CV)
-    with open(path_with_json_file, "r") as json_file:
-        json_data = json.load(json_file)
-        for key in json_data['metadata']:
-            timestamps_of_labels = json_data['metadata'][key]['z']
-            # print(timestamps_of_labels)
-            start_label = convert_sec_to_min_sec_ms(timestamps_of_labels[0])
-            end_label = convert_sec_to_min_sec_ms(timestamps_of_labels[1])
-            start_label_timestamps = np.append(start_label_timestamps, start_label)
-            end_label_timestamps = np.append(end_label_timestamps, end_label)
+                cap = cv.VideoCapture(path_video_file_name_i)
+                if cap.isOpened() == False:
+                    print('Unable to read video ' + path_video_file_name_i)
 
-    length_of_timestamp_vector = len(start_label)
-    number_of_labelled_clips = int(len(start_label_timestamps) / length_of_timestamp_vector)
+                # Get parameters of input video
+                frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+                frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+                fps = int(np.ceil(cap.get(cv.CAP_PROP_FPS)))
+                nframes = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
 
-    while True:
-        success, image_frame_array_3ch_i = cap.read()
-        if not success:
-            break
-        frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
-        current_frame_timestamp = msec_to_timestamp(frame_msec)
+                # Print video features
+                print(f'  ')
+                print(f'  Frame_height={frame_height},  frame_width={frame_width} fps={fps} nframes={nframes} ')
+                print(f'  ')
 
-        if image_frame_index % 1 == 0: ## jump index every MOD vallue (idx % MOD)
-            print(
-                f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
+                if not os.path.isdir(video_out_path):
+                    os.makedirs(video_out_path)
 
-            for clips_i in range(0, number_of_labelled_clips):
-                ## condition for  minute_label
-                if (current_frame_timestamp[0] >= int(start_label_timestamps[clips_i * length_of_timestamp_vector])) & (
-                        current_frame_timestamp[0] <= int(end_label_timestamps[clips_i * length_of_timestamp_vector])):
-                    ## condition for second label
-                    if (current_frame_timestamp[1] >= int(
-                            start_label_timestamps[(clips_i * length_of_timestamp_vector) + 1])) & (
-                            current_frame_timestamp[1] <= int(
-                        end_label_timestamps[(clips_i * length_of_timestamp_vector) + 1])):
-                        # # DOUBLE CHECK THIS ONE condition for milliseconds label
-                        # if ( int(float(current_frame_timestamp[2])) >=  int(float(start_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ) & ( int(float(current_frame_timestamp[2]))  <=   int(float(end_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ):
+                image_frame_index = 0
+                start_label_timestamps = []
+                end_label_timestamps = []
+                rg, rb, gb = [], [], []  # Average Absolute difference
+                nnz_rg, nnz_rb, nnz_gb = [], [], []  # NNZ in subtraction
+                nz_rg, nz_rb, nz_gb = [], [], []  # Average difference over NZNNZ
 
-                        # TODO: the following commented lines will be addressed in #14
-                        # masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
-                        # annotated_masked_image_frame_array_3ch_i = annotated_image_frame(masked_image_frame_array_3ch_i,
-                        #                                                                  rg, rb, gb, nnz_rg, nnz_rb,
-                        #                                                                  nnz_gb, nz_rg, nz_rb, nz_gb)
-                        # cv.imwrite(image_frames_path + '/nframes{:05d}.png'.format(image_frame_index),
-                        #            annotated_masked_image_frame_array_3ch_i)
+                ## Extracting timestams in json files for labelled of four chamber views (4CV)
+                with open(json_file_i, "r") as json_file:
+                    json_data = json.load(json_file)
+                    for key in json_data['metadata']:
+                        timestamps_of_labels = json_data['metadata'][key]['z']
+                        # print(timestamps_of_labels)
+                        start_label = convert_sec_to_min_sec_ms(timestamps_of_labels[0])
+                        end_label = convert_sec_to_min_sec_ms(timestamps_of_labels[1])
+                        start_label_timestamps = np.append(start_label_timestamps, start_label)
+                        end_label_timestamps = np.append(end_label_timestamps, end_label)
 
-                        cropped_image_frame_ = cropped_image_frame(image_frame_array_3ch_i, bounds)
-                        file_name_with_path = image_frames_path + '/clip{:03d}'.format(clips_i + 1)
-                        if not os.path.isdir(file_name_with_path):
-                            os.makedirs(file_name_with_path)
-                        image_file_name_with_path = file_name_with_path + '/nframe{:05d}_of_{}.png'.format(image_frame_index,nframes-1)
-                        print(image_file_name_with_path)
-                        cv.imwrite(image_file_name_with_path, cropped_image_frame_)
+                length_of_timestamp_vector = len(start_label)
+                number_of_labelled_clips = int(len(start_label_timestamps) / length_of_timestamp_vector)
 
-        image_frame_index += 1
+                while True:
+                    success, image_frame_array_3ch_i = cap.read()
+                    if not success:
+                        break
+                    frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
+                    current_frame_timestamp = msec_to_timestamp(frame_msec)
+
+                    if image_frame_index % 1 == 0: ## jump index every MOD vallue (idx % MOD)
+                        print(
+                            f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
+
+                        for clips_i in range(0, number_of_labelled_clips):
+                            ## condition for  minute_label
+                            if (current_frame_timestamp[0] >= int(start_label_timestamps[clips_i * length_of_timestamp_vector])) & (
+                                    current_frame_timestamp[0] <= int(end_label_timestamps[clips_i * length_of_timestamp_vector])):
+                                ## condition for second label
+                                if (current_frame_timestamp[1] >= int(
+                                        start_label_timestamps[(clips_i * length_of_timestamp_vector) + 1])) & (
+                                        current_frame_timestamp[1] <= int(
+                                    end_label_timestamps[(clips_i * length_of_timestamp_vector) + 1])):
+                                    # # DOUBLE CHECK THIS ONE condition for milliseconds label
+                                    # if ( int(float(current_frame_timestamp[2])) >=  int(float(start_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ) & ( int(float(current_frame_timestamp[2]))  <=   int(float(end_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ):
+
+                                    # TODO: the following commented lines will be addressed in #14
+                                    # masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
+                                    # annotated_masked_image_frame_array_3ch_i = annotated_image_frame(masked_image_frame_array_3ch_i,
+                                    #                                                                  rg, rb, gb, nnz_rg, nnz_rb,
+                                    #                                                                  nnz_gb, nz_rg, nz_rb, nz_gb)
+                                    # cv.imwrite(video_out_path + '/nframes{:05d}.png'.format(image_frame_index),
+                                    #            annotated_masked_image_frame_array_3ch_i)
+
+                                    cropped_image_frame_ = cropped_image_frame(image_frame_array_3ch_i, bounds)
+                                    file_name_with_path = video_out_path + '/clip{:03d}'.format(clips_i + 1)
+                                    if not os.path.isdir(file_name_with_path):
+                                        os.makedirs(file_name_with_path)
+                                    image_file_name_with_path = file_name_with_path + '/nframe{:05d}_of_{}.png'.format(image_frame_index,nframes-1)
+                                    print(image_file_name_with_path)
+                                    cv.imwrite(image_file_name_with_path, cropped_image_frame_)
+
+                    image_frame_index += 1
 
 
-    # TODO: the following commented lines will be addressed in #14
-    # plotting_colour_features(image_frames_path, rg, rb, gb, nnz_rg, nnz_rb, nnz_gb, nz_rg, nz_rb, nz_gb)
+                # TODO: the following commented lines will be addressed in #14
+                # plotting_colour_features(video_out_path, rg, rb, gb, nnz_rg, nnz_rb, nnz_gb, nz_rg, nz_rb, nz_gb)
 
-    cap.release()
-    cv.destroyAllWindows()
+                cap.release()
+                cv.destroyAllWindows()
 
 
 if __name__ == '__main__':
@@ -339,7 +352,10 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    Video_to_ImageFrame(config['videofile_in'],
-                        config['image_frames_path'],
-                        config['path_with_json_file'],
-                        config['bounds'])
+    Video_to_ImageFrame(
+                        config['participant_directory'],
+                        config['preprocessed_datasets_path'],
+                        config['video_output_pathname'],
+                        config['participant_path_json_file'],
+                        config['bounds']
+    )

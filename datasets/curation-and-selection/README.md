@@ -19,12 +19,6 @@ cd $HOME/repositories/echocardiography/datasets/curation-and-selection
 python video_to_imageframes.py --config ../config_files/config_v2i.yml  
 ```
 
-* Terminal output for `01NVb-003-072/`
-``` 
-    Frame_height=1080,  frame_width=1920 fps=29.971317121291353 nframes=23285 
-    ...
-  Function 'Video_to_ImageFrame' executed in 54.9318s
-```
 
 ### [`png_to_avi.py`](png_to_avi.py)
 Terminal commands:
@@ -53,10 +47,8 @@ python video_channel_measurement.py --videofile_in $HOME/datasets/vital-us/raw-d
 ```
 
 
-## Curated datasets 
-
-## Cropped Four Chamber View datasets
-* Paths 
+## Curated datasets of Cropped Four Chamber View datasets
+### Paths 
 ``` 
 mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072$ tree -d
 .
@@ -79,7 +71,7 @@ mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb
 15 directories
 ``` 
 
-* paths, filenames and human-readable size
+### Paths, filenames and human-readable size
 ```
 mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072$ tree -fh
 .
@@ -185,7 +177,7 @@ g
 
 ```
 
-* Videos and gifs
+### Videos and gifs
 ```
 mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/T2/cropped_us_image/animations$ tree -h
 .
@@ -197,4 +189,4 @@ mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb
 └── [ 21M]  clip003.gif
 
 0 directories, 6 files
-``` 
+```
