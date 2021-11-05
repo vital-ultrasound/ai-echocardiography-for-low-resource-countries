@@ -1,6 +1,6 @@
 ---
 name: "\U0001F41B Bug Report"
-about: If you are pretty sure you are getting a bug, please create a report to help us improve TorchIO
+about: If you are pretty sure you are getting a bug, please create a report to help us improve real-time AI echocardiography
 title: ''
 labels: bug
 assignees: ''
