@@ -16,7 +16,7 @@ bash anonymise_video.sh $HOME/datasets/vital-us/raw-datasets/01NVb-003-001/T1/01
 ```
 where `$HOME` is the concatenated  home with user paths. 
  
-![usage image](art/ffmpeg.png)  
+![usage image](../figures/ffmpeg.png)  
 **Figure 1** The coloured boxes will appear black -colours are only for illustration and bounds (in pixels) are 300 1550 60 850. 
 
 ### 2. `anonymise_video_blackblock.sh`  
@@ -32,7 +32,7 @@ bash anonymise_video_blackblock.sh $HOME/datasets/vital-us/raw-datasets/01NVb-00
 ```
 where `$HOME` is the concatenated  home with user paths.
 
-![usage image](art/ffmpeg2.png)  
+![usage image](../figures/ffmpeg2.png)  
 **Figure 2** The coloured boxes will appear black -colours are only for illustration and bounds (in pixels) are 300 1550 60 850.
 
 ## openCV-based method (slower)
@@ -43,4 +43,4 @@ python anonimise_video_using_opencv.py --videofile_in $HOME/datasets/vital-us/ra
 ``` 
 The script show a window where you will select the region or interest to be preserved.  
 Otherwise, you can also pass it as argument `bounds = 76, 28, 526, 421`.   
-![usage image](art/usage.gif)
+![usage image](../figures/usage.gif)
