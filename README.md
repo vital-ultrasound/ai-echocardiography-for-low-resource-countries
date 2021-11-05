@@ -5,8 +5,9 @@ This repository contains code, data and documentation on the implementation of r
 Echocardiography (echo) is also known as cardiac ultrasound (CUS) and it is the most common noninvasive medical image technique to assess cardiovascular disorders.   
 
 ## Clone repository
-After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), then you can clone the repository by typing (or copying) the following in a terminal:
+After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), then you can clone the repository by typing (or copying) the following lines in a terminal:
 ```
+mkdir -p $HOME/repositories/ && cd $HOME/repositories/ ## suggested path
 git clone git@github.com:vital-ultrasound/echocardiography.git
 ```
 

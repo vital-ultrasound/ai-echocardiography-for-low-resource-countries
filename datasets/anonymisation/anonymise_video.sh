@@ -1,12 +1,9 @@
 #! /bin/bash
-# usage: bash anonymize_video.sh <videoname in> <videoname out> <xmin xmax ymin ymax>
-# example:
-# bash ~/repos/VITAL/echocardiography/Anonymization/anonymize_video.sh 01NVb_sample_short.avi 01NVb_sample_test1_anonym.mp4 300 1550 60 850
+# Usage: bash anonymize_video.sh <videoname in> <videoname out> <xmin xmax ymin ymax>
+# Example: bash anonymize_video.sh 01NVb_sample_short.avi 01NVb_sample_test1_anonym.mp4 300 1550 60 850
 
 # bounding box xmin xmax ymin ymax
-#bb=(300 1550 60 850)
 bb=($3 $4 $5 $6)
-
 
 # Get video height and width
 array=`ffprobe -v error -show_entries stream=width,height -of csv=p=0:s=x $1 | awk 'BEGIN{ FS="x"}{print $1" "$2}'`

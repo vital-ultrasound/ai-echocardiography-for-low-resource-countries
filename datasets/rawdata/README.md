@@ -1,9 +1,71 @@
-# Datapath and files
+# Dataset path and files
 
+## Raw Data
+Raw datasets in local path
+```
+cd $HOME/datasets/vital-us/echocardiography/videos
+```
 
-## Terminal output
+## Raw datasets tree in the server 
+```
+* 01NVb
+	* Group 1-ECHO+LUS
+		* ...
+		* 01NVb-003-002
+			* T1
+				* 01NVB-003-002-1
+					* 20200604043114
+						* Image001.avi
+						* ...
+						* Image001.jpg
+						* ...
+				* _P163114
+					* K64GR282
+					* ...
+				* 01NVb-003-002-1.mp4
+			* T2	
+				* 01NVb-003-002-2
+					* 20200608110757	
+						* Image001.avi
+						* ...
+						* Image001.jpg
+						* ...					
+				* _P110757
+					* K68B7G82
+					* ...
+			* T3 
+				* 01NVb-003-002-3
+					* 20200608040258
+						* Image001.avi
+						* ...
+						* Image001.jpg
+						* ...					
+				* _P160258
+					* K68B7302
+					* ...
+		* 01NVb-003-003
+			* T1
+			* T2
+			* T3
+			
+			
+		*  ... 
+		
+		
+		
+		* 01NVb-003-079
+			* T1
+			* T2
+			* T3
+		* 01NVb-003-080
+			* T1
+		* 01NVb-003-081
+			* T1
+			* T2
+``` 
 
-Data path, filename and size are shown blow for 8 out of 81 participants (%10). 
+## Raw datasets in local machine 
+Data path, filename and size are shown below for 8 out of 81 participants (%10 of the dataset). 
 ```
 mx19@sie133-lap:~/datasets/vital/rawdatasets$ ls -lR
 .:
@@ -1344,3 +1406,110 @@ total 417140
 -rw-r--r-- 1 mx19 mx19   313264 Sep 21 07:40 K72F9O84
 
 ```
+
+
+## Raw video datasets tree
+``` 
+$ tree 
+
+├── 01NVb-003-070
+│   ├── T1
+│   │   ├── 01NVb-003-070-1 echo.mp4
+│   │   └── 01NVb-003-070-1 mea.mp4
+│   ├── T2
+│   │   ├── 01NVb-003-070-2 echo.mp4
+│   │   └── 01NVb-003-070-2 mea.mp4
+│   └── T3
+│       ├── 01NVb-003-070-3 echo.mp4
+│       └── 01NVb-003-070-3 mea.mp4
+├── 01NVb-003-071
+│   ├── T1
+│   │   ├── 01NVb-003-071-1 echo.mp4
+│   │   └── 01NVb-003-071-1 mea.mp4
+│   ├── T2
+│   │   ├── 01NVb-003-071-2 echo.mp4
+│   │   └── 01NVb-003-071-2 mea.mp4
+│   └── T3
+│       ├── 01NVb-003-071-3 echo.mp4
+│       └── 01NVb-003-071-3 mea.mp4
+├── 01NVb-003-072
+│   ├── T1
+│   │   ├── 01NVb-003-072-1-echo.mp4
+│   │   └── 01NVb-003-072-1-mea.mp4
+│   ├── T2
+│   │   ├── 01NVb-003-072-2-echo-cont.mp4
+│   │   ├── 01NVb-003-072-2-echo.mp4
+│   │   └── 01NVb-003-072-2-mea.mp4
+│   └── T3
+│       ├── 01NVb-003-072-3-echo.mp4
+│       └── 01NVb-003-072-3-mea.mp4
+├── 01NVb-003-073
+│   ├── T1
+│   │   ├── 01NVb-003-073-1 echo.mp4
+│   │   └── 01NVb-003-073-1 mea.mp4
+│   ├── T2
+│   │   ├── 01NVb-003-073-2 echo.mp4
+│   │   └── 01NVb-003-073-2 mea.mp4
+│   └── T3
+├── 01NVb-003-074
+│   ├── T1
+│   │   ├── 01NVb-003-074-1 echo.mp4
+│   │   └── 01NVb-003-074-1 mea.mp4
+│   ├── T2
+│   │   ├── 01NVb-003-074-2 echo.mp4
+│   │   └── 01NVb-003-074-2 mea.mp4
+│   └── T3
+│       ├── 01NVb-003-074-3 echo.mp4
+│       └── 01NVb-003-074-3 mea.mp4
+├── 01NVb-003-075
+│   ├── T1
+│   │   ├── 01NVb-003-075-1 echo.mp4
+│   │   └── 01NVb-003-075-1 mea.mp4
+│   ├── T2
+│   │   ├── 01NVb-003-075-2 echo.mp4
+│   │   └── 01NVb-003-075-2 mea.mp4
+│   └── T3
+│       ├── 01NVb-003-075-3 echo.mp4
+│       └── 01NVb-003-075-3 mea.mp4
+├── 01NVb-003-076
+│   ├── T1
+│   │   └── 01NVb-003-076-1 echo.mp4
+│   ├── T2
+│   │   └── 01NVb-003-076-2 echo.mp4
+│   └── T3
+│       └── 01NVb-003-076-3 echo.mp4
+├── 01NVb-003-077
+│   ├── T1
+│   │   ├── 01NVb-003-077-1 cont.mp4
+│   │   └── 01NVb-003-077-1 echo.mp4
+│   ├── T2
+│   │   └── 01NVb-003-077-2 echo.mp4
+│   └── T3
+│       └── 01NVb-003-077-3 echo.mp4
+├── 01NVb-003-078
+│   ├── T1
+│   │   └── 01NVb-003-078-1 echo.mp4
+│   ├── T2
+│   │   └── 01NVb-003-078-2 echo.mp4
+│   └── T3
+│       └── 01NVb-003-078-3 echo.mp4
+├── 01NVb-003-079
+│   ├── T1
+│   │   └── 01NVb-003-079-1 echo.mp4
+│   ├── T2
+│   │   ├── 01NVb-003-079-2 echo.mp4
+│   │   └── 01NVb-003-079-2 mea.mp4
+│   └── T3
+│       └── 01NVb-003-079-3 echo.mp4
+├── 01NVb-003-080
+│   ├── T1
+│   │   └── 01NVb-003-080-1 echo.mp4
+│   ├── T2
+│   └── T3
+└── 01NVb-003-081
+    ├── T1
+    │   └── 01NVb-003-081-1 echo.mp4
+    ├── T2
+    └── T3
+
+ ```
