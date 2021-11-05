@@ -1,4 +1,59 @@
-### 01NVb-003-072/
-participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/"
+#### 01NVb-003-070
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-070/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-071
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-071/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-072/
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-073
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-073/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-074
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-074/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-075
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-075/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-076
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-076/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-077
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-077/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-078
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-078/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-079
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-079/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+#### 01NVb-003-080
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-080/"
+#video_output_pathname: 'animations'
+#fps: 30
+
+### 01NVb-003-081
+participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-081/"
 video_output_pathname: 'animations'
 fps: 30

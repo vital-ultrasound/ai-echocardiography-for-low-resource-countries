@@ -8,7 +8,7 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
-#TODO use tqdm with #14
+#TODO use tqdm with #21
 from tqdm import tqdm
 
 def timer_func(func):
@@ -303,8 +303,10 @@ def Video_to_ImageFrame(
                     current_frame_timestamp = msec_to_timestamp(frame_msec)
 
                     if image_frame_index % 1 == 0: ## jump index every MOD vallue (idx % MOD)
-                        print(
-                            f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
+                        ## Comment/uncomment the following printing lines to show the progress of each frame
+                        ## :WARNING: this might flood your terminal
+                        # print(
+                        #     f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
 
                         for clips_i in range(0, number_of_labelled_clips):
                             ## condition for  minute_label
@@ -318,7 +320,7 @@ def Video_to_ImageFrame(
                                     # # DOUBLE CHECK THIS ONE condition for milliseconds label
                                     # if ( int(float(current_frame_timestamp[2])) >=  int(float(start_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ) & ( int(float(current_frame_timestamp[2]))  <=   int(float(end_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ):
 
-                                    # TODO: the following commented lines will be addressed in #14
+                                    # TODO: the following commented lines will be addressed in #21
                                     # masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
                                     # annotated_masked_image_frame_array_3ch_i = annotated_image_frame(masked_image_frame_array_3ch_i,
                                     #                                                                  rg, rb, gb, nnz_rg, nnz_rb,
@@ -337,7 +339,7 @@ def Video_to_ImageFrame(
                     image_frame_index += 1
 
 
-                # TODO: the following commented lines will be addressed in #14
+                # TODO: the following commented lines will be addressed in #21
                 # plotting_colour_features(video_out_path, rg, rb, gb, nnz_rg, nnz_rb, nnz_gb, nz_rg, nz_rb, nz_gb)
 
                 cap.release()
