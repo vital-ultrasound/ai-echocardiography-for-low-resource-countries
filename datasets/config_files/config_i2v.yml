@@ -3,10 +3,10 @@
 #video_output_pathname: 'animations'
 #fps: 30
 
-#### 01NVb-003-071
-#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-071/"
-#video_output_pathname: 'animations'
-#fps: 30
+### 01NVb-003-071
+participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-071/"
+video_output_pathname: 'animations'
+fps: 30
 
 #### 01NVb-003-072/
 #participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072/"
@@ -38,10 +38,10 @@
 #video_output_pathname: 'animations'
 #fps: 30
 
-### 01NVb-003-078
-participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-078/"
-video_output_pathname: 'animations'
-fps: 30
+#### 01NVb-003-078
+#participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-078/"
+#video_output_pathname: 'animations'
+#fps: 30
 
 #### 01NVb-003-079
 #participant_directory: "/home/mx19/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-079/"
