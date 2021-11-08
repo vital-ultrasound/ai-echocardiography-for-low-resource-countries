@@ -332,7 +332,7 @@ def Video_to_ImageFrame(
                                     file_name_with_path = video_out_path + '/clip{:03d}'.format(clips_i + 1)
                                     if not os.path.isdir(file_name_with_path):
                                         os.makedirs(file_name_with_path)
-                                    image_file_name_with_path = file_name_with_path + '/nframe{:05d}_of_{}.png'.format(image_frame_index,nframes-1)
+                                    image_file_name_with_path = file_name_with_path + '/nframe{:05d}_of_{}_T{}min{}sec{}msec.png'.format( image_frame_index,nframes-1, current_frame_timestamp[0], current_frame_timestamp[1], int(float(current_frame_timestamp[2])) )
                                     print(image_file_name_with_path)
                                     cv.imwrite(image_file_name_with_path, cropped_image_frame_)
 
