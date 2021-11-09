@@ -1,38 +1,13 @@
-
-
-import torch
-import torch.utils.data as Data
-import os
 import json
-from typing import Tuple, List
+import os
+from typing import Tuple
+
 import cv2 as cv
 import numpy as np
-#import SimpleITK as sitk
-#import csv
-#from utils import utils
-#import itertools
-#import random
+import torch
+import torch.utils.data as Data
 
 S2MS = 1000
-
-def convert_sec_to_min_sec_ms(timestamp_in_secs: float) -> Tuple[float]:
-    """
-    Convert seconds to the format of minutes, seconds and milliseconds.
-    Temporal segments in VGG I A are in seconds.
-    References: https://gitlab.com/vgg/via/blob/master/via-3.x.y/CodeDoc.md
-    """
-    day = timestamp_in_secs // (24 * 3600)
-    timestamp_in_secs = timestamp_in_secs % (24 * 3600)
-    hour = timestamp_in_secs // 3600
-    timestamp_in_secs %= 3600
-    minutes = timestamp_in_secs // 60
-    timestamp_in_secs %= 60
-    seconds = timestamp_in_secs
-    milliseconds = (seconds - int(seconds)) * 1000
-
-    return int(minutes), int(seconds), '{:.3f}'.format(milliseconds), '{:02d}:{:02d}:{:.3f}'.format(int(minutes),
-                                                                                                    int(seconds),
-                                                                                                    milliseconds)
 
 class EchoViewVideoDataset(Data.Dataset):
     """
@@ -40,44 +15,43 @@ class EchoViewVideoDataset(Data.Dataset):
     This dataset would normally be useful for classification tasks.
 
     Arguments
-        root (string)   -   the folder where there input files are. The system will expect two files to be here,
+        root (srt):  the folder where there input files are. The system will expect two files to be here,
                             video_list.txt and annotation_list.txt as described below.
 
-        video_list_file - text file with the names of videos, with a path relative to the root folder. One file per line.
+        video_list_file (str): text file with the names of videos, with a path relative to the root folder. One file per line.
 
-        annotation_list_file - text file with the names of json annotation files, in the same order as the video_list,
+        annotation_list_file (str): text file with the names of json annotation files, in the same order as the video_list,
                               with a path relative to the root folder. One file per line.
 
-        transform (torch.Transform) - a transform, e.g. for data augmentation, normalization, etc (Default = None)
+        transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
     """
 
-    def __init__(self, root, video_list_file, annotation_list_file, transform=None):
+    def __init__(self, root: str, video_list_file: str, annotation_list_file: str, transform=None):
 
-        self.root = root # folder where the input images are
+        self.root = root  # folder where the input images are
         self.transform = transform
-        self.video_list_file =video_list_file
+        self.video_list_file = video_list_file
         self.annotation_list_file = annotation_list_file
 
         # read the input files to have a list with all the original videos and annotation files
         videoList = os.path.join(root, self.video_list_file)
         annotationList = os.path.join(root, self.annotation_list_file)
 
-        self.video_filenames = [self.root + os.sep+line.strip() for line in open(videoList)]
+        self.video_filenames = [self.root + os.sep + line.strip() for line in open(videoList)]
         self.annotation_filenames = [self.root + os.sep + line.strip() for line in open(annotationList)]
 
     def __len__(self):
         return len(self.video_filenames)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int):
         """
 
-        Arguments
-            index (int) index position to return the data
+        Arguments:
+            index (int): index position to return the data
 
         Returns
-           Returns  a clip (tensor) with the  4ch view, for file 'index',
+           video_data clip (tensor): vide data clip with the 4ch view, for file 'index',
         """
-
 
         video_name = self.video_filenames[index]
         cap = cv.VideoCapture(video_name)
@@ -103,11 +77,11 @@ class EchoViewVideoDataset(Data.Dataset):
 
         number_of_labelled_clips = int(len(start_label_timestamps_ms))
 
-        id_clip_to_extract = 0 # TODO: if more than one clip, change this
+        id_clip_to_extract = 0  # TODO: if more than one clip, change this
 
         # extract the frames of the clip
         frames_torch = []
-        cap.set(cv.CAP_PROP_POS_MSEC,start_label_timestamps_ms[id_clip_to_extract])
+        cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
         while True:
             success, frame = cap.read()
             # in pytorch, channels go first, then height, width
@@ -117,7 +91,9 @@ class EchoViewVideoDataset(Data.Dataset):
             if msec > end_label_timestamps_ms[id_clip_to_extract]:
                 break
             if not success:
-                print('[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to extract frame at ms {} from video '.format(msec))
+                print(
+                    '[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to extract frame at ms {} from video '.format(
+                        msec))
                 break
             frames_torch.append(frame_torch)
 
@@ -126,7 +102,6 @@ class EchoViewVideoDataset(Data.Dataset):
         video_data = torch.stack(frames_torch)
 
         if self.transform is not None:
-                video_data = self.transform(video_data)
+            video_data = self.transform(video_data)
 
         return video_data
-
