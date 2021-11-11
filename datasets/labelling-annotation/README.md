@@ -1,8 +1,8 @@
 # Labelling and annotating ultrasound echochardiograhy datasets.
-The following are instructions for user to label and annotate ultrasound echocardiography datasets.
+The following are instructions for user to label and annotate timestamps of Four Chamber View (4CV) and Ejection Fraction (EF) of ultrasound echocardiography datasets.
 
 ## 1. Download datasets
-1.1 Download datasets from the filezilla server.    
+**1.1** Download datasets from the filezilla server which are located at `/01NVb/01NVb/Group 1-ECHO + LUS`.
 It is suggested that you create a path for datasets as showing below:
 ``` 
 cd 
@@ -17,7 +17,7 @@ Then you can download the following files from filezilla:
  /01NVb/01NVb/Group 1-ECHO + LUS/01NVb-003-070/T3/01NVb-003-072-3 echo.mp4
 ```
 
-1.2 Save files in your local machine.
+**1.2** Save files in your local machine.
 For instance, files are organised as follows where "mx19@sie113-lap" is the username with machine name:
 ``` 
 mx19@sie133-lap:~/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072$ tree -h
@@ -36,8 +36,8 @@ mx19@sie133-lap:~/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072$ 
 
 
 ## 2. Use VIA software to annotate videos.
-2.1 Open the [VIA software](https://www.robots.ox.ac.uk/~vgg/software/via/app/via_video_annotator.html) in your favorite internet web-browser (tested in firefox-92.0 (64-bit) in Ubuntu20.04).       
-2.2 Open json files are saved in this repository and are located at:   
+**2.1** Open the [VIA software](https://www.robots.ox.ac.uk/~vgg/software/via/app/via_video_annotator.html) in your favorite internet web-browser (tested in firefox-92.0 (64-bit) in Ubuntu20.04).       
+**2.2** Open json files are saved in this repository and are located at:   
 ```
 :~/vital-us/echocardiography/datasets/labelling-annotation/json_files$ ls -lR
 .:
@@ -46,16 +46,16 @@ total 4
 ```
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.
 
-2.3. Select paths of video files and verify annotations. 
+**2.3** Select paths of video files and verify annotations. 
 ![figure](figures/file-not-found.png)
 
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.
 
-2.4 Verify annotations   
+**2.4** Verify annotations   
 With your mouse scroll the time line of the video to verify annotation(s).
 ![figure](figures/verification-of-annotation.png)
 
-2.5 Save annotations in json files and only leave two json files (last most updates files).     
+**2.5** Save annotations in json files and only leave two json files (last most updates files).     
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.  
 
 See [README](json_files/README.md) in json_files path for further details. 
