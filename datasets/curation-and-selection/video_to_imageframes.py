@@ -8,8 +8,9 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
-#TODO use tqdm with #14
-from tqdm import tqdm
+
+
+# TODO use tqdm with #21
 
 def timer_func(func):
     """
@@ -203,7 +204,9 @@ def show_image(ima_array: np.ndarray) -> None:
     plt.imshow(ima_array)
     plt.show()
 
-def convert_frames_to_video(videofile_with_destinationFolder: str, filaName: str = None, fps: int = None, cropSize: list = None):
+
+def convert_frames_to_video(videofile_with_destinationFolder: str, filaName: str = None, fps: int = None,
+                            cropSize: list = None):
     """
     Convert frames to AVI file
     """
@@ -213,20 +216,19 @@ def convert_frames_to_video(videofile_with_destinationFolder: str, filaName: str
         except FileExistsError:
             pass
 
-    fourcc = cv.VideoWriter_fourcc('M','J','P','G')
+    fourcc = cv.VideoWriter_fourcc('M', 'J', 'P', 'G')
     # video_filename = os.path.join(videofile_with_destinationFolder)
     print(videofile_with_destinationFolder)
     # out = cv.VideoWriter(videofile_with_destinationFolder, fourcc, fps, cropSize)
 
 
-
 @timer_func
 def Video_to_ImageFrame(
-                        participant_directory: str,
-                        preprocessed_datasets_path: str,
-                        video_output_pathname: str,
-                        participant_path_json_file: str,
-                        bounds: List = None):
+        participant_directory: str,
+        preprocessed_datasets_path: str,
+        video_output_pathname: str,
+        participant_path_json_file: str,
+        bounds: List = None):
     """Video_to_ImageFrame
     Extract clips (images frames) from json metadata from mp4 videos.
     Args:
@@ -237,19 +239,20 @@ def Video_to_ImageFrame(
     """
 
     ## Create list of json files
-    json_files = [ ]
-    for json_i  in enumerate( sorted(os.listdir(participant_path_json_file))  ):
+    json_files = []
+    for json_i in enumerate(sorted(os.listdir(participant_path_json_file))):
         json_files_path = participant_path_json_file + '/' + json_i[1]
         json_files.append(json_files_path)
 
     participant_directory_name = participant_directory.split("/")[-1]
 
-    for T_days_i in enumerate( sorted(os.listdir(participant_directory))  ):
+    for T_days_i in enumerate(sorted(os.listdir(participant_directory))):
         days_i_path = participant_directory + '/' + T_days_i[1]
-        json_file_i=json_files[T_days_i[0]]
-        video_out_path = preprocessed_datasets_path + '/' + participant_directory_name + '/' + T_days_i[1] + '/' + video_output_pathname
+        json_file_i = json_files[T_days_i[0]]
+        video_out_path = preprocessed_datasets_path + '/' + participant_directory_name + '/' + T_days_i[
+            1] + '/' + video_output_pathname
 
-        for video_file_name_i in  sorted(os.listdir(days_i_path)):
+        for video_file_name_i in sorted(os.listdir(days_i_path)):
             path_video_file_name_i = days_i_path + '/' + video_file_name_i
             if path_video_file_name_i.endswith('.mp4'):
                 print(path_video_file_name_i)
@@ -284,13 +287,19 @@ def Video_to_ImageFrame(
                 ## Extracting timestams in json files for labelled of four chamber views (4CV)
                 with open(json_file_i, "r") as json_file:
                     json_data = json.load(json_file)
-                    for key in json_data['metadata']:
-                        timestamps_of_labels = json_data['metadata'][key]['z']
-                        # print(timestamps_of_labels)
-                        start_label = convert_sec_to_min_sec_ms(timestamps_of_labels[0])
-                        end_label = convert_sec_to_min_sec_ms(timestamps_of_labels[1])
-                        start_label_timestamps = np.append(start_label_timestamps, start_label)
-                        end_label_timestamps = np.append(end_label_timestamps, end_label)
+                    if len(json_data['metadata']) == 0: ## Check if the metadata is empty
+                        print(f'')
+                        print(f'  No 4CV labels for {json_file_i}')
+                        print(f'')
+                        break
+                    else:
+                        for key in json_data['metadata']:
+                            timestamps_of_labels = json_data['metadata'][key]['z']
+                            # print(timestamps_of_labels)
+                            start_label = convert_sec_to_min_sec_ms(timestamps_of_labels[0])
+                            end_label = convert_sec_to_min_sec_ms(timestamps_of_labels[1])
+                            start_label_timestamps = np.append(start_label_timestamps, start_label)
+                            end_label_timestamps = np.append(end_label_timestamps, end_label)
 
                 length_of_timestamp_vector = len(start_label)
                 number_of_labelled_clips = int(len(start_label_timestamps) / length_of_timestamp_vector)
@@ -302,14 +311,18 @@ def Video_to_ImageFrame(
                     frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
                     current_frame_timestamp = msec_to_timestamp(frame_msec)
 
-                    if image_frame_index % 1 == 0: ## jump index every MOD vallue (idx % MOD)
-                        print(
-                            f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
+                    if image_frame_index % 1 == 0:  ## jump index every MOD vallue (idx % MOD)
+                        ## Comment/uncomment the following printing lines to show the progress of each frame
+                        ## :WARNING: this might flood your terminal
+                        # print(
+                        #     f'  Frame_index/number_of_frames={image_frame_index}/{nframes - 1},  current_frame_timestamp={current_frame_timestamp[3]}')
 
                         for clips_i in range(0, number_of_labelled_clips):
                             ## condition for  minute_label
-                            if (current_frame_timestamp[0] >= int(start_label_timestamps[clips_i * length_of_timestamp_vector])) & (
-                                    current_frame_timestamp[0] <= int(end_label_timestamps[clips_i * length_of_timestamp_vector])):
+                            if (current_frame_timestamp[0] >= int(
+                                    start_label_timestamps[clips_i * length_of_timestamp_vector])) & (
+                                    current_frame_timestamp[0] <= int(
+                                end_label_timestamps[clips_i * length_of_timestamp_vector])):
                                 ## condition for second label
                                 if (current_frame_timestamp[1] >= int(
                                         start_label_timestamps[(clips_i * length_of_timestamp_vector) + 1])) & (
@@ -318,7 +331,7 @@ def Video_to_ImageFrame(
                                     # # DOUBLE CHECK THIS ONE condition for milliseconds label
                                     # if ( int(float(current_frame_timestamp[2])) >=  int(float(start_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ) & ( int(float(current_frame_timestamp[2]))  <=   int(float(end_label_timestamps[ (clips_i * length_of_timestamp_vector) + 2]))  ):
 
-                                    # TODO: the following commented lines will be addressed in #14
+                                    # TODO: the following commented lines will be addressed in #21
                                     # masked_image_frame_array_3ch_i = maks_for_captured_us_image(image_frame_array_3ch_i)
                                     # annotated_masked_image_frame_array_3ch_i = annotated_image_frame(masked_image_frame_array_3ch_i,
                                     #                                                                  rg, rb, gb, nnz_rg, nnz_rb,
@@ -330,14 +343,16 @@ def Video_to_ImageFrame(
                                     file_name_with_path = video_out_path + '/clip{:03d}'.format(clips_i + 1)
                                     if not os.path.isdir(file_name_with_path):
                                         os.makedirs(file_name_with_path)
-                                    image_file_name_with_path = file_name_with_path + '/nframe{:05d}_of_{}.png'.format(image_frame_index,nframes-1)
+                                    image_file_name_with_path = file_name_with_path + '/nframe{:05d}_of_{}_T{}min{}sec{}msec.png'.format(
+                                        image_frame_index,
+                                        nframes - 1,
+                                        current_frame_timestamp[0],current_frame_timestamp[1], int(float(current_frame_timestamp[2])))
                                     print(image_file_name_with_path)
                                     cv.imwrite(image_file_name_with_path, cropped_image_frame_)
 
                     image_frame_index += 1
 
-
-                # TODO: the following commented lines will be addressed in #14
+                # TODO: the following commented lines will be addressed in #21
                 # plotting_colour_features(video_out_path, rg, rb, gb, nnz_rg, nnz_rb, nnz_gb, nz_rg, nz_rb, nz_gb)
 
                 cap.release()
@@ -353,9 +368,9 @@ if __name__ == '__main__':
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
     Video_to_ImageFrame(
-                        config['participant_directory'],
-                        config['preprocessed_datasets_path'],
-                        config['video_output_pathname'],
-                        config['participant_path_json_file'],
-                        config['bounds']
+        config['participant_directory'],
+        config['preprocessed_datasets_path'],
+        config['video_output_pathname'],
+        config['participant_path_json_file'],
+        config['bounds']
     )
