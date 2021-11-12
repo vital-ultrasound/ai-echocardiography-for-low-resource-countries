@@ -7,6 +7,7 @@ import numpy as np
 import torch
 import torch.utils.data as Data
 
+# constants
 S2MS = 1000
 
 class EchoViewVideoDataset(Data.Dataset):
@@ -26,19 +27,20 @@ class EchoViewVideoDataset(Data.Dataset):
         transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
     """
 
-    def __init__(self, root: str, video_list_file: str, annotation_list_file: str, transform=None):
+    def __init__(self, root: str, participant_path_json_files: str, video_list_file: str, annotation_list_file: str, transform=None):
 
-        self.root = root  # folder where the input images are
+        self.root = root
+        self.participant_path_json_files = participant_path_json_files
         self.transform = transform
         self.video_list_file = video_list_file
         self.annotation_list_file = annotation_list_file
 
         # read the input files to have a list with all the original videos and annotation files
         videoList = os.path.join(root, self.video_list_file)
-        annotationList = os.path.join(root, self.annotation_list_file)
+        annotationList = os.path.join(participant_path_json_files, self.annotation_list_file)
 
         self.video_filenames = [self.root + os.sep + line.strip() for line in open(videoList)]
-        self.annotation_filenames = [self.root + os.sep + line.strip() for line in open(annotationList)]
+        self.annotation_filenames = [self.participant_path_json_files + os.sep + line.strip() for line in open(annotationList)]
 
     def __len__(self):
         return len(self.video_filenames)
