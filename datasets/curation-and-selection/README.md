@@ -2,7 +2,7 @@
 Python scripts made use of the `rt-ai-echo-VE` virtual environment which should be started in the terminal  (by typing or copying and paste) `conda activate rt-ai-echo-VE`. 
 It is suggested that datasets in the local machine are placed in the following location:
 ``` 
-cd $HOME/datasets/vital-us/echocardiography/videos/
+cd $HOME/datasets/vital-us/echocardiography/videos-echo
 ```
 
 ## Scripts
@@ -14,11 +14,17 @@ The script converts mp4 videos to png image frames of masked videos (Fig 1).
 * Example for `01NVb-003-071/`  
 Before running the script, make sure to edit [config.yml](config.yml) file with the right paths.
 ```
-conda activate rt-ai-echo-VE 
 cd $HOME/repositories/echocardiography/datasets/curation-and-selection
+conda activate rt-ai-echo-VE
 python video_to_imageframes.py --config ../config_files/config_v2i.yml  
 ```
 
+See output of convered frames at 
+
+
+``` 
+cd $HOME/datasets/vital-us/echocardiography/preprocessed-datasets
+```
 
 ### [`png_to_avi.py`](png_to_avi.py)
 Terminal commands:
