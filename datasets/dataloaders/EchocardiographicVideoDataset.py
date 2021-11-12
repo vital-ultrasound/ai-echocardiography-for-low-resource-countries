@@ -1,6 +1,5 @@
 import json
 import os
-from typing import Tuple
 
 import cv2 as cv
 import numpy as np
@@ -12,35 +11,34 @@ S2MS = 1000
 
 class EchoViewVideoDataset(Data.Dataset):
     """
-    This dataset provides short clips (as 2D + t tensors) and their corresponding label describing the view.
+    This dataset provides clips (as 2D + t tensors) and their corresponding label describing the view.
     This dataset would normally be useful for classification tasks.
 
     Arguments
-        root (srt):  the folder where there input files are. The system will expect two files to be here,
-                            video_list.txt and annotation_list.txt as described below.
+        participant_videos_path (srt):  the folder where there input files are.
 
-        video_list_file (str): text file with the names of videos, with a path relative to the root folder. One file per line.
-
-        annotation_list_file (str): text file with the names of json annotation files, in the same order as the video_list,
-                              with a path relative to the root folder. One file per line.
+        participant_path_json_files (str): text file with the names of json annotation files, in the same order as the video_list.
 
         transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
     """
 
-    def __init__(self, root: str, participant_path_json_files: str, video_list_file: str, annotation_list_file: str, transform=None):
+    def __init__(self, participant_videos_path: str, participant_path_json_files: str, transform=None):
 
-        self.root = root
+        self.participant_videos_path = participant_videos_path
         self.participant_path_json_files = participant_path_json_files
         self.transform = transform
-        self.video_list_file = video_list_file
-        self.annotation_list_file = annotation_list_file
 
-        # read the input files to have a list with all the original videos and annotation files
-        videoList = os.path.join(root, self.video_list_file)
-        annotationList = os.path.join(participant_path_json_files, self.annotation_list_file)
+        self.video_filenames = []
+        for T_days_i in enumerate(sorted(os.listdir(self.participant_videos_path))):
+            days_i_path = self.participant_videos_path + '/' + T_days_i[1]
+            for video_file_name_i in sorted(os.listdir(days_i_path)):
+                path_video_file_name_i = days_i_path + '/' + video_file_name_i
+                if path_video_file_name_i.endswith('.mp4'):
+                    self.video_filenames += [path_video_file_name_i]
 
-        self.video_filenames = [self.root + os.sep + line.strip() for line in open(videoList)]
-        self.annotation_filenames = [self.participant_path_json_files + os.sep + line.strip() for line in open(annotationList)]
+        self.annotation_filenames = []
+        for json_i in enumerate(sorted(os.listdir(self.participant_path_json_files))):
+            self.annotation_filenames += [self.participant_path_json_files + '/' + json_i[1]]
 
     def __len__(self):
         return len(self.video_filenames)
@@ -100,7 +98,6 @@ class EchoViewVideoDataset(Data.Dataset):
             frames_torch.append(frame_torch)
 
         # make a  tensor of the clip
-
         video_data = torch.stack(frames_torch)
 
         if self.transform is not None:

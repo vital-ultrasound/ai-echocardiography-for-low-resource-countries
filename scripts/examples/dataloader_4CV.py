@@ -10,11 +10,6 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    dataset = EchoViewVideoDataset(config['participant_datapath'],
-                                   config['participant_path_json_files'],
-                                   config['video_list_file'],
-                                   config['annotation_list_file'])
+    dataset = EchoViewVideoDataset(config['participant_videos_path'], config['participant_path_json_files'])
     sample_index = 0
     data = dataset[sample_index]
-
-

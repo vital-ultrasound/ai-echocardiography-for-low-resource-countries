@@ -1,10 +1,10 @@
 # Pytorch dataloaders for echo videos
 
-A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format, as generated with the VGG annotator tool.
+A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format.
 
 # Usage:
 ## Running script
-1. Open a terminal and load your conda environment 
+Open a terminal and load your conda environment 
 ```
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 cd $HOME/repositories/echocardiography/scripts/examples
@@ -12,36 +12,11 @@ conda activate rt-ai-echo-VE
 python dataloader_4CV.py --config ../config_files/config_4cv.yml
 ```
 
-## Further explanations
-2. The dataloader takes as input a list of the videos, and a list of annotations, in two text files. As follows:
-
+## Setting config file 
+For datapaths of other users, you can edit config.yml and add respective participant video path and json files path. 
+``` 
+### Datapaths
+#### 01NVb-003-072
+participant_videos_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072'
+participant_path_json_files: '/home/mx19/datasets/vital-us/echocardiography/json/01NVb-003-072'
 ```
-import datasets.dataloaders.EchocardiographicVideoDataset as EchoDatasets
-...
-dataset = EchoDatasets.EchoViewVideoDataset(
-	    root=, 
-	    video_list_file='video_list.txt', 
-	    annotation_list_file='annotation_list.txt')
-```
-
-So the files `video_list.txt` and `annotation_list.txt` should be located in the root folder.
-
-The contents of those files should be, for example, as follows:
-
-`video_list.txt`
-
-```
-01NVb-003-072/T1/01NVb-003-072-1 echo.mp4
-01NVb-003-072/T2/01NVb-003-072-2 echo cont.mp4
-01NVb-003-072/T3/01NVb-003-072-3 echo.mp4
-```
-
-`annotation_list.txt`
-
-```
-01NVb-003-072/T1/01NVb_003_072_T1_4CV.json
-01NVb-003-072/T2/01NVb_003_072_T2_4CV.json
-01NVb-003-072/T3/01NVb_003_072_T3_4CV.json
-```
-
-Containing the paths to the files within the root folder.
