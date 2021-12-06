@@ -1,6 +1,7 @@
 # flake8: noqa
 ### USAGE:
-#           conda activate ve-AICO
+#           conda activate rt-ai-echo-VE
+#           cd $HOME/repositories/echocardiography/scripts
 #           python print_system.py
 ### Terminal log:
 #           Platform:   Linux-5.11.0-36-generic-x86_64-with-glibc2.17

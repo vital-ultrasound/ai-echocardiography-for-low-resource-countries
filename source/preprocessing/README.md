@@ -4,7 +4,7 @@
 The script converts DICOM files into AVI files.
 ```
 conda activate ve-AICU
-cd $HOME/vital-us/echocardiography/datasets/preprocessing
+cd $HOME/repositories/echocardiography/source/preprocessing
 python convertDICOMtoAVI.py --datapath $HOME/datasets/vital-us --participant_ID 01NVb-003-001
 ```
 

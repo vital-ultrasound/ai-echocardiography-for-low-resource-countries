@@ -14,7 +14,7 @@ The script converts mp4 videos to png image frames of masked videos (Fig 1).
 * Example for `01NVb-003-071/`  
 Before running the script, make sure to edit [config.yml](config.yml) file with the right paths.
 ```
-cd $HOME/repositories/echocardiography/datasets/curation-and-selection
+cd $HOME/repositories/echocardiography/source/curation-and-selection
 conda activate rt-ai-echo-VE
 python video_to_imageframes.py --config ../config_files/config_v2i.yml  
 ```
@@ -30,7 +30,7 @@ cd $HOME/datasets/vital-us/echocardiography/preprocessed-datasets
 Terminal commands:
 ```
 conda activate rt-ai-echo-VE
-cd $HOME/repositories/echocardiography/datasets/curation-and-selection
+cd $HOME/repositories/echocardiography/source/curation-and-selection
 python png_to_avi.py --config ../config_files/config_i2v.yml
 ```
 
@@ -39,7 +39,7 @@ python png_to_avi.py --config ../config_files/config_i2v.yml
 Terminal commands:
 ```
 conda activate rt-ai-echo-VE
-cd $HOME/repositories/echocardiography/datasets/curation-and-selection
+cd $HOME/repositories/echocardiography/source/curation-and-selection
 python video_to_sliding_video.py --videofile_in $HOME/datasets/vital-us/raw-datasets/01NVb-003-001/T1/01NVb-003-001-echo.mp4 --videofile_out $HOME/datasets/vital-us/preprocessed-datasets/tmp/01NVb-003-001-echo-sliced.mp4 --bounds 100 100  
 ```
 
@@ -48,7 +48,7 @@ This script helps identify good pairs of images/labels and save them to a folder
 Terminal commands:
 ``` 
 conda activate rt-ai-echo-VE
-cd $HOME/repositories/echocardiography/datasets/curation-and-selection
+cd $HOME/repositories/echocardiography/source/curation-and-selection
 python video_channel_measurement.py --videofile_in $HOME/datasets/vital-us/raw-datasets/01NVb-003-001/T1/01NVb-003-001-echo.mp4 --image_frames_path $HOME/datasets/vital-us/preprocessed-datasets/tmp/nframes_ --bounds 331 107 1477 823
 ```
 

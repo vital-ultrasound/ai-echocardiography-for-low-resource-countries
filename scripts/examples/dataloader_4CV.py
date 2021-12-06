@@ -1,6 +1,6 @@
 import argparse
 import yaml
-from datasets.dataloaders.EchocardiographicVideoDataset import *
+from source.dataloaders.EchocardiographicVideoDataset import *
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
