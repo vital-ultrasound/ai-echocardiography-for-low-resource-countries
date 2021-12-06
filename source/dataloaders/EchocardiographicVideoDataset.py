@@ -2,13 +2,15 @@ import json
 import os
 
 import cv2 as cv
-import numpy as np
 import torch
 import torch.utils.data as Data
+from tqdm import tqdm
+
 from source.helpers.various import *
 
 # constants
 S2MS = 1000
+
 
 class EchoViewVideoDataset(Data.Dataset):
     """
@@ -55,49 +57,79 @@ class EchoViewVideoDataset(Data.Dataset):
            video_data clip (tensor): vide data clip with the 4ch view, for file 'index',
         """
 
+        image_frame_index = 0
         video_name = self.video_filenames[index]
         cap = cv.VideoCapture(video_name)
         if cap.isOpened() == False:
-            print('[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to read video ' + video_name)
+            print('[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to open video ' + video_name)
             exit(-1)
+
+        # Get parameters of input video
+        frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+        frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+        fps = int(np.ceil(cap.get(cv.CAP_PROP_FPS)))
+        nframes = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+
+        # Print video features
+        print(f'  ')
+        print(f'  Frame_height={frame_height},  frame_width={frame_width} fps={fps} nframes={nframes} ')
+        print(f'  ')
 
         jsonfile_name = self.annotation_filenames[index]
 
+        ## Extracting timestams in json files for labelled of four chamber views (4CV)
         start_label_timestamps_ms = []
         end_label_timestamps_ms = []
-
         with open(jsonfile_name, "r") as json_file:
             json_data = json.load(json_file)
-            for key in json_data['metadata']:
-                timestamps_of_labels = json_data['metadata'][key]['z']
-                # print(timestamps_of_labels)
-                start_label_ms = timestamps_of_labels[0] * S2MS
-                end_label_ms = timestamps_of_labels[1] * S2MS
+            if len(json_data['metadata']) == 0:  ## Check if the metadata is empty
+                id_clip_to_extract = 0
+                print(f'')
+                print(f'  No 4CV labels for {json_file_i}')
+                print(f'')
+                # break
+            else:
+                for key in json_data['metadata']:
+                    timestamps_of_labels = json_data['metadata'][key]['z']
+                    start_label_ms = timestamps_of_labels[0] * S2MS
+                    end_label_ms = timestamps_of_labels[1] * S2MS
+                    start_label_timestamps_ms.append(start_label_ms)
+                    end_label_timestamps_ms.append(end_label_ms)
 
-                start_label_timestamps_ms.append(start_label_ms)
-                end_label_timestamps_ms.append(end_label_ms)
-
+        # length_of_timestamp_vector = len(start_label_timestamps_ms)
+        # print(length_of_timestamp_vector)
+        # number_of_labelled_clips = int(len(start_label_timestamps) / length_of_timestamp_vector)
         number_of_labelled_clips = int(len(start_label_timestamps_ms))
 
-        id_clip_to_extract = 0  # TODO: if more than one clip, change this
-
-        # extract the frames of the clip
+        # Extract the frames of the clip
         frames_torch = []
-        cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
+        # cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
+        pbar = tqdm(total=nframes - 1)
         while True:
-            success, frame = cap.read()
+            success, image_frame_array_3ch_i = cap.read()
             # in pytorch, channels go first, then height, width
-            frame_channelsfirst = np.moveaxis(frame, -1, 0)
-            frame_torch = torch.from_numpy(frame_channelsfirst)
-            msec = cap.get(cv.CAP_PROP_POS_MSEC)
-            if msec > end_label_timestamps_ms[id_clip_to_extract]:
-                break
+            frame_channels_height_width = np.moveaxis(image_frame_array_3ch_i, -1, 0)
+            frame_torch = torch.from_numpy(frame_channels_height_width)
             if not success:
-                print(
-                    '[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to extract frame at ms {} from video '.format(
-                        msec))
+                print('[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to read video ' + video_name)
                 break
-            frames_torch.append(frame_torch)
+            frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
+            current_frame_timestamp = msec_to_timestamp(frame_msec)
+
+            ## condition for  minute_label
+            for clips_i in range(0, number_of_labelled_clips):
+                if (current_frame_timestamp[0] >= int(msec_to_timestamp(start_label_timestamps_ms[clips_i])[0])) & (
+                        current_frame_timestamp[0] <= int(msec_to_timestamp(end_label_timestamps_ms[clips_i])[0])):
+                    # condition for second label
+                    if (current_frame_timestamp[1] >= int(msec_to_timestamp(start_label_timestamps_ms[clips_i])[1])) & (
+                            current_frame_timestamp[1] <= int(msec_to_timestamp(end_label_timestamps_ms[clips_i])[1])):
+                        print('clip', clips_i, '; image_frame_index', image_frame_index)
+                        frames_torch.append(frame_torch)
+
+            image_frame_index += 1
+            pbar.update(1)  ## jump every updated number K where is at "update(K)"
+
+        pbar.close()
 
         # make a  tensor of the clip
         video_data = torch.stack(frames_torch)

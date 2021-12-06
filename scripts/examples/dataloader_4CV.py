@@ -11,5 +11,5 @@ if __name__ == '__main__':
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
     dataset = EchoViewVideoDataset(config['participant_videos_path'], config['participant_path_json_files'])
-    sample_index = 0
+    sample_index = 1
     data = dataset[sample_index]
