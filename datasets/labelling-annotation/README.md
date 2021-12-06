@@ -47,13 +47,13 @@ total 4
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.
 
 **2.3** Select paths of video files and verify annotations. 
-![figure](figures/file-not-found.png)
+![figure](../../figures/file-not-found.png)
 
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.
 
 **2.4** Verify annotations   
 With your mouse scroll the time line of the video to verify annotation(s).
-![figure](figures/verification-of-annotation.png)
+![figure](../../figures/verification-of-annotation.png)
 
 **2.5** Save annotations in json files and only leave two json files (last most updates files).     
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.  

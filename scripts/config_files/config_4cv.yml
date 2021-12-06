@@ -1,7 +1,8 @@
 ### US Device 
-us_device:  '?'
+us_device:  'GE Venue Go'
 model: '?'
 software_version: '?'
+Transducers: 'Convex probe C1-5-D'
 
 ### Datapaths
 #### 01NVb-003-072

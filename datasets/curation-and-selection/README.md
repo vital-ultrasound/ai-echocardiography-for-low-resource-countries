@@ -8,7 +8,7 @@ cd $HOME/datasets/vital-us/echocardiography/videos-echo
 ## Scripts
 ### [`video_to_imageframes.py`](video_to_imageframes.py)
 The script converts mp4 videos to png image frames of masked videos (Fig 1).
-![fig](../figures/masked-captured-image-frame.png)
+![fig](../../figures/masked-captured-image-frame.png)
 **Fig 1** Example of masks (green geometric forms) in the capture ultrasound image.
 
 * Example for `01NVb-003-071/`  
