@@ -5,6 +5,7 @@ import cv2 as cv
 import numpy as np
 import torch
 import torch.utils.data as Data
+from source.helpers.various import *
 
 # constants
 S2MS = 1000
@@ -43,6 +44,7 @@ class EchoViewVideoDataset(Data.Dataset):
     def __len__(self):
         return len(self.video_filenames)
 
+    @timer_func_decorator
     def __getitem__(self, index: int):
         """
 
