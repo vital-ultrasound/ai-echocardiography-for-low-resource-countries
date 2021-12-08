@@ -1,7 +1,7 @@
 ### US Device 
-us_device:  'GE Venue Go'
-model: '?'
-software_version: '?'
+us_device_brand:  'GE'
+model: 'Venue Go'
+software_version: 'R2'
 Transducers: 'Convex probe C1-5-D'
 
 ### Datapaths
