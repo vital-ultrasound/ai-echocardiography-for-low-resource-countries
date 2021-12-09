@@ -47,18 +47,18 @@ class EchoViewVideoDataset(Data.Dataset):
         return len(self.video_filenames)
 
     @timer_func_decorator
-    def __getitem__(self, index: int):
+    def __getitem__(self, video_index: int):
         """
 
         Arguments:
-            index (int): index position to return the data
+            video_index (int): video_index position to return the data
 
         Returns
-           video_data clip (tensor): vide data clip with the 4ch view, for file 'index',
+           video_data clip (tensor): vide data clip with the 4ch view, for file 'video_index',
         """
 
         image_frame_index = 0
-        video_name = self.video_filenames[index]
+        video_name = self.video_filenames[video_index]
         cap = cv.VideoCapture(video_name)
         if cap.isOpened() == False:
             print('[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to open video ' + video_name)
@@ -75,7 +75,7 @@ class EchoViewVideoDataset(Data.Dataset):
         print(f'  Frame_height={frame_height},  frame_width={frame_width} fps={fps} nframes={frame_count} ')
         print(f'  ')
 
-        jsonfile_name = self.annotation_filenames[index]
+        jsonfile_name = self.annotation_filenames[video_index]
 
         ## Extracting timestams in json files for labelled of four chamber views (4CV)
         start_label_timestamps_ms = []
@@ -97,10 +97,11 @@ class EchoViewVideoDataset(Data.Dataset):
                     end_label_timestamps_ms.append(end_label_ms)
 
         number_of_labelled_clips = int(len(start_label_timestamps_ms))
-        # print(number_of_labelled_clips)
+        # print(f' {number_of_labelled_clips}')
 
         # PLAYGROUND
         # cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
+        # torch.from_numpy(image_frame_array_3ch_i).float().cuda()
 
         video_batch_output = []
         pbar = tqdm(total=frame_count)
@@ -108,50 +109,41 @@ class EchoViewVideoDataset(Data.Dataset):
             success, image_frame_array_3ch_i = cap.read()
             if (success == True):
 
-                # in pytorch, channels go first, then height, width
-                # frame_channels_height_width = np.moveaxis(image_frame_array_3ch_i, -1, 0)
-                # frame_torch = torch.from_numpy(frame_channels_height_width)
-                # frame_torch = torch.from_numpy(image_frame_array_3ch_i).numpy()
-                # frame_torch = torch.from_numpy(image_frame_array_3ch_i).float().cuda()
-                # image_frame_array_1ch_i = cv.cvtColor(image_frame_array_3ch_i, cv.COLOR_BGR2RGB ) #cv.COLOR_BGR2RGB  cv.COLOR_BGR2GRAY
-                # print(type(frame_torch), frame_torch.shape)
-                frame_torch_h_w_chs = torch.as_tensor(image_frame_array_3ch_i)
-                frame_torch_chs_h_w = torch.movedim(frame_torch_h_w_chs, -1, 0)
-
                 frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
                 current_frame_timestamp = msec_to_timestamp(frame_msec)
 
-                # print('b',image_frame_array_1ch_i.shape)
-                # cv.imshow('a',image_frame_array_1ch_i)
+                # image_frame_array_1ch_i = cv.cvtColor(image_frame_array_3ch_i, cv.COLOR_BGR2GRAY ) #cv.COLOR_BGR2RGB  cv.COLOR_BGR2GRAY
+                torch_frame_h_w_chs = torch.as_tensor(image_frame_array_3ch_i)
+                torch_frame_chs_h_w = torch.movedim(torch_frame_h_w_chs, -1, 0)
+
+                # PLAYGROUND
+                # cv.imshow('a', image_frame_array_1ch_i)
                 # if cv.waitKey(1) == ord('q'):
                 #     break
-
-                # print(image_frame_index)
-                # print(frame_msec, current_frame_timestamp)
-                # print(type(frame_torch_chs_h_w), frame_torch_chs_h_w.shape)
 
                 # ## condition for  minute_label
                 for clips_i in range(0, number_of_labelled_clips):
                     if (current_frame_timestamp[0] >= int(msec_to_timestamp(start_label_timestamps_ms[clips_i])[0])) & (
                             current_frame_timestamp[0] <= int(msec_to_timestamp(end_label_timestamps_ms[clips_i])[0])):
                         # condition for second label
-                        if (current_frame_timestamp[1] >= int(msec_to_timestamp(start_label_timestamps_ms[clips_i])[1])) & (
-                                current_frame_timestamp[1] <= int(msec_to_timestamp(end_label_timestamps_ms[clips_i])[1])):
-                            print('clip', clips_i, '; image_frame_index', image_frame_index)
-                            video_batch_output.append(frame_torch_chs_h_w)
+                        if (current_frame_timestamp[1] >= int(
+                                msec_to_timestamp(start_label_timestamps_ms[clips_i])[1])) & (
+                                current_frame_timestamp[1] <= int(
+                            msec_to_timestamp(end_label_timestamps_ms[clips_i])[1])):
+                            print(
+                                f'  clip {clips_i}; image_frame_index {image_frame_index}, frame_msec {frame_msec}, current_frame_timestamp {current_frame_timestamp}')
+                            video_batch_output.append(torch_frame_chs_h_w)
 
                 pbar.update(1)
                 image_frame_index += 1
+
             else:
                 break
 
         pbar.close()
         cap.release()
 
-
-        # convert video_batch_output as tensor of the clips
         video_data = torch.stack(video_batch_output)
-        print(video_data.shape)
 
         if self.transform is not None:
             video_data = self.transform(video_data)
