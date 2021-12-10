@@ -1,4 +1,4 @@
-# Labelling and annotating ultrasound echochardiograhy datasets.
+# Labelling ultrasound echochardiograhy datasets.
 The following are instructions for user to label and annotate timestamps of Four Chamber View (4CV) and Ejection Fraction (EF) of ultrasound echocardiography datasets.
 
 ## 1. Download datasets
@@ -39,7 +39,7 @@ mx19@sie133-lap:~/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072$ 
 **2.1** Open the [VIA software](https://www.robots.ox.ac.uk/~vgg/software/via/app/via_video_annotator.html) in your favorite internet web-browser (tested in firefox-92.0 (64-bit) in Ubuntu20.04).       
 **2.2** Open json files are saved in this repository and are located at:   
 ```
-:~/vital-us/echocardiography/datasets/labelling-annotation/json_files$ ls -lR
+:~/vital-us/echocardiography/source/labelling-annotation/json_files$ ls -lR
 .:
 total 4
 -rw-rw-r-- 1 mx19 mx19 981 Oct  6 18:51 via_project_06Oct2021_18h51m11s.json
@@ -47,13 +47,13 @@ total 4
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.
 
 **2.3** Select paths of video files and verify annotations. 
-![figure](figures/file-not-found.png)
+![figure](../../figures/file-not-found.png)
 
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.
 
 **2.4** Verify annotations   
 With your mouse scroll the time line of the video to verify annotation(s).
-![figure](figures/verification-of-annotation.png)
+![figure](../../figures/verification-of-annotation.png)
 
 **2.5** Save annotations in json files and only leave two json files (last most updates files).     
 **NOTE** you can bookmark the path of your files in 'nautiulus', file browsers, to have a quicker accessibility to the files.  
