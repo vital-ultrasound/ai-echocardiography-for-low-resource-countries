@@ -13,7 +13,7 @@ python dataloader_4CV.py --config ../config_files/config_4cv.yml
 ```
 
 ## Setting config file 
-For datapaths of other users, you can edit config.yml and add respective participant video path and json files path. 
+For datapaths of other users, you can edit ../config_files/config_4cv.yml and add respective participant video path and json files path. 
 ``` 
 ### Datapaths
 #### 01NVb-003-072

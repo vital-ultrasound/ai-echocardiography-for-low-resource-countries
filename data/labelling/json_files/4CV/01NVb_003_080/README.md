@@ -35,3 +35,12 @@ av
 	
 
 ```  
+
+## CODEC ERRORS
+```  
+[h264 @ 0x55eae3fbafc0] error while decoding MB 48 27
+[h264 @ 0x55eae3fd7d80] Invalid NAL unit size (0 > 2197).
+[h264 @ 0x55eae3fd7d80] Error splitting the input into NAL units.
+[h264 @ 0x55eae3ff4b40] P sub_mb_type 6 out of range at 102 38
+[h264 @ 0x55eae3ff4b40] error while decoding MB 102 38
+```

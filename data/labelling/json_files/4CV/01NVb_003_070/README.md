@@ -108,3 +108,26 @@ av
 
 
 ```  
+
+
+## CODEC ERRORS
+
+```
+[h264 @ 0x5638c5d94000] Invalid NAL unit size (0 > 2168).
+[h264 @ 0x5638c5d94000] Error splitting the input into NAL units.
+[h264 @ 0x5638c5d77240] cbp too large (58) at 2 41
+[h264 @ 0x5638c5d77240] error while decoding MB 2 41
+[h264 @ 0x5638c5dcdb80] No start code is found.
+[h264 @ 0x5638c5dcdb80] Error splitting the input into NAL units.
+[h264 @ 0x5638c5dea940] No start code is found.
+[h264 @ 0x5638c5dea940] Error splitting the input into NAL units.
+Invalid UE golomb code
+[h264 @ 0x5638c5db0dc0] cbp too large (3199971767) at 73 52
+[h264 @ 0x5638c5db0dc0] error while decoding MB 73 52
+[h264 @ 0x5638c5e07700] No start code is found.
+[h264 @ 0x5638c5e07700] Error splitting the input into NAL units.
+[h264 @ 0x5638c5e244c0] No start code is found.
+[h264 @ 0x5638c5e244c0] Error splitting the input into NAL units.
+ 
+ 
+```

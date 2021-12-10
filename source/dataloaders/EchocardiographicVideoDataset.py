@@ -2,11 +2,12 @@ import json
 import os
 
 import cv2 as cv
+import numpy as np
 import torch
 import torch.utils.data as Data
 from tqdm import tqdm
 
-from source.helpers.various import *
+from source.helpers.various import timer_func_decorator, msec_to_timestamp, change_video_shape
 
 # constants
 S2MS = 1000
@@ -96,10 +97,6 @@ class EchoViewVideoDataset(Data.Dataset):
         number_of_labelled_clips = int(len(start_label_timestamps_ms))
         # print(f' {number_of_labelled_clips}')
 
-        # PLAYGROUND
-        # cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
-        # torch.from_numpy(image_frame_array_3ch_i).float().cuda()
-
         video_batch_output = []
         pbar = tqdm(total=frame_count)
         while True:
@@ -109,14 +106,14 @@ class EchoViewVideoDataset(Data.Dataset):
                 frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
                 current_frame_timestamp = msec_to_timestamp(frame_msec)
 
-                # image_frame_array_1ch_i = cv.cvtColor(image_frame_array_3ch_i, cv.COLOR_BGR2GRAY ) #cv.COLOR_BGR2RGB  cv.COLOR_BGR2GRAY
-                torch_frame_h_w_chs = torch.as_tensor(image_frame_array_3ch_i)
-                torch_frame_chs_h_w = torch.movedim(torch_frame_h_w_chs, -1, 0)
+                number_of_channels = 3
+                torch_frame_chs_h_w = change_video_shape(image_frame_array_3ch_i, number_of_channels)
 
-                # PLAYGROUND
-                # cv.imshow('a', image_frame_array_1ch_i)
+                #### PLAYGROUND
+                # show_torch_tensor(torch_frame_chs_h_w)
                 # if cv.waitKey(1) == ord('q'):
                 #     break
+                ## cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
 
                 # ## condition for  minute_label
                 for clips_i in range(0, number_of_labelled_clips):
