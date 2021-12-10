@@ -1,4 +1,4 @@
-# Labelling and annotating ultrasound echochardiograhy datasets.
+# Labelling ultrasound echochardiograhy datasets.
 The following are instructions for user to label and annotate timestamps of Four Chamber View (4CV) and Ejection Fraction (EF) of ultrasound echocardiography datasets.
 
 ## 1. Download datasets

@@ -6,8 +6,8 @@ A Pytorch dataloader to preprocess and serve data samples extracted from videos 
 ## Running script
 Open a terminal and load your conda environment 
 ```
-export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 cd $HOME/repositories/echocardiography/scripts/examples
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE 
 python dataloader_4CV.py --config ../config_files/config_4cv.yml
 ```

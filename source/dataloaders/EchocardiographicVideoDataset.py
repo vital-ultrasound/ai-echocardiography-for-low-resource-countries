@@ -19,9 +19,7 @@ class EchoViewVideoDataset(Data.Dataset):
 
     Arguments
         participant_videos_path (srt):  the folder where there input files are.
-
         participant_path_json_files (str): text file with the names of json annotation files, in the same order as the video_list.
-
         transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
     """
 
@@ -49,11 +47,10 @@ class EchoViewVideoDataset(Data.Dataset):
     @timer_func_decorator
     def __getitem__(self, video_index: int):
         """
-
         Arguments:
             video_index (int): video_index position to return the data
 
-        Returns
+        Returns:
            video_data clip (tensor): vide data clip with the 4ch view, for file 'video_index',
         """
 
