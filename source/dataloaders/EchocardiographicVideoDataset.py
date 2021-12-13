@@ -7,7 +7,7 @@ import torch
 import torch.utils.data as Data
 from tqdm import tqdm
 
-from source.helpers.various import timer_func_decorator, msec_to_timestamp, change_video_shape
+from source.helpers.various import timer_func_decorator, msec_to_timestamp, change_video_tensor_shape
 
 # constants
 S2MS = 1000
@@ -70,10 +70,12 @@ class EchoViewVideoDataset(Data.Dataset):
 
         # Print video features
         print(f'  ')
-        print(f'  Frame_height={frame_height},  frame_width={frame_width} fps={fps} nframes={frame_count} ')
         print(f'  ')
+        print(f'  video_name={video_name}')
+        print(f'  Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
 
         jsonfile_name = self.annotation_filenames[video_index]
+        print(f'  jsonfile_name={jsonfile_name}')
 
         ## Extracting timestams in json files for labelled of four chamber views (4CV)
         start_label_timestamps_ms = []
@@ -95,7 +97,9 @@ class EchoViewVideoDataset(Data.Dataset):
                     end_label_timestamps_ms.append(end_label_ms)
 
         number_of_labelled_clips = int(len(start_label_timestamps_ms))
-        # print(f' {number_of_labelled_clips}')
+        print(f'  number_of_labelled_clips={number_of_labelled_clips}')
+        print(f'  ')
+        print(f'  ')
 
         video_batch_output = []
         pbar = tqdm(total=frame_count)
@@ -107,7 +111,7 @@ class EchoViewVideoDataset(Data.Dataset):
                 current_frame_timestamp = msec_to_timestamp(frame_msec)
 
                 number_of_channels = 3
-                torch_frame_chs_h_w = change_video_shape(image_frame_array_3ch_i, number_of_channels)
+                torch_frame_chs_h_w = change_video_tensor_shape(image_frame_array_3ch_i, number_of_channels)
 
                 #### PLAYGROUND
                 # show_torch_tensor(torch_frame_chs_h_w)

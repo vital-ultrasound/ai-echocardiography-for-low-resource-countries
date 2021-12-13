@@ -6,9 +6,9 @@ import numpy as np
 import torch
 
 
-def change_video_shape(image_np_array: np.ndarray, nch: int = 3 or None) -> torch.Tensor:
+def change_video_tensor_shape(image_np_array: np.ndarray, nch: int = 3 or None) -> torch.Tensor:
     """
-    change_video_shape to Index, Channels, Height, Width
+    change_video_shape to Timestamp in msec, Clip_number, Channels, Height, Width
     TODO:
         * ChangeVideoShape to "CTHW" (Channels, Time, Height, Width)
         * make use of torch.from_numpy(image_frame_array_3ch_i).float().cuda()

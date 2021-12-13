@@ -12,6 +12,6 @@ if __name__ == '__main__':
 
     dataset = EchoViewVideoDataset(config['participant_videos_path'], config['participant_path_json_files'])
 
-    video_index = 0
+    video_index = 1
     data = dataset[video_index]
     print(f' {type(data)}, {data.size()} ')
