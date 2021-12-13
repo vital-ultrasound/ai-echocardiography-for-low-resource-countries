@@ -4,7 +4,6 @@ import os
 import cv2 as cv
 import numpy as np
 import torch
-import torch.utils.data as Data
 from tqdm import tqdm
 
 from source.helpers.various import timer_func_decorator, msec_to_timestamp, change_video_tensor_shape
@@ -13,18 +12,24 @@ from source.helpers.various import timer_func_decorator, msec_to_timestamp, chan
 S2MS = 1000
 
 
-class EchoViewVideoDataset(Data.Dataset):
+class EchoViewVideoDataset(torch.utils.data.Dataset):
     """
-    This dataset provides clips (as 2D + t tensors) and their corresponding label describing the view.
-    This dataset would normally be useful for classification tasks.
+    EchoViewVideoDataset Class for Loading Video using torch.utils.data.
+    """
 
-    Arguments
+    def __init__(
+            self,
+            participant_videos_path: str,
+            participant_path_json_files: str,
+            transform=None
+    ):
+        """
+        Arguments
+
         participant_videos_path (srt):  the folder where there input files are.
         participant_path_json_files (str): text file with the names of json annotation files, in the same order as the video_list.
         transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
-    """
-
-    def __init__(self, participant_videos_path: str, participant_path_json_files: str, transform=None):
+        """
 
         self.participant_videos_path = participant_videos_path
         self.participant_path_json_files = participant_path_json_files
@@ -114,9 +119,6 @@ class EchoViewVideoDataset(Data.Dataset):
                 torch_frame_chs_h_w = change_video_tensor_shape(image_frame_array_3ch_i, number_of_channels)
 
                 #### PLAYGROUND
-                # show_torch_tensor(torch_frame_chs_h_w)
-                # if cv.waitKey(1) == ord('q'):
-                #     break
                 ## cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
 
                 # ## condition for  minute_label
