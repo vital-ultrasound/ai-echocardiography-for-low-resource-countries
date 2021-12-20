@@ -1,5 +1,4 @@
-# Pytorch dataloaders for echo videos
-
+# Pytorch dataloaders for echochardiography datasets
 A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format.
 
 # Usage:

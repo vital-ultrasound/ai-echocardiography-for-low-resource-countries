@@ -130,8 +130,8 @@ class EchoViewVideoDataset(torch.utils.data.Dataset):
                                 msec_to_timestamp(start_label_timestamps_ms[clips_i])[1])) & (
                                 current_frame_timestamp[1] <= int(
                             msec_to_timestamp(end_label_timestamps_ms[clips_i])[1])):
-                            print(
-                                f'  clip {clips_i}; image_frame_index {image_frame_index}, frame_msec {frame_msec}, current_frame_timestamp {current_frame_timestamp}')
+                            # print(
+                            #     f'  clip {clips_i}; image_frame_index {image_frame_index}, frame_msec {frame_msec}, current_frame_timestamp {current_frame_timestamp}')
                             video_batch_output.append(torch_frame_chs_h_w)
 
                 pbar.update(1)
