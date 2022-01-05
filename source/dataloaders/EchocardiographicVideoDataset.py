@@ -12,9 +12,9 @@ from source.helpers.various import timer_func_decorator, msec_to_timestamp, chan
 S2MS = 1000
 
 
-class EchoViewVideoDataset(torch.utils.data.Dataset):
+class ViewVideoDataset(torch.utils.data.Dataset):
     """
-    EchoViewVideoDataset Class for Loading Video using torch.utils.data.
+    ViewVideoDataset Class for Loading Video using torch.utils.data.
     """
 
     def __init__(
@@ -62,9 +62,11 @@ class EchoViewVideoDataset(torch.utils.data.Dataset):
 
         image_frame_index = 0
         video_name = self.video_filenames[video_index]
+        jsonfile_name = self.annotation_filenames[video_index]
+
         cap = cv.VideoCapture(video_name)
         if cap.isOpened() == False:
-            print('[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to open video ' + video_name)
+            print('[ERROR] [ViewVideoDataset.__getitem__()] Unable to open video ' + video_name)
             exit(-1)
 
         # Get parameters of input video
@@ -78,8 +80,6 @@ class EchoViewVideoDataset(torch.utils.data.Dataset):
         print(f'  ')
         print(f'  video_name={video_name}')
         print(f'  Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
-
-        jsonfile_name = self.annotation_filenames[video_index]
         print(f'  jsonfile_name={jsonfile_name}')
 
         ## Extracting timestams in json files for labelled of four chamber views (4CV)

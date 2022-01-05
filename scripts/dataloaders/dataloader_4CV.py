@@ -3,7 +3,7 @@ import argparse
 import yaml
 from torch.utils.data import DataLoader
 
-from source.dataloaders.EchocardiographicVideoDataset import EchoViewVideoDataset
+from source.dataloaders.EchocardiographicVideoDataset import ViewVideoDataset
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    dataset = EchoViewVideoDataset(config['participant_videos_path'], config['participant_path_json_files'])
+    dataset = ViewVideoDataset(config['participant_videos_path'], config['participant_path_json_files'])
 
     video_index = 1
     data = dataset[video_index]
