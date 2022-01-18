@@ -12,9 +12,9 @@ channels:
   - conda-forge
 dependencies:
   - python=3.8.*
-  - pytorch=1.9.1
+  - pytorch=1.9.* #1.9.*#OK #1.10.* found conflict!
   - cudatoolkit=11.1
-  - torchvision=0.2.2  #0.2.2#OK #0.10.1 has conflicts (TODO check version conflicts)
+  - torchvision=0.10.0  #0.2.2#OK #0.10.0 #OK #0.10.1 #0.11.* have conflicts (TODO check version conflicts)
   - matplotlib
   - numpy
   - pip
