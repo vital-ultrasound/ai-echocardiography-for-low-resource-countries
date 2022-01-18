@@ -6,32 +6,22 @@ import numpy as np
 import torch
 
 
-def change_video_tensor_shape(image_np_array: np.ndarray, nch: int = 3 or None) -> torch.Tensor:
+def ToTensor(image_np_array: np.ndarray) -> torch.Tensor:
     """
-    change_video_shape to Timestamp in msec, Clip_number, Channels, Height, Width
-    TODO:
-        * ChangeVideoShape to "CTHW" (Channels, Time, Height, Width)
-        * make use of torch.from_numpy(image_frame_array_3ch_i).float().cuda()
+    change_video_shape "numpy image: H x W x C" to torch image: C x H x W
 
     Arguments:
         image_np_array: Numpy array of image frame
-        nch: Number of channels with one channel as default or None if not specified
 
     Return:
-        torch.Tensor in the form of idx_chs_h_w
+        torch.Tensor image in the form of chs_h_w
     """
 
-    if nch == 3:
-        image_np_array_ = cv.cvtColor(image_np_array, cv.COLOR_BGR2RGB)
-    elif nch == 1:
-        image_np_array_ = cv.cvtColor(image_np_array, cv.COLOR_BGR2GRAY)
-    else:
-        print(f'Should be 1 or 3 channels')
+    torch_frame_hwc = torch.as_tensor(image_np_array) # torch.uint8
+    torch_frame_cwh = torch.movedim(torch_frame_hwc, -1, 0)
 
-    torch_frame_h_w_chs = torch.as_tensor(image_np_array_)
-    torch_frame_idx_chs_h_w = torch.movedim(torch_frame_h_w_chs, -1, 0)
+    return torch_frame_cwh
 
-    return torch_frame_idx_chs_h_w
 
 
 def show_torch_tensor(tensor: torch.Tensor) -> None:

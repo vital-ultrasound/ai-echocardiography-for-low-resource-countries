@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from source.helpers.various import timer_func_decorator, msec_to_timestamp, change_video_tensor_shape
+from source.helpers.various import timer_func_decorator, msec_to_timestamp, ToTensor
 
 # constants
 S2MS = 1000
@@ -115,8 +115,7 @@ class ViewVideoDataset(torch.utils.data.Dataset):
                 frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
                 current_frame_timestamp = msec_to_timestamp(frame_msec)
 
-                number_of_channels = 3
-                torch_frame_chs_h_w = change_video_tensor_shape(image_frame_array_3ch_i, number_of_channels)
+                torch_frame_chw = ToTensor(image_frame_array_3ch_i)
 
                 #### PLAYGROUND
                 ## cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
@@ -132,7 +131,7 @@ class ViewVideoDataset(torch.utils.data.Dataset):
                             msec_to_timestamp(end_label_timestamps_ms[clips_i])[1])):
                             # print(
                             #     f'  clip {clips_i}; image_frame_index {image_frame_index}, frame_msec {frame_msec}, current_frame_timestamp {current_frame_timestamp}')
-                            video_batch_output.append(torch_frame_chs_h_w)
+                            video_batch_output.append(torch_frame_chw)
 
                 pbar.update(1)
                 image_frame_index += 1
