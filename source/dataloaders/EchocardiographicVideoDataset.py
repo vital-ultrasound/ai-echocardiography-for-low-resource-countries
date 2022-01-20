@@ -6,13 +6,13 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from source.helpers.various import timer_func_decorator, msec_to_timestamp, ToTensor
+from source.helpers.various import timer_func_decorator, msec_to_timestamp, ToImageTensor
 
 # constants
 S2MS = 1000
 
 
-class ViewVideoDataset(torch.utils.data.Dataset):
+class EchoVideoDataset(torch.utils.data.Dataset):
     """
     ViewVideoDataset Class for Loading Video using torch.utils.data.
     """
@@ -106,7 +106,7 @@ class ViewVideoDataset(torch.utils.data.Dataset):
         print(f'  ')
         print(f'  ')
 
-        video_batch_output = []
+        frames_torch = []
         pbar = tqdm(total=frame_count)
         while True:
             success, image_frame_array_3ch_i = cap.read()
@@ -115,7 +115,7 @@ class ViewVideoDataset(torch.utils.data.Dataset):
                 frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
                 current_frame_timestamp = msec_to_timestamp(frame_msec)
 
-                torch_frame_chw = ToTensor(image_frame_array_3ch_i)
+                frame_torch = ToImageTensor(image_frame_array_3ch_i)
 
                 #### PLAYGROUND
                 ## cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
@@ -131,7 +131,7 @@ class ViewVideoDataset(torch.utils.data.Dataset):
                             msec_to_timestamp(end_label_timestamps_ms[clips_i])[1])):
                             # print(
                             #     f'  clip {clips_i}; image_frame_index {image_frame_index}, frame_msec {frame_msec}, current_frame_timestamp {current_frame_timestamp}')
-                            video_batch_output.append(torch_frame_chw)
+                            frames_torch.append(frame_torch)
 
                 pbar.update(1)
                 image_frame_index += 1
@@ -142,7 +142,8 @@ class ViewVideoDataset(torch.utils.data.Dataset):
         pbar.close()
         cap.release()
 
-        video_data = torch.stack(video_batch_output)
+        video_data = torch.stack(frames_torch) # "Fi,C,H,W"
+        # video_data = video_data.squeeze() # "Fi,H,W" for one channel
 
         if self.transform is not None:
             video_data = self.transform(video_data)
