@@ -6,9 +6,9 @@ import numpy as np
 import torch
 
 
-def ToImageTensor(image_np_array: np.ndarray, nch: int = 1 or None) -> torch.Tensor:
+def ToImageTensor(image_np_array: np.ndarray) -> torch.Tensor:
     """
-    change_video_shape "numpy image: H x W x C" to torch image: C x H x W
+    Torch image tensor as C x H x W
 
     Arguments:
         image_np_array: Numpy array of image frame
@@ -17,22 +17,13 @@ def ToImageTensor(image_np_array: np.ndarray, nch: int = 1 or None) -> torch.Ten
         torch.Tensor image in the form of chs_h_w
     """
 
-    if nch == 3:
-        image_np_array_ = cv.cvtColor(image_np_array, cv.COLOR_BGR2RGB)
-        frame_torch = torch.as_tensor(image_np_array_, dtype=torch.float32) #frame_torch_h_w_c
-        frame_torch = torch.movedim(frame_torch, -1, 0) #frame_torch_c_h_w
-
-    elif nch == 1:
-        image_np_array_ = cv.cvtColor(image_np_array, cv.COLOR_BGR2GRAY)
-        frame_torch = torch.as_tensor(image_np_array_, dtype=torch.float32) #frame_torch_h_w
-        frame_torch = frame_torch.unsqueeze(0) # Fake batch dimension to be "C,H,W"
-
-    else:
-        print(f'Should be 1 or 3 channels')
+    #frame_torch = torch.as_tensor(image_np_array_, dtype=torch.float32)
+    frame_torch = torch.from_numpy(image_np_array).float()
+    frame_torch = frame_torch.unsqueeze(0) # Fake batch dimension to be "C,H,W"
 
     return frame_torch
 
-def to_grayscale(image_np_array: np.ndarray, color_th: int = 1) -> np.ndarray:
+def to_grayscale(image_np_array: np.ndarray, color_th: bool = False or None) -> np.ndarray:
     """
     Convert BGR to grayscale.
     NOTE: This is an expensive operation because of the std deviation and conditions to check
@@ -44,10 +35,13 @@ def to_grayscale(image_np_array: np.ndarray, color_th: int = 1) -> np.ndarray:
     Return:
         gray_image_np_array: Numpy array of image frame
     """
-    color_th = 1
-    nongray = np.std(image_np_array, axis=2)
-    gray_image_np_array = cv.cvtColor(image_np_array, cv.COLOR_BGR2GRAY)
-    gray_image_np_array[nongray > color_th] = 0
+    if color_th == True:
+        color_th_ = 1
+        nongray = np.std(image_np_array, axis=2)
+        gray_image_np_array = cv.cvtColor(image_np_array, cv.COLOR_BGR2GRAY)
+        gray_image_np_array[nongray > color_th_] = 0
+    else:
+        gray_image_np_array = cv.cvtColor(image_np_array, cv.COLOR_BGR2GRAY).astype(np.float64)
 
     return gray_image_np_array
 

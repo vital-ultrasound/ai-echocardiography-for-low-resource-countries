@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from source.helpers.various import timer_func_decorator, msec_to_timestamp, ToImageTensor
+from source.helpers.various import timer_func_decorator, msec_to_timestamp, to_grayscale, ToImageTensor
 
 # constants
 S2MS = 1000
@@ -109,13 +109,13 @@ class EchoVideoDataset(torch.utils.data.Dataset):
         frames_torch = []
         pbar = tqdm(total=frame_count)
         while True:
-            success, image_frame_array_3ch_i = cap.read()
+            success, image_frame_3ch_i = cap.read()
             if (success == True):
 
                 frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
                 current_frame_timestamp = msec_to_timestamp(frame_msec)
-
-                frame_torch = ToImageTensor(image_frame_array_3ch_i)
+                frame_gray = to_grayscale(image_frame_3ch_i)
+                frame_torch = ToImageTensor(frame_gray)
 
                 #### PLAYGROUND
                 ## cap.set(cv.CAP_PROP_POS_MSEC, start_label_timestamps_ms[id_clip_to_extract])
