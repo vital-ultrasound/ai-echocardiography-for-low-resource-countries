@@ -1,16 +1,29 @@
-# Preprocessing Cardiac Ultrasound data
+# Preprocessing Echochardiography Ultrasound data
 
-## convertDICOMtoAVI.py
+## Cropping and Masking Datasets
+
+### Running script
+Open a terminal and load your conda environment 
+```
+cd $HOME/repositories/echocardiography/scripts/preprocessing
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
+conda activate rt-ai-echo-VE
+python cropping_and_masking_4CV.py --config ../config_files/config_echodatasets.yml
+```
+
+## DICOM datasets
+
+### convertDICOMtoAVI.py
 The script converts DICOM files into AVI files.
 ```
 conda activate ve-AICU
-cd $HOME/repositories/echocardiography/source/preprocessing
+cd $HOME/repositories/echocardiography/scripts/preprocessing
 python convertDICOMtoAVI.py --datapath $HOME/datasets/vital-us --participant_ID 01NVb-003-001
 ```
 
-## DICOM Metadata 
+### DICOM Metadata 
 
-### DICOMfile_i: 01NVb-003-001/T3/_T144314/K65EO7G2
+#### DICOM file_i: 01NVb-003-001/T3/_T144314/K65EO7G2
 ```
 Dataset.file_meta -------------------------------
 (0002, 0000) File Meta Information Group Length  UL: 202
@@ -109,6 +122,6 @@ Dataset.file_meta -------------------------------
 (fffc, fffc) Data Set Trailing Padding           OB: b'\x00\x00'
 ```
 
-## Reference
+### Reference
 * David Ouyang is the author of [`ConvertDICOMtoAVI.py`](https://github.com/echonet/dynamic/blob/master/scripts/ConvertDICOMToAVI.ipynb)  
 * See more https://github.com/echonet/   

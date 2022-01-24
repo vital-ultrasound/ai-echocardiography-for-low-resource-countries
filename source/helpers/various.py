@@ -17,7 +17,7 @@ def ToImageTensor(image_np_array: np.ndarray) -> torch.Tensor:
         torch.Tensor image in the form of chs_h_w
     """
 
-    #frame_torch = torch.as_tensor(image_np_array_, dtype=torch.float32)
+    # frame_torch = torch.as_tensor(image_np_array, dtype=torch.float32)
     frame_torch = torch.from_numpy(image_np_array).float()
     frame_torch = frame_torch.unsqueeze(0) # Fake batch dimension to be "C,H,W"
 

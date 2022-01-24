@@ -6,7 +6,8 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from source.helpers.various import timer_func_decorator, msec_to_timestamp, to_grayscale, ToImageTensor
+from source.helpers.various import timer_func_decorator, msec_to_timestamp, to_grayscale, ToImageTensor, \
+    show_torch_tensor
 
 # constants
 S2MS = 1000
@@ -14,7 +15,7 @@ S2MS = 1000
 
 class EchoVideoDataset(torch.utils.data.Dataset):
     """
-    ViewVideoDataset Class for Loading Video using torch.utils.data.
+    EchoVideoDataset Class for Loading Video using torch.utils.data.
     """
 
     def __init__(
@@ -142,8 +143,101 @@ class EchoVideoDataset(torch.utils.data.Dataset):
         pbar.close()
         cap.release()
 
-        video_data = torch.stack(frames_torch) # "Fi,C,H,W"
+        video_data = torch.stack(frames_torch)  # "Fi,C,H,W"
         # video_data = video_data.squeeze() # "Fi,H,W" for one channel
+
+        if self.transform is not None:
+            video_data = self.transform(video_data)
+
+        return video_data
+
+
+class ViewVideoDataset(torch.utils.data.Dataset):
+    """
+    ViewVideoDataset Class for Loading Video using torch.utils.data.
+    """
+
+    def __init__(
+            self,
+            participants_videos_path: str,
+            transform=None
+    ):
+        """
+        Arguments
+
+        participant_videos_path (srt):  the folder where there input files are.
+        transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
+        """
+
+        self.participants_videos_path = participants_videos_path
+        self.transform = transform
+
+        self.video_filenames = []
+
+        for Participant_i in enumerate(sorted(os.listdir(self.participants_videos_path))):
+            part_i_path = self.participants_videos_path + '/' + Participant_i[1]
+            for T_days_i in enumerate(sorted(os.listdir(part_i_path))):
+                days_i_path = part_i_path + '/' + T_days_i[1]
+                for video_file_name_i in sorted(os.listdir(days_i_path)):
+                    path_video_file_name_i = days_i_path + '/' + video_file_name_i
+                    if path_video_file_name_i.endswith('.mp4'):
+                        self.video_filenames += [path_video_file_name_i]
+
+    def __len__(self):
+        return len(self.video_filenames)
+
+    def __getitem__(self, video_index: int):
+        """
+        Arguments:
+            video_index (int): video_index position to return the data
+
+        Returns:
+            video_data clip (tensor): vide data clip with the 4ch view, for file 'video_index',
+        """
+
+        video_name = self.video_filenames[video_index]
+        print(video_name)
+
+        cap = cv.VideoCapture(video_name)
+        if cap.isOpened() == False:
+            print('[ERROR] [ViewVideoDataset.__getitem__()] Unable to open video ' + video_name)
+            exit(-1)
+
+        # Get parameters of input video
+        frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+        frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+        fps = int(np.ceil(cap.get(cv.CAP_PROP_FPS)))
+        frame_count = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+
+        # Print video features
+        print(f'  ')
+        print(f'  ')
+        print(f'  video_name={video_name}')
+        print(f'  Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
+
+        frames_torch = []
+
+        pbar = tqdm(total=frame_count)
+        while True:
+            success, image_frame_3ch_i = cap.read()
+            if (success == True):
+
+                frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
+                current_frame_timestamp = msec_to_timestamp(frame_msec)
+                frame_gray = to_grayscale(image_frame_3ch_i)
+                frame_torch = ToImageTensor(frame_gray)
+
+                frames_torch.append(frame_torch.detach())
+
+                pbar.update(1)
+
+            else:
+                break
+
+        pbar.close()
+        cap.release()
+
+        video_data = torch.stack(frames_torch)  # "Fi,C,H,W"
 
         if self.transform is not None:
             video_data = self.transform(video_data)

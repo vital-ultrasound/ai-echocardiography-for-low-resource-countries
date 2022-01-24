@@ -1,0 +1,7 @@
+### US Device 
+us_device_brand:  'GE'
+model: 'Venue Go'
+software_version: 'R2'
+Transducers: 'Convex probe C1-5-D'
+
+participants_videos_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo'
