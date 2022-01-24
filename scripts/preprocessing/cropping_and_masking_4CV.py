@@ -17,7 +17,7 @@ if __name__ == '__main__':
     video_index = 79 #79: /01NVb-003-072/T3/01NVb-003-072-3-echo.mp4
     data = dataset[video_index]
 
-    # print(f' {type(data)}, {data.size()} ')
+    print(f' {type(data)}, {data.size()} ')
 
     # my_dloader = DataLoader(data,
     #                     batch_size=200,
