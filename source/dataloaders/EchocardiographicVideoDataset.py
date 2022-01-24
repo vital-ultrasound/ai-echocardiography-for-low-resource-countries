@@ -217,24 +217,26 @@ class ViewVideoDataset(torch.utils.data.Dataset):
 
         frames_torch = []
 
-        pbar = tqdm(total=frame_count)
-        while True:
-            success, image_frame_3ch_i = cap.read()
-            if (success == True):
+        frame_number = 19000
+        cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
+        success, image = cap.read()
 
-                frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
-                current_frame_timestamp = msec_to_timestamp(frame_msec)
-                frame_gray = to_grayscale(image_frame_3ch_i)
-                frame_torch = ToImageTensor(frame_gray)
+        while success and frame_number <= frame_count:
 
-                frames_torch.append(frame_torch.detach())
+            frame_number += fps
+            print(frame_number)
 
-                pbar.update(1)
+            cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
+            success, image = cap.read()
 
-            else:
-                break
+            frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
+            current_frame_timestamp = msec_to_timestamp(frame_msec)
+            frame_gray = to_grayscale(image)
 
-        pbar.close()
+            frame_torch = ToImageTensor(frame_gray)
+
+            frames_torch.append(frame_torch.detach())
+
         cap.release()
 
         video_data = torch.stack(frames_torch)  # "Fi,C,H,W"
