@@ -13,7 +13,7 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    dataset = ViewVideoDataset(config['participants_videos_path'])
+    dataset = ViewVideoDataset(config['participants_videos_path'], config['crop_bounds'])
     video_index = 79 #79: /01NVb-003-072/T3/01NVb-003-072-3-echo.mp4
     data = dataset[video_index]
 

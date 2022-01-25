@@ -7,7 +7,7 @@ import torch
 from tqdm import tqdm
 
 from source.helpers.various import timer_func_decorator, msec_to_timestamp, to_grayscale, ToImageTensor, \
-    show_torch_tensor
+    show_torch_tensor, cropped_frame, masks_us_image
 
 # constants
 S2MS = 1000
@@ -160,16 +160,19 @@ class ViewVideoDataset(torch.utils.data.Dataset):
     def __init__(
             self,
             participants_videos_path: str,
+            crop_bounds=None,
             transform=None
     ):
         """
         Arguments
 
         participant_videos_path (srt):  the folder where there input files are.
+        crop_bounds - Crop bounds, a tuple in format (w0, h0, w, h).
         transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
         """
 
         self.participants_videos_path = participants_videos_path
+        self.crop_bounds = crop_bounds
         self.transform = transform
 
         self.video_filenames = []
@@ -219,8 +222,9 @@ class ViewVideoDataset(torch.utils.data.Dataset):
         print(f'  ')
         print(f'  ')
 
-        start_frame_number = 1000
-        end_frame_number = 1500
+        start_frame_number = 4000
+        end_frame_number = 4403
+        total_number_of_frames = end_frame_number- start_frame_number
 
         if start_frame_number >= end_frame_number:
             raise Exception("start frame number must be less than end frame number")
@@ -229,7 +233,7 @@ class ViewVideoDataset(torch.utils.data.Dataset):
 
         frames_torch = []
 
-        pbar = tqdm(total= (end_frame_number- start_frame_number)-1 )
+        pbar = tqdm(total= total_number_of_frames-1 )
         while cap.isOpened():
             success, image_frame_3ch_i = cap.read()
 
@@ -247,9 +251,15 @@ class ViewVideoDataset(torch.utils.data.Dataset):
 
             # frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
             # current_frame_timestamp = msec_to_timestamp(frame_msec)
-            frame_gray = to_grayscale(image_frame_3ch_i)
-            frame_torch = ToImageTensor(frame_gray)
 
+            frame_gray = to_grayscale(image_frame_3ch_i)
+            masked_frame = masks_us_image(frame_gray)
+            cropped_image_frame_ = cropped_frame(masked_frame, self.crop_bounds)
+
+            # cv.imshow('window', cropped_image_frame_)
+            # cv.waitKey()
+
+            frame_torch = ToImageTensor(cropped_image_frame_)
             frames_torch.append(frame_torch.detach())
 
             pbar.update(1)

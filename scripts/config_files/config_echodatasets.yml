@@ -4,4 +4,12 @@ model: 'Venue Go'
 software_version: 'R2'
 Transducers: 'Convex probe C1-5-D'
 
+## Image bounds
+crop_bounds:
+  start_x: 480
+  start_y: 120
+  width: 1130
+  height: 810
+
+## Video paths
 participants_videos_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo'
