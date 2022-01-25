@@ -1,5 +1,4 @@
-# Pytorch dataloaders for echo videos
-
+# Pytorch dataloaders for echochardiography datasets
 A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format.
 
 # Usage:
@@ -20,3 +19,13 @@ For datapaths of other users, you can edit ../config_files/config_4cv.yml and ad
 participant_videos_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072'
 participant_path_json_files: '/home/mx19/datasets/vital-us/echocardiography/json/01NVb-003-072'
 ```
+
+## Jupyter Notebooks
+Open a terminal and load your conda environment 
+```
+cd $HOME/repositories/echocardiography/scripts/dataloaders
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
+conda activate rt-ai-echo-VE 
+jupyter notebook
+```
+

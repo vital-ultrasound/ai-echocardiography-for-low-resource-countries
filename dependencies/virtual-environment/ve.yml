@@ -1,18 +1,20 @@
 ## USAGE
 ## conda env create -f ve.yml
 ## conda env update --file ve.yml --prune
+## conda activate rt-ai-echo-VE
 name: rt-ai-echo-VE
 channels:
-  - pytorch
+  - pytorch # https://anaconda.org/pytorch/torchvision
   - nvidia
   - defaults
   - jmcmurray #https://anaconda.org/jmcmurray/json
   - anaconda
-#  - conda-forge
+  - conda-forge
 dependencies:
   - python=3.8.*
-  - pytorch=1.9.1
-  - cudatoolkit=11.1
+  - pytorch=1.9.* #1.9.* with cudatoolkit=11.1#OK    #1.10.* with cudatoolkit=11.1 found conflict! #1.10.* with cudatoolkit=11.3 found conflict!
+  - cudatoolkit=11.3.*
+  - torchvision=0.10.0  #0.2.2#OK #0.10.0 #OK #0.10.1 #0.11.* have conflicts (TODO check version conflicts)
   - matplotlib
   - numpy
   - pip
@@ -20,6 +22,8 @@ dependencies:
   - pyyaml
   - tqdm
   - pillow
+  - notebook
+  - jupyter_contrib_nbextensions # A good overview over other extensions: https://towardsdatascience.com/jupyter-notebook-extensions-517fa69d2231
   - pip:
      - pydicom
      - opencv-python
