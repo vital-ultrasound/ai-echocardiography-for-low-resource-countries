@@ -1,6 +1,20 @@
 # Pytorch dataloaders for echochardiography datasets
 A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format.
 
+
+# Generate train / validate sets
+
+Use the script [split_train_validate_test.py](split_train_validate_test.py), which generates the following files:
+```commandline
+<data folder>/annotation_list_full.txt
+<data folder>/annotation_list_train.txt
+<data folder>/annotation_list_validate.txt
+<data folder>/video_list_full.txt
+<data folder>/video_list_train.txt
+<data folder>/video_list_validate.txt
+```
+
+
 ## dataloader_4CV.py
 Open a terminal and load your conda environment 
 ```
