@@ -91,9 +91,6 @@ def cropped_frame(image_frame_array_3ch: np.ndarray, crop_bounds: List) -> np.nd
                            int(crop_bounds['start_y']):int(crop_bounds['start_y'] + crop_bounds['height']),
                            int(crop_bounds['start_x']):int(crop_bounds['start_x'] + crop_bounds['width'])]
 
-    # frame_torch = frame_torch[self.crop_bounds[1]:self.crop_bounds[1] + self.crop_bounds[3],
-    #               self.crop_bounds[0]:self.crop_bounds[0] + self.crop_bounds[2]]
-
     return cropped_image_frame_
 
 def masks_us_image(image_frame_array_1ch: np.ndarray) -> np.ndarray:
