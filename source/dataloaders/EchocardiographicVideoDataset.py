@@ -52,7 +52,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         self.annotation_filenames = []
         for json_i in enumerate(sorted(os.listdir(self.participants_path_json_files) )):
             self.annotation_filenames += [self.participants_path_json_files + '/' + json_i[1]]
-            print(self.annotation_filenames)
+
 
     def __len__(self):
         return len(self.video_filenames)
@@ -66,6 +66,8 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             video_data clip (tensor): vide data clip with the 4ch view, for file 'video_index',
         """
 
+        print(f' VIDEOS {self.video_filenames}')
+        print(f' ANNOTATIONS {self.annotation_filenames}')
 
         video_name = self.video_filenames[video_index]
         # print(video_name)
