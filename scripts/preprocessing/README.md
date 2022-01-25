@@ -9,6 +9,7 @@ cd $HOME/repositories/echocardiography/scripts/preprocessing
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE
 python cropping_and_masking_4CV.py --config ../config_files/config_echodatasets.yml
+jupyter notebook
 ```
 
 ## DICOM datasets

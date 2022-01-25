@@ -19,15 +19,15 @@ if __name__ == '__main__':
 
     print(f' {type(data)}, {data.size()} ')
 
-    # my_dloader = DataLoader(data,
-    #                     batch_size=200,
-    #                     shuffle=True,
-    #                     num_workers=4,
-    #                     pin_memory=True
-    #                     )
-    #
-    # for (idx, batch) in enumerate(my_dloader):
-    #     print(f' Index: {idx}')
-    #     print(f' {type(batch)}, {batch.size()} ')
-    #     print(f' Batch: {batch}')
-    #
+    my_dloader = DataLoader(data,
+                        batch_size=1,
+                        shuffle=False,
+                        num_workers=0,
+                        pin_memory=True
+                        )
+
+    for idx_batch, sample_batched in enumerate(my_dloader):
+        print(f' Index: {idx_batch}')
+        print(f' {type(sample_batched)}, {sample_batched.size()} ')
+        # print(f' Batch: {batch}')
+

@@ -212,31 +212,49 @@ class ViewVideoDataset(torch.utils.data.Dataset):
         # Print video features
         print(f'  ')
         print(f'  ')
-        print(f'  video_name={video_name}')
-        print(f'  Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
+        print(f'  ')
+        print(f'  VIDEO_FEATURES')
+        print(f'    video_name={video_name}')
+        print(f'    Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
+        print(f'  ')
+        print(f'  ')
+
+        start_frame_number = 1000
+        end_frame_number = 1500
+
+        if start_frame_number >= end_frame_number:
+            raise Exception("start frame number must be less than end frame number")
+
+        cap.set(cv.CAP_PROP_POS_FRAMES, start_frame_number)
 
         frames_torch = []
 
-        frame_number = 19000
-        cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
-        success, image = cap.read()
+        pbar = tqdm(total= (end_frame_number- start_frame_number)-1 )
+        while cap.isOpened():
+            success, image_frame_3ch_i = cap.read()
 
-        while success and frame_number <= frame_count:
+            if not success and len(frames_torch) < 1:
+                print('[ERROR] [VideoDataset.__getitem__()] Video {} has less than 1 frame, skipping'.format(video_name))
+                exit(-1)
+                break
 
-            frame_number += fps
-            print(frame_number)
+            if image_frame_3ch_i is None:
+                # no frame here! video is finished
+                break
 
-            cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
-            success, image = cap.read()
+            if cap.get(cv.CAP_PROP_POS_FRAMES) >= end_frame_number:
+                break
 
-            frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
-            current_frame_timestamp = msec_to_timestamp(frame_msec)
-            frame_gray = to_grayscale(image)
-
+            # frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
+            # current_frame_timestamp = msec_to_timestamp(frame_msec)
+            frame_gray = to_grayscale(image_frame_3ch_i)
             frame_torch = ToImageTensor(frame_gray)
 
             frames_torch.append(frame_torch.detach())
 
+            pbar.update(1)
+
+        pbar.close()
         cap.release()
 
         video_data = torch.stack(frames_torch)  # "Fi,C,H,W"
