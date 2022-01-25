@@ -1,3 +1,5 @@
+import random
+from pathlib import Path
 from time import time
 from typing import Tuple, List
 
@@ -19,9 +21,10 @@ def ToImageTensor(image_np_array: np.ndarray) -> torch.Tensor:
 
     # frame_torch = torch.as_tensor(image_np_array, dtype=torch.float32)
     frame_torch = torch.from_numpy(image_np_array).float()
-    frame_torch = frame_torch.unsqueeze(0) # Fake batch dimension to be "C,H,W"
+    frame_torch = frame_torch.unsqueeze(0)  # Fake batch dimension to be "C,H,W"
 
     return frame_torch
+
 
 def to_grayscale(image_np_array: np.ndarray, color_th: bool = False or None) -> np.ndarray:
     """
@@ -41,9 +44,11 @@ def to_grayscale(image_np_array: np.ndarray, color_th: bool = False or None) -> 
         gray_image_np_array = cv.cvtColor(image_np_array, cv.COLOR_BGR2GRAY)
         gray_image_np_array[nongray > color_th_] = 0
     else:
-        gray_image_np_array = cv.cvtColor(image_np_array, cv.COLOR_BGR2GRAY) # default is unit8 but you can consider .astype(np.float64)
+        gray_image_np_array = cv.cvtColor(image_np_array,
+                                          cv.COLOR_BGR2GRAY)  # default is unit8 but you can consider .astype(np.float64)
 
     return gray_image_np_array
+
 
 def show_torch_tensor(tensor: torch.Tensor) -> None:
     """
@@ -83,6 +88,7 @@ def msec_to_timestamp(current_timestamp: float) -> Tuple[float]:
 
     return minutes, seconds, '{:.3f}'.format(ms), '{:02d}:{:02d}:{:.3f}'.format(minutes, seconds, ms)
 
+
 def cropped_frame(image_frame_array_3ch: np.ndarray, crop_bounds: List) -> np.ndarray:
     """
     Hard crop of US image with bounds: (start_x, start_y, width, height)
@@ -92,6 +98,7 @@ def cropped_frame(image_frame_array_3ch: np.ndarray, crop_bounds: List) -> np.nd
                            int(crop_bounds['start_x']):int(crop_bounds['start_x'] + crop_bounds['width'])]
 
     return cropped_image_frame_
+
 
 def masks_us_image(image_frame_array_1ch: np.ndarray) -> np.ndarray:
     """
@@ -110,3 +117,74 @@ def masks_us_image(image_frame_array_1ch: np.ndarray) -> np.ndarray:
     maskedImage = cv.bitwise_and(image_frame_array_1ch, image_frame_array_1ch, mask=mask)
 
     return maskedImage
+
+
+def write_list_to_txtfile(list: List, filename: str, files_path: str) -> None:
+    """
+
+    Write a txt file from a list
+
+    Arguments:
+        list: list of filenames
+        filename: string of the name where txt will be saved (e.g.: video_list_train.txt)
+        files_path: path where you will save txt files
+
+    Return:
+        None
+
+    """
+    textfile = open('{}{}'.format(files_path, filename), "w")
+    for element in list:
+        textfile.write(element + "\n")
+
+
+def split_train_validate_sets(video_echodataset_path: str, ntraining: float) -> None:
+    """
+
+    Split paths to train and validate sets
+
+    Arguments:
+        video_echodataset_path: path of the video files
+        ntraining: percentage of training from 0.0 to 1.0
+
+    Return:
+        None
+
+    """
+    nvalidation = 1.0 - ntraining
+
+    all_videos_file = 'video_list_full.txt'
+    all_labels_file = 'annotation_list_full.txt'
+
+    videolist = '{}{}'.format(video_echodataset_path, all_videos_file)
+    labellist = '{}{}'.format(video_echodataset_path, all_labels_file)
+
+    ## list all  files
+    result = list(Path(video_echodataset_path).rglob("*echo.[mM][pP][4]"))
+    with open(videolist, 'w') as f:
+        for fn in result:
+            fn_nopath = str(fn).replace(video_echodataset_path, '')
+            f.write(fn_nopath + '\n')
+
+    result = list(Path(video_echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]"))
+    with open(labellist, 'w') as f:
+        for fn in result:
+            fn_nopath = str(fn).replace(video_echodataset_path, '')
+            f.write(fn_nopath + '\n')
+
+    ## load filenames into list
+    video_filenames = [line.strip() for line in open(videolist)]
+    label_filenames = [line.strip() for line in open(labellist)]
+
+    ##randomly shuffle them
+    c = list(zip(video_filenames, label_filenames))
+    random.shuffle(c)
+    video_filenames, label_filenames = zip(*c)
+
+    ## Split and save
+    N = len(video_filenames)
+    video_filenames_t = video_filenames[:int(N * ntraining)]
+    label_filenames_t = label_filenames[:int(N * ntraining)]
+
+    write_list_to_txtfile(video_filenames_t, 'video_list_train.txt', video_echodataset_path)
+    write_list_to_txtfile(label_filenames_t, 'annotation_list_train.txt', video_echodataset_path)

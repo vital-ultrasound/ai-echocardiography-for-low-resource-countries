@@ -2,16 +2,23 @@
 A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format.
 
 
-# Generate train / validate sets
+# Generate list txt files for train / validate sets
 
-Use the script [split_train_validate_test.py](split_train_validate_test.py), which generates the following files:
-```commandline
+## [split_train_validate_test.py](split_train_validate_test.py)
+Open a terminal and load your conda environment 
+```
+cd $HOME/repositories/echocardiography/scripts/dataloaders
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
+conda activate rt-ai-echo-VE 
+python split_train_validate_test.py --video_echodataset_path $HOME/datasets/vital-us/echocardiography/videos-echo/ --ntraining 0.8
+```
+
+Then, text files looks like as follows:
+```
 <data folder>/annotation_list_full.txt
 <data folder>/annotation_list_train.txt
-<data folder>/annotation_list_validate.txt
 <data folder>/video_list_full.txt
 <data folder>/video_list_train.txt
-<data folder>/video_list_validate.txt
 ```
 
 
