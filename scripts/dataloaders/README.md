@@ -2,15 +2,15 @@
 A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format.
 
 
-# Generate list txt files for train / validate sets
+## Generate list txt files for train / validate sets
 
-## [split_train_validate_test.py](split_train_validate_test.py)
+### [split_train_validate_test.py](split_train_validate_test.py)
 Open a terminal and load your conda environment 
 ```
 cd $HOME/repositories/echocardiography/scripts/dataloaders
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE 
-python split_train_validate_test.py --video_echodataset_path $HOME/datasets/vital-us/echocardiography/videos-echo/ --ntraining 0.8
+python split_train_validate_test.py --video_echodataset_path $HOME/datasets/vital-us/echocardiography/videos-echo/ --text_label_output_path $HOME/repositories/echocardiography/scripts/config_files/ --ntraining 0.8
 ```
 
 Then, text files looks like as follows:
@@ -21,8 +21,20 @@ Then, text files looks like as follows:
 <data folder>/video_list_train.txt
 ```
 
+## Dataloaders
 
-## dataloader_4CV.py
+### echo_classes.py
+Open a terminal and load your conda environment 
+```
+cd $HOME/repositories/echocardiography/scripts/dataloaders
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
+conda activate rt-ai-echo-VE
+python echo_classes.py --config ../config_files/config_echo_classes.yml
+jupyter notebook
+```
+
+
+### dataloader_4CV.py
 Open a terminal and load your conda environment 
 ```
 cd $HOME/repositories/echocardiography/scripts/dataloaders
@@ -50,12 +62,3 @@ jupyter notebook
 ```
 
 
-## echo_classes.py
-Open a terminal and load your conda environment 
-```
-cd $HOME/repositories/echocardiography/scripts/dataloaders
-export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
-conda activate rt-ai-echo-VE
-python echo_classes.py --config ../config_files/config_echo_classes.yml
-jupyter notebook
-```

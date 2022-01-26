@@ -138,13 +138,14 @@ def write_list_to_txtfile(list: List, filename: str, files_path: str) -> None:
         textfile.write(element + "\n")
 
 
-def split_train_validate_sets(video_echodataset_path: str, ntraining: float) -> None:
+def split_train_validate_sets(video_echodataset_path: str, text_label_output_path: str, ntraining: float) -> None:
     """
 
     Split paths to train and validate sets
 
     Arguments:
         video_echodataset_path: path of the video files
+        text_label_output_path: path where text labels are written
         ntraining: percentage of training from 0.0 to 1.0
 
     Return:
@@ -156,8 +157,8 @@ def split_train_validate_sets(video_echodataset_path: str, ntraining: float) -> 
     all_videos_file = 'video_list_full.txt'
     all_labels_file = 'annotation_list_full.txt'
 
-    videolist = '{}{}'.format(video_echodataset_path, all_videos_file)
-    labellist = '{}{}'.format(video_echodataset_path, all_labels_file)
+    videolist = '{}{}'.format(text_label_output_path, all_videos_file)
+    labellist = '{}{}'.format(text_label_output_path, all_labels_file)
 
     ## list all  files
     result = list(Path(video_echodataset_path).rglob("*echo.[mM][pP][4]"))
@@ -181,10 +182,10 @@ def split_train_validate_sets(video_echodataset_path: str, ntraining: float) -> 
     random.shuffle(c)
     video_filenames, label_filenames = zip(*c)
 
-    ## Split and save
+    ## Split and save txt files
     N = len(video_filenames)
     video_filenames_t = video_filenames[:int(N * ntraining)]
     label_filenames_t = label_filenames[:int(N * ntraining)]
 
-    write_list_to_txtfile(video_filenames_t, 'video_list_train.txt', video_echodataset_path)
-    write_list_to_txtfile(label_filenames_t, 'annotation_list_train.txt', video_echodataset_path)
+    write_list_to_txtfile(video_filenames_t, 'video_list_train.txt', text_label_output_path)
+    write_list_to_txtfile(label_filenames_t, 'annotation_list_train.txt', text_label_output_path)
