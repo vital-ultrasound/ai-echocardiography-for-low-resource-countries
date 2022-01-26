@@ -11,6 +11,9 @@ crop_bounds:
   width: 1130
   height: 810
 
+## number of frames per clip
+n_frames: 5
+
 ## Video paths
 main_data_path: '/home/ag09/data/VITAL/echo'
 participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'

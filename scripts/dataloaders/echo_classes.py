@@ -16,11 +16,13 @@ if __name__ == '__main__':
     dataset = EchoClassesDataset(main_data_path=config['main_data_path'],
                                  participant_videos_list=config['participant_videos_list'],
                                  participant_path_json_list=config['participant_path_json_list'],
-                                 crop_bounds=config['crop_bounds'])
+                                 crop_bounds=config['crop_bounds'],
+                                 clip_duration=config['n_frames'])
 
-    video_index = 79 #79: /01NVb-003-072/T3/01NVb-003-072-3-echo.mp4
-    data = dataset[video_index]
+    clip_index = 10 # this must be within the dataset length
+    data = dataset[clip_index]
 
+    print('data retrieved')
     # print(f' {type(data)}, {data.size()} ')
 
     # my_dloader = DataLoader(data,

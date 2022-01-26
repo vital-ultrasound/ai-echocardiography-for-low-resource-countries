@@ -5,6 +5,7 @@ import cv2 as cv
 import numpy as np
 import torch
 from tqdm import tqdm
+import random
 
 from source.helpers.various import timer_func_decorator, msec_to_timestamp, to_grayscale, ToImageTensor, \
     cropped_frame, masks_us_image
@@ -18,11 +19,23 @@ class EchoClassesDataset(torch.utils.data.Dataset):
     EchoClassesDataset Class to load video and json labels using torch.utils.data.
 
     Arguments:
-    main_data_path(str): Main path of videos and json files
-    participant_videos_list (srt):  Lists of video files
-    participant_path_json_list (srt): List of json files
-    crop_bounds (Tuple) - Crop bounds, a tuple in format (w0, h0, w, h).
-    transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
+        main_data_path(str): Main path of videos and json files
+
+        participant_videos_list (srt):  Lists of video files
+
+        participant_path_json_list (srt): List of json files
+
+        crop_bounds (Tuple) - Crop bounds, a dictionary in format ('start_x':w0, 'start_y':h0, 'width':w, 'height':h).
+
+        pretransform (torch.Transform): a transform, e.g. normalization, etc, that is done determninistically and before augmentation (Default = None)
+
+        transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
+
+        clip_duration (int): duration of the clips, in number of frames
+
+        device - torch.device('cpu') or torch.device('cuda:0') etc
+
+        use_tmp_storage - is set to true, saves clips into a tmp folder to speed up training.
     """
 
     def __init__(
@@ -31,13 +44,22 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             participant_videos_list: str,
             participant_path_json_list: str,
             crop_bounds=None,
-            transform=None
+            pretransform=None,
+            transform=None,
+            clip_duration: int = 20,
+            device=torch.device('cpu'),
+            use_tmp_storage=False,
             ):
         self.main_data_path = main_data_path
         self.participant_videos_list = participant_videos_list
         self.participant_path_json_list = participant_path_json_list
         self.crop_bounds = crop_bounds
         self.transform = transform
+        self.pretransform = pretransform
+        self.clip_n_frames = clip_duration
+        self.device = device
+        self.use_tmp_storage = use_tmp_storage
+        self.temp_folder = os.path.expanduser('~') + os.path.sep + 'tmp' + os.path.sep + 'echoviddata_{}frames'.format(self.clip_n_frames)
 
         videolist = os.path.join(main_data_path, participant_videos_list)
         annotationlist = os.path.join(main_data_path, participant_path_json_list)
@@ -47,6 +69,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
         self.BACKGROUND_LABEL = 0
         self.FOURCH_LABEL = 1
+        self.MAX_BACKGROUND_DURATION = 10 * S2MS # since background clips might be realy long, we use this to limit their max lenth to 10sec
 
         # read the json files to see where the labeled parts start and end. As we read them, we will create a list of
         # clips, called self.idx_to_clip
@@ -58,6 +81,9 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         #   clip_id_within_video: integer with the number of the clip within the video, if there is more than one
         #   start_time_ms and end_time_ms are self explanatory
         #   label: 0 (backgorund) or 1 (4 chamber)
+
+        # also count how many samples there are from each class, to be able to balance later
+        self.class_count = [0, 0]
         for video_id, json_filename_i in enumerate(self.annotation_filenames):
             with open(json_filename_i, "r") as json_file:
                 json_data = json.load(json_file)
@@ -69,7 +95,6 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
             # get the video length. This will help define the segments outside the label as backgorund
             video_name = self.video_filenames[video_id]
-            print(video_name)
             cap = cv.VideoCapture(video_name)
             if cap.isOpened() == False:
                 print('[ERROR] [EchoClassesDataset.__init__()] Unable to read video ' + video_name)
@@ -91,40 +116,193 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 # for the clips that ar enot the first one, if the start time is greater than
                 # the end time of the previous clip, it means there is a background clip in between
                 if start_time_ms > end_time_ms:
-                    background_clip = [video_id, nclips_in_video, end_time_ms, start_time_ms, self.BACKGROUND_LABEL]
+                    # background clips can be very long, so lets take, form the given interval, the central part
+                    # up to MAX_BACKGROUND_DURATION msec
+                    clip_duration = start_time_ms - end_time_ms
+                    if clip_duration > self.MAX_BACKGROUND_DURATION:
+                        excess = clip_duration - self.MAX_BACKGROUND_DURATION
+                        background_clip = [video_id, nclips_in_video, end_time_ms+excess/2, start_time_ms-excess/2, self.BACKGROUND_LABEL]
+                    else:
+                        background_clip = [video_id, nclips_in_video, end_time_ms, start_time_ms, self.BACKGROUND_LABEL]
                     self.idx_to_clip.append(background_clip)
+                    self.class_count[self.BACKGROUND_LABEL] += 1
                     nclips_in_video += 1
                 end_time_ms = timestamps_of_labels[1] * S2MS
                 # segments are always labeled as FOURCHAMBER, background is what remains
                 entry = [video_id, nclips_in_video, start_time_ms, end_time_ms, self.FOURCH_LABEL]
                 self.idx_to_clip.append(entry)
+                self.class_count[self.FOURCH_LABEL] += 1
                 nclips_in_video += 1
             # Last, if the end_time_ms of the last clip is earlier than the end of the video, then
             # there is a last background clip to be added
             if end_time_ms < video_duration_i:
-                background_clip = [video_id, nclips_in_video, end_time_ms, video_duration_i, self.BACKGROUND_LABEL]
+                # background clips can be very long, so lets take, form the given interval, the central part
+                # up to MAX_BACKGROUND_DURATION msec
+                clip_duration = video_duration_i - end_time_ms
+                if clip_duration > self.MAX_BACKGROUND_DURATION:
+                    excess = clip_duration - self.MAX_BACKGROUND_DURATION
+                    background_clip = [video_id, nclips_in_video, end_time_ms + excess / 2, video_duration_i - excess / 2,
+                                       self.BACKGROUND_LABEL]
+                else:
+                    background_clip = [video_id, nclips_in_video, end_time_ms, video_duration_i, self.BACKGROUND_LABEL]
                 self.idx_to_clip.append(background_clip)
+                self.class_count[self.BACKGROUND_LABEL] += 1
                 nclips_in_video += 1
 
-        print('Done for {} clips'.format(len(self.idx_to_clip)))
+        # most likely there will be many more samples of background than of fourchamber,
+        # so we want to balance the dataset by randomly removing background samples until they
+        # are the same amount
+        if self.class_count[self.BACKGROUND_LABEL] > self.class_count[self.FOURCH_LABEL]:
 
+            # extract the submatrix where the label is this
+            idx_to_clip_i = [[] for i in range(len(self.class_count))]
+            for sample in self.idx_to_clip:
+                l = sample[-1]
+                idx_to_clip_i[l].append(sample)
 
+            idx_to_clip_smaller = []
+            # now randomly permute the background list
+            background_sublist = random.sample(idx_to_clip_i[self.BACKGROUND_LABEL], self.class_count[self.FOURCH_LABEL])
+            self.class_count[self.BACKGROUND_LABEL] = len(background_sublist)
+            idx_to_clip_smaller.append(background_sublist)
+            idx_to_clip_smaller.append(idx_to_clip_i[self.FOURCH_LABEL])
+            self.idx_to_clip = [item for sublist in idx_to_clip_smaller for item in sublist]
 
-
+        self.samples_count = len(self.idx_to_clip)
 
 
     def __len__(self):
-        return len(self.video_filenames)
+        return self.samples_count
 
-    def __getitem__(self, video_index: int):
+    def __getitem__(self, index: int):
         """
         Arguments:
+            index (int): index position of the clip (not the video) to return the data
 
-        Returns:
+        Returns
+           video_data clip (tensor): video data clip with background or fourchamber, for file 'index',
 
         """
 
+        video_idx = self.idx_to_clip[index][0]
+        # clip_index = self.idx_to_clip[index][1] # not needed here
+        clip_earliest_start_ms = self.idx_to_clip[index][2]
+        clip_latest_end_ms = self.idx_to_clip[index][3]
+        clip_label = self.idx_to_clip[index][4]
 
+        prefix = self.participant_videos_list.split('.')[0].split('_')[-1]
+        save_filename = self.temp_folder + '/video_l{}_{}_{}.pth'.format(clip_label, prefix, index)
+
+        if self.use_tmp_storage is True and os.path.isfile(save_filename) is True:
+            video_data = torch.load(save_filename)
+        else:
+            video_name = self.video_filenames[video_idx]
+            cap = cv.VideoCapture(video_name)
+            if cap.isOpened() == False:
+                print('[ERROR] [LusVideoDataset.__getitem__()] Unable to read video ' + video_name)
+                exit(-1)
+
+            # extract the frames of the clip
+            frames_torch = []
+
+            cap.set(cv.CAP_PROP_POS_MSEC, clip_earliest_start_ms)
+            while True:
+                success, frame = cap.read()
+                if not success and len(frames_torch) < 1:
+                    print('[ERROR] [EchoClassesDataset.__getitem__()] Video {} has less than 1 frame, skipping'.format(
+                        video_name))
+                    exit(-1)
+                    # print('[ERROR] [LusVideoDataset.__getitem__()] Unable to extract frame {} at ms {} from video {}, skipping'.format(len(frames_torch), msec, video_name))
+                    # the video has finished
+                    break
+
+                if frame is None:
+                    # no frame here! video is finished
+                    break
+
+                # in pytorch, channels go first, then height, width
+                # frame_channelsfirst = np.moveaxis(gray_frame, -1, 0)
+                # frame_torch = torch.from_numpy(frame_channelsfirst)
+                # get the frame in grayscale
+                msec = cap.get(cv.CAP_PROP_POS_MSEC)
+
+                if msec > clip_latest_end_ms:
+                    break
+
+                # remove non-gray stuff
+                color_th = 1
+                nongray = np.std(frame, axis=2)
+                gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+                gray_frame[nongray > color_th] = 0
+                frame_torch = torch.from_numpy(gray_frame)
+                if self.crop_bounds is not None:
+                    frame_torch = frame_torch[self.crop_bounds['start_y']:self.crop_bounds['start_y'] + self.crop_bounds['height'],
+                                  self.crop_bounds['start_x']:self.crop_bounds['start_x'] + self.crop_bounds['width']]
+
+                if self.pretransform is not None:
+                    frame_torch = self.pretransform(frame_torch).squeeze()
+
+                # minmax norm - this is not needed I think.
+                #M = torch.max(frame_torch)
+                #m = torch.min(frame_torch)
+                #frame_torch = (frame_torch - m) / (M - m)
+
+                frames_torch.append(frame_torch)
+            cap.release()
+            # make a  tensor of the clip
+            video_data = torch.stack(frames_torch)
+
+            if self.use_tmp_storage is True and os.path.isfile(save_filename) is False:
+                if not os.path.isdir(self.temp_folder):
+                    print(
+                        '[INFO] [EchoClassesDataset.__getitem__()] - computing clips and saving to temporary folder {}'.format(
+                            self.temp_folder))
+                    os.makedirs(self.temp_folder, exist_ok=False)
+                torch.save(video_data, save_filename)
+
+        # Now extract a random clio of clip_n_frames fomr the video data.
+        # This could be done perhaps using data augmentation
+        # clip_duration_ms = self.clip_n_frames / self.video_framerate * S2MS
+        n_available_frames = video_data.shape[0]
+        if n_available_frames < self.clip_n_frames:
+            clip_frame0 = 0
+            clip_frame1 = n_available_frames
+        else:
+            # randomly pick a window within
+            latest_start_frame = np.max((n_available_frames - self.clip_n_frames, 0))
+            earliest_end_frame = self.clip_n_frames
+            clip_frame0 = int(np.random.uniform(np.min((latest_start_frame, earliest_end_frame)),
+                                                np.max((latest_start_frame, earliest_end_frame))))
+            clip_frame1 = np.min((clip_frame0 + self.clip_n_frames, n_available_frames))
+        clip_data = video_data[clip_frame0:clip_frame1, ...]
+
+        if clip_data.shape[0] == 0:
+            # we should never get here
+            print('[ERROR] [EchoClassesDataset.__get_item__()] Empty video in {}'.format(index))
+            exit(-1)
+
+        if clip_data.shape[0] < self.clip_n_frames:
+            # if < 30frames, add the last one over, as if the user had frozen
+            extra_frames = [clip_data[-1, ...].unsqueeze(0)] * (self.clip_n_frames - clip_data.shape[0])
+            clip_data = torch.cat([clip_data] + extra_frames, dim=0)
+
+        if self.transform is not None:
+            clip_data_transformed = []
+            for f in range(clip_data.shape[0]):
+                if f == 0:
+                    # save the state of the transform, so that all frames are augmented in the same way
+                    state = torch.get_rng_state()
+                else:
+                    torch.set_rng_state(state)
+                clip_data_transformed_f = self.transform(clip_data[f, ...]).squeeze()
+                clip_data_transformed.append(clip_data_transformed_f)
+            clip_data = torch.stack(clip_data_transformed)
+
+        clip_data = clip_data.to(self.device)
+        # add channel data
+        clip_data = clip_data.unsqueeze(0)
+
+        return clip_data, clip_label, clip_frame0
 
 
 
