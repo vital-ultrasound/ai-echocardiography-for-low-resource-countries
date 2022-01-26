@@ -167,13 +167,13 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     result = list(Path(echodataset_path).rglob("*echo*.[mM][pP][4]"))
     with open(videolist, 'w') as f:
         for fn in result:
-            fn_nopath = str(fn).replace(echodataset_path, '')
+            fn_nopath = str(fn).replace(data_list_output_path, '')
             f.write(fn_nopath + '\n')
 
     result = list(Path(echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]"))
     with open(labellist, 'w') as f:
         for fn in result:
-            fn_nopath = str(fn).replace(echodataset_path, '')
+            fn_nopath = str(fn).replace(data_list_output_path, '')
             f.write(fn_nopath + '\n')
 
     ## load filenames into list

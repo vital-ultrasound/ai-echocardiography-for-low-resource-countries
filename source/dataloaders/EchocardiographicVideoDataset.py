@@ -45,11 +45,29 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         self.video_filenames = [self.main_data_path + os.sep + line.strip() for line in open(videolist)]
         self.annotation_filenames = [self.main_data_path + os.sep + line.strip() for line in open(annotationlist)]
 
+        self.BACKGROUND_LABEL = 0
+        self.FOURCH_LABEL = 1
+
+        # read the json files to see where the labeled parts start and end. As we read them, we will create a list of
+        # clips, called self.idx_to_clip
+        self.idx_to_clip = []
+        # Each entry of this list has the following information:
+        #   [video_id, clip_id_within_video, start_time_ms, end_time_ms, label]
+        # where the information means:
+        #   video_id: integer with the index of the video as accessed in the self.video_filenames list
+        #   clip_id_within_video: integer with the number of the clip within the video, if there is more than one
+        #   start_time_ms and end_time_ms are self explanatory
+        #   label: 0 (backgorund) or 1 (4 chamber)
         for video_id, json_filename_i in enumerate(self.annotation_filenames):
             with open(json_filename_i, "r") as json_file:
                 json_data = json.load(json_file)
 
-            # video length, in ms
+            # check that the annotation we need is encoded in the metadata
+            if len(json_data['metadata']) == 0:
+                print('[ERROR] [EchoClassesDataset.__init__()] Error reading {} (empty). Removing from list'.format(json_filename_i))
+                continue
+
+            # get the video length. This will help define the segments outside the label as backgorund
             video_name = self.video_filenames[video_id]
             print(video_name)
             cap = cv.VideoCapture(video_name)
@@ -58,10 +76,41 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 exit(-1)
             fps = cap.get(cv.CAP_PROP_FPS)  # OpenCV2 version 2 used "CV_CAP_PROP_FPS"
             frame_count = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
-            frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
-            frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+            #frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+            #frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
             video_duration_i = frame_count / fps * S2MS
             cap.release()
+
+            # Now read the segments in the json file
+            nclips_in_video = 0
+            end_time_ms = 0
+            for seg_i, segment in enumerate(json_data['metadata']):
+                timestamps_of_labels = json_data['metadata'][segment]['z']
+                start_time_ms = timestamps_of_labels[0]  * S2MS
+                # if for the first clip the start time is not 0, then there is a background clip before
+                # for the clips that ar enot the first one, if the start time is greater than
+                # the end time of the previous clip, it means there is a background clip in between
+                if start_time_ms > end_time_ms:
+                    background_clip = [video_id, nclips_in_video, end_time_ms, start_time_ms, self.BACKGROUND_LABEL]
+                    self.idx_to_clip.append(background_clip)
+                    nclips_in_video += 1
+                end_time_ms = timestamps_of_labels[1] * S2MS
+                # segments are always labeled as FOURCHAMBER, background is what remains
+                entry = [video_id, nclips_in_video, start_time_ms, end_time_ms, self.FOURCH_LABEL]
+                self.idx_to_clip.append(entry)
+                nclips_in_video += 1
+            # Last, if the end_time_ms of the last clip is earlier than the end of the video, then
+            # there is a last background clip to be added
+            if end_time_ms < video_duration_i:
+                background_clip = [video_id, nclips_in_video, end_time_ms, video_duration_i, self.BACKGROUND_LABEL]
+                self.idx_to_clip.append(background_clip)
+                nclips_in_video += 1
+
+        print('Done for {} clips'.format(len(self.idx_to_clip)))
+
+
+
+
 
 
     def __len__(self):
