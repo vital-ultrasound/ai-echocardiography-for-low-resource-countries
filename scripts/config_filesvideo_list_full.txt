@@ -1,0 +1,76 @@
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-054/T3/01NVb-003-054-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-054/T1/01NVb-003-054-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-066/T2/01NVb-003-066-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-066/T1/01NVb-003-066-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-078/T3/01NVb-003-078-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-078/T2/01NVb-003-078-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-078/T1/01NVb-003-078-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-068/T3/01NVb-003-068-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-068/T1/01NVb-003-068-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-051/T3/01NVb-003-051-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-051/T2/01NVb-003-051-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-051/T1/01NVb-003-051-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-077/T3/01NVb-003-077-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-077/T2/01NVb-003-077-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-077/T1/01NVb-003-077-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-075/T3/01NVb-003-075-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-075/T2/01NVb-003-075-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-075/T1/01NVb-003-075-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-053/T3/01NVb-003-053-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-053/T3/01NVb-003-053-3 echo cont.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-053/T2/01NVb-003-053-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-053/T1/01NVb-003-053-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-069/T3/01NVb-003-069-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-069/T2/01NVb-003-069-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-069/T1/01NVb-003-069-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-061/T3/01NVb-003-061-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-056/T3/01NVb-003-056-3 echo cont.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-056/T3/01NVb-003-056-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-056/T2/01NVb-003-056-2 echo cont.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-056/T2/01NVb-003-056-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-071/T3/01NVb-003-071-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-071/T2/01NVb-003-071-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-071/T1/01NVb-003-071-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-057/T3/01NVb-003-057-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-057/T2/01NVb-003-057-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-070/T3/01NVb-003-070-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-070/T2/01NVb-003-070-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-070/T1/01NVb-003-070-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072/T3/01NVb-003-072-3-echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072/T2/01NVb-003-072-2-echo-cont.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072/T2/extras/01NVb-003-072-2-echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072/T1/01NVb-003-072-1-echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-073/T2/01NVb-003-073-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-073/T1/01NVb-003-073-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-063/T3/01NVb-003-063-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-063/T2/01NVb-003-063-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-063/T1/01NVb-003-063-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-074/T3/01NVb-003-074-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-074/T2/01NVb-003-074-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-074/T1/01NVb-003-074-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-076/T3/01NVb-003-076-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-076/T2/01NVb-003-076-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-076/T1/01NVb-003-076-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-080/T3/01NVb-003-080-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-080/T2/01NVb-003-080-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-080/T1/01NVb-003-080-1-echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-060/T2/extras/01NVb-003-060-2 echo cont.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-060/T2/extras/01NVb-003-060-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-060/T1/01NVb-003-060-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-050/T3/01NVb-003-050-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-050/T2/01NVb-003-050-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-050/T1/01NVb-003-050-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-052/T2/01NVb-003-052-2 echo (2).mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-052/T2/01NVb-003-052-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-052/T1/01NVb-003-052-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-079/T3/01NVb-003-079-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-079/T2/01NVb-003-079-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-079/T1/01NVb-003-079-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-064/T2/01NVb-003-064-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-064/T1/01NVb-003-064-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-058/T3/01NVb-003-058-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-058/T2/01NVb-003-058-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-058/T1/01NVb-003-058-1 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-065/T3/01NVb-003-065-3 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-065/T2/01NVb-003-065-2 echo.mp4
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-065/T1/01NVb-003-065-1 echo.mp4

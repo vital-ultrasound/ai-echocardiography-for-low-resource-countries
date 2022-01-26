@@ -163,24 +163,24 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     videolist = '{}{}'.format(data_list_output_path, all_videos_file)
     labellist = '{}{}'.format(data_list_output_path, all_labels_file)
 
-    ## list all  files
+    ## List all files
     result = list(Path(echodataset_path).rglob("*echo*.[mM][pP][4]"))
     with open(videolist, 'w') as f:
         for fn in result:
-            fn_nopath = str(fn).replace(data_list_output_path, '')
+            fn_nopath = str(fn).replace(echodataset_path, '')
             f.write(fn_nopath + '\n')
 
     result = list(Path(echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]"))
     with open(labellist, 'w') as f:
         for fn in result:
-            fn_nopath = str(fn).replace(data_list_output_path, '')
+            fn_nopath = str(fn).replace(echodataset_path, '')
             f.write(fn_nopath + '\n')
 
-    ## load filenames into list
+    ## Load filenames into list
     video_filenames = [line.strip() for line in open(videolist)]
     label_filenames = [line.strip() for line in open(labellist)]
 
-    ##randomly shuffle them
+    ## Randomly shuffle lists
     c = list(zip(video_filenames, label_filenames))
     random.shuffle(c)
     video_filenames, label_filenames = zip(*c)
@@ -189,10 +189,10 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     N = len(video_filenames)
     video_filenames_t = video_filenames[:int(N * ntraining)]
     label_filenames_t = label_filenames[:int(N * ntraining)]
-    image_filenames_v = video_filenames[int(N * ntraining):]
+    video_filenames_v = video_filenames[int(N * ntraining):]
     label_filenames_v = label_filenames[int(N * ntraining):]
 
     write_list_to_txtfile(video_filenames_t, 'video_list_train.txt', data_list_output_path)
     write_list_to_txtfile(label_filenames_t, 'annotation_list_train.txt', data_list_output_path)
-    write_list_to_txtfile(image_filenames_v, 'video_list_validate.txt', data_list_output_path)
+    write_list_to_txtfile(video_filenames_v, 'video_list_validate.txt', data_list_output_path)
     write_list_to_txtfile(label_filenames_v, 'annotation_list_validate.txt', data_list_output_path)

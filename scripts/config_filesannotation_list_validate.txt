@@ -1,0 +1,13 @@
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-058/T3/01NVb-003-058-3-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-073/T2/01NVb-003-073-2-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072/T3/01NVb_003_072_T3_4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-052/T2/01NVb-003-052-2-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-058/T1/01NVb-003-058-1-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-075/T2/01NVb-003-075-2-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-064/T1/01NVb-003-064-1-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-079/T2/01NVb-003-079-2-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-074/T2/01NVb-003-074-2-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-072/T1/01NVb_003_072_T1_4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-051/T2/01NVb-003-051-2-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-060/T1/01NVb-003-060-1-4CV.json
+/home/mx19/datasets/vital-us/echocardiography/videos-echo/01NVb-003-056/T3/01NVb-003-056-3-4CV.json

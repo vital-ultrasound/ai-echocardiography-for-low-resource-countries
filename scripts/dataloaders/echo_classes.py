@@ -1,7 +1,6 @@
 import argparse
 
 import yaml
-from torch.utils.data import DataLoader
 
 from source.dataloaders.EchocardiographicVideoDataset import EchoClassesDataset
 
@@ -19,7 +18,7 @@ if __name__ == '__main__':
                                  crop_bounds=config['crop_bounds'],
                                  clip_duration=config['n_frames'])
 
-    clip_index = 10 # this must be within the dataset length
+    clip_index = 10  # this must be within the dataset length
     data = dataset[clip_index]
 
     print('data retrieved')
@@ -36,4 +35,3 @@ if __name__ == '__main__':
     #     print(f' Index: {idx_batch}')
     #     print(f' {type(sample_batched)}, {sample_batched.size()} ')
     #     # print(f' Batch: {batch}')
-
