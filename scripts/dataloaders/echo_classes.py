@@ -13,18 +13,22 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    dataset = EchoClassesDataset(config['participants_videos_path'], config['participants_path_json_files'], config['crop_bounds'])
+    dataset = EchoClassesDataset(config['main_data_path'],
+                                 config['participant_videos_list'],
+                                 config['participant_path_json_list'],
+                                 config['crop_bounds'])
+
     video_index = 79 #79: /01NVb-003-072/T3/01NVb-003-072-3-echo.mp4
     data = dataset[video_index]
 
     # print(f' {type(data)}, {data.size()} ')
 
-    my_dloader = DataLoader(data,
-                        batch_size=1,
-                        shuffle=False,
-                        num_workers=0,
-                        pin_memory=True
-                        )
+    # my_dloader = DataLoader(data,
+    #                     batch_size=1,
+    #                     shuffle=False,
+    #                     num_workers=0,
+    #                     pin_memory=True
+    #                     )
 
     # for idx_batch, sample_batched in enumerate(my_dloader):
     #     print(f' Index: {idx_batch}')

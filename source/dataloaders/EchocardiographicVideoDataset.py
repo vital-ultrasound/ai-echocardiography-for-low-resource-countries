@@ -16,42 +16,52 @@ S2MS = 1000
 class EchoClassesDataset(torch.utils.data.Dataset):
     """
     EchoClassesDataset Class to load video and json labels using torch.utils.data.
+
+    Arguments:
+    main_data_path(str): Main path of videos and json files
+    participant_videos_list (srt):  Lists of video files
+    participant_path_json_list (srt): List of json files
+    crop_bounds (Tuple) - Crop bounds, a tuple in format (w0, h0, w, h).
+    transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
     """
 
     def __init__(
             self,
-            participants_videos_path: str,
-            participants_path_json_files: str = None,
+            main_data_path: str,
+            participant_videos_list: str,
+            participant_path_json_list: str,
             crop_bounds=None,
             transform=None
-    ):
-        """
-        Arguments
-
-        participant_videos_path (srt):  the folder where there input files are.
-        crop_bounds - Crop bounds, a tuple in format (w0, h0, w, h).
-        transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
-        """
-
-        self.participants_videos_path = participants_videos_path
-        self.participants_path_json_files = participants_path_json_files
+            ):
+        self.main_data_path = main_data_path
+        self.participant_videos_list = participant_videos_list
+        self.participant_path_json_list = participant_path_json_list
         self.crop_bounds = crop_bounds
         self.transform = transform
 
-        self.video_filenames = []
-        for Participant_i in enumerate(sorted(os.listdir(self.participants_videos_path))):
-            part_i_path = self.participants_videos_path + '/' + Participant_i[1]
-            for T_days_i in enumerate(sorted(os.listdir(part_i_path))):
-                days_i_path = part_i_path + '/' + T_days_i[1]
-                for video_file_name_i in sorted(os.listdir(days_i_path)):
-                    path_video_file_name_i = days_i_path + '/' + video_file_name_i
-                    if path_video_file_name_i.endswith('.mp4'):
-                        self.video_filenames += [path_video_file_name_i]
+        videolist = os.path.join(main_data_path, participant_videos_list)
+        annotationlist = os.path.join(main_data_path, participant_path_json_list)
 
+        self.video_filenames = [self.main_data_path + os.sep + line.strip() for line in open(videolist)]
+        self.annotation_filenames = [self.main_data_path + os.sep + line.strip() for line in open(annotationlist)]
 
-        self.annotation_filenames = []
-        for json_i in enumerate(sorted(os.listdir(self.participants_path_json_files) )):
-            self.annotation_filenames += [self.participants_path_json_files + '/' + json_i[1]]
+        for video_id, json_filename_i in enumerate(self.annotation_filenames):
+            with open(json_filename_i, "r") as json_file:
+                json_data = json.load(json_file)
+
+            # video length, in ms
+            video_name = self.video_filenames[video_id]
+            print(video_name)
+            cap = cv.VideoCapture(video_name)
+            if cap.isOpened() == False:
+                print('[ERROR] [EchoClassesDataset.__init__()] Unable to read video ' + video_name)
+                exit(-1)
+            fps = cap.get(cv.CAP_PROP_FPS)  # OpenCV2 version 2 used "CV_CAP_PROP_FPS"
+            frame_count = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+            frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+            frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+            video_duration_i = frame_count / fps * S2MS
+            cap.release()
 
 
     def __len__(self):
@@ -60,49 +70,13 @@ class EchoClassesDataset(torch.utils.data.Dataset):
     def __getitem__(self, video_index: int):
         """
         Arguments:
-            video_index (int): video_index position to return the data
 
         Returns:
-            video_data clip (tensor): vide data clip with the 4ch view, for file 'video_index',
+
         """
 
-        print(f' VIDEOS {self.video_filenames}')
-        print(f' ANNOTATIONS {self.annotation_filenames}')
-
-        video_name = self.video_filenames[video_index]
-        # print(video_name)
-        # jsonfile_name = self.annotation_filenames[video_index]
-
-        cap = cv.VideoCapture(video_name)
-        if cap.isOpened() == False:
-            print('[ERROR] [ViewVideoDataset.__getitem__()] Unable to open video ' + video_name)
-            exit(-1)
-
-        # Get parameters of input video
-        frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
-        frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
-        fps = int(np.ceil(cap.get(cv.CAP_PROP_FPS)))
-        frame_count = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
-
-        # Print video features
-        print(f'  ')
-        print(f'  ')
-        print(f'  ')
-        print(f'  VIDEO_FEATURES')
-        print(f'    video_name={video_name}')
-        print(f'    Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
-        print(f'  ')
-        print(f'  ')
 
 
-        cap.release()
-
-        # video_data = torch.stack(frames_torch)  # "Fi,C,H,W"
-        #
-        # if self.transform is not None:
-        #     video_data = self.transform(video_data)
-        #
-        # return video_data
 
 
 class ViewVideoDataset(torch.utils.data.Dataset):
