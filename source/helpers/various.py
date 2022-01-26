@@ -138,15 +138,18 @@ def write_list_to_txtfile(list: List, filename: str, files_path: str) -> None:
         textfile.write(element + "\n")
 
 
-def split_train_validate_sets(video_echodataset_path: str, text_label_output_path: str, ntraining: float) -> None:
+def split_train_validate_sets(echodataset_path: str, data_list_output_path: str, ntraining: float) -> None:
     """
 
     Split paths to train and validate sets
 
     Arguments:
-        video_echodataset_path: path of the video files
-        text_label_output_path: path where text labels are written
-        ntraining: percentage of training from 0.0 to 1.0
+        echodataset_path: path of the video and annotation files
+
+        data_list_output_path: path where text files containing lists of data (train/validate videos
+                               and annotations)  are written
+
+        ntraining: percentage of data used for training from 0.0 to 1.0
 
     Return:
         None
@@ -157,20 +160,20 @@ def split_train_validate_sets(video_echodataset_path: str, text_label_output_pat
     all_videos_file = 'video_list_full.txt'
     all_labels_file = 'annotation_list_full.txt'
 
-    videolist = '{}{}'.format(text_label_output_path, all_videos_file)
-    labellist = '{}{}'.format(text_label_output_path, all_labels_file)
+    videolist = '{}{}'.format(data_list_output_path, all_videos_file)
+    labellist = '{}{}'.format(data_list_output_path, all_labels_file)
 
     ## list all  files
-    result = list(Path(video_echodataset_path).rglob("*echo.[mM][pP][4]"))
+    result = list(Path(echodataset_path).rglob("*echo*.[mM][pP][4]"))
     with open(videolist, 'w') as f:
         for fn in result:
-            fn_nopath = str(fn).replace(video_echodataset_path, '')
+            fn_nopath = str(fn).replace(echodataset_path, '')
             f.write(fn_nopath + '\n')
 
-    result = list(Path(video_echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]"))
+    result = list(Path(echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]"))
     with open(labellist, 'w') as f:
         for fn in result:
-            fn_nopath = str(fn).replace(video_echodataset_path, '')
+            fn_nopath = str(fn).replace(echodataset_path, '')
             f.write(fn_nopath + '\n')
 
     ## load filenames into list
@@ -186,6 +189,10 @@ def split_train_validate_sets(video_echodataset_path: str, text_label_output_pat
     N = len(video_filenames)
     video_filenames_t = video_filenames[:int(N * ntraining)]
     label_filenames_t = label_filenames[:int(N * ntraining)]
+    image_filenames_v = video_filenames[int(N * ntraining):]
+    label_filenames_v = label_filenames[int(N * ntraining):]
 
-    write_list_to_txtfile(video_filenames_t, 'video_list_train.txt', text_label_output_path)
-    write_list_to_txtfile(label_filenames_t, 'annotation_list_train.txt', text_label_output_path)
+    write_list_to_txtfile(video_filenames_t, 'video_list_train.txt', data_list_output_path)
+    write_list_to_txtfile(label_filenames_t, 'annotation_list_train.txt', data_list_output_path)
+    write_list_to_txtfile(image_filenames_v, 'video_list_validate.txt', data_list_output_path)
+    write_list_to_txtfile(label_filenames_v, 'annotation_list_validate.txt', data_list_output_path)
