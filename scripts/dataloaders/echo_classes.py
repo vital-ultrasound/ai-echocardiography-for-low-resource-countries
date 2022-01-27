@@ -2,6 +2,7 @@ import argparse
 import torch
 import yaml
 import torchvision.transforms as transforms
+import matplotlib.pyplot as plt
 
 from source.dataloaders.EchocardiographicVideoDataset import EchoClassesDataset
 
@@ -39,5 +40,20 @@ if __name__ == '__main__':
     print(f'Load two clips: ')
     clip_index_a = 0  # this must be within the dataset length
     clip_index_b = 15  # this must be within the dataset length
-    data = dataset[clip_index_a]
-    data = dataset[clip_index_b]
+    data_a = dataset[clip_index_a]
+    data_b = dataset[clip_index_b]
+
+    print('Display the two clips:')
+
+    labelnames = ('bck', '4Ch')
+
+    plt.figure()
+    for f in range(data_a[0].shape[1]):
+        plt.subplot(2, data_a[0].shape[1], f+1)
+        plt.imshow(data_a[0][0, f, ...], cmap='gray')
+        plt.title('{} {}'.format(labelnames[data_a[1]], f))
+    for f in range(data_b[0].shape[1]):
+        plt.subplot(2, data_b[0].shape[1], f+data_b[0].shape[1]+1)
+        plt.imshow(data_b[0][0, f, ...], cmap='gray')
+        plt.title('{} {}'.format(labelnames[data_b[1]], f))
+    plt.show()

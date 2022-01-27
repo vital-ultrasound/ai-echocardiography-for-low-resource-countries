@@ -227,12 +227,12 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 if self.crop_bounds_for_us_image is not None:
                     cropped_masked_gray_frame = cropped_frame(masked_gray_frame, self.crop_bounds_for_us_image)
 
-                frame_torch = ToImageTensor(cropped_masked_gray_frame)
-
                 if self.pretransform is not None:
-                    frame_torch = self.pretransform(frame_torch).squeeze()
+                    frame_torch = self.pretransform(cropped_masked_gray_frame).squeeze()
                 else:
-                    frame_torch = frame_torch.squeeze()
+                    # image to tensor is covered by a pretransform (which we may always use) but leaving this here just in case.
+                    frame_torch = ToImageTensor(cropped_masked_gray_frame).squeeze()
+
 
                 frames_torch.append(frame_torch)
             cap.release()
