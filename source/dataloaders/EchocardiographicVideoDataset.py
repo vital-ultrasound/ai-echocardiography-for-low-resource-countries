@@ -231,13 +231,15 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
                 if self.pretransform is not None:
                     frame_torch = self.pretransform(frame_torch).squeeze()
+                else:
+                    frame_torch = frame_torch.squeeze()
 
                 frames_torch.append(frame_torch)
             cap.release()
             # make a  tensor of the clip
             video_data = torch.stack(frames_torch)
 
-            print(video_data.size())
+            #print(video_data.size())
 
             if self.use_tmp_storage is True and os.path.isfile(save_filename) is False:
                 if not os.path.isdir(self.temp_folder):

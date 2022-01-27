@@ -11,6 +11,9 @@ crop_bounds_for_us_image:
   width: 1130
   height: 810
 
+## Size to which the cropped area is resized to.
+im_size:  !!python/tuple [128, 128]
+
 ## number of frames per clip
 n_frames: 5
 
