@@ -17,9 +17,9 @@ if __name__ == '__main__':
                                  participant_videos_list=config['participant_videos_list'],
                                  participant_path_json_list=config['participant_path_json_list'],
                                  crop_bounds_for_us_image=config['crop_bounds_for_us_image'],
-                                 clip_duration=config['n_frames'],
+                                 clip_duration_nframes=config['n_frames'],
                                  device=device,
-                                 max_background_duration_in_secs = 10
+                                 max_background_duration_in_secs = config['max_background_duration_in_secs'],
                                  )
 
     ## USAGE

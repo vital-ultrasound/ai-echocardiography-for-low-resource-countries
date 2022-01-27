@@ -25,7 +25,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         crop_bounds_for_us_image (Tuple) - Crop bounds, a dictionary in format ('start_x':w0, 'start_y':h0, 'width':w, 'height':h).
         pretransform (torch.Transform): a transform, e.g. normalization, etc, that is done determninistically and before augmentation (Default = None)
         transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
-        clip_duration (int): duration of the clips, in number of frames
+        clip_duration_nframes (int): duration of the clips, in number of frames
         device: It could be torch.device('cpu') or torch.device('cuda:0') etc
         use_tmp_storage: It is set to true, saves clips into a tmp folder to speed up training.
         max_background_duration_in_secs: to limit their max length to 10 seconds. background clips might be long (60 seconds sampled at 30fps),
@@ -40,7 +40,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             crop_bounds_for_us_image=None,
             pretransform=None,
             transform=None,
-            clip_duration: int = 20,
+            clip_duration_nframes: int = 20,
             device=torch.device('cpu'),
             use_tmp_storage=False,
             max_background_duration_in_secs: int = 10
@@ -51,7 +51,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         self.crop_bounds_for_us_image = crop_bounds_for_us_image
         self.transform = transform
         self.pretransform = pretransform
-        self.clip_n_frames = clip_duration
+        self.clip_n_frames = clip_duration_nframes
         self.device = device
         self.use_tmp_storage = use_tmp_storage
         self.temp_folder = os.path.expanduser('~') + os.path.sep + 'tmp' + os.path.sep + 'echoviddata_{}frames'.format(self.clip_n_frames)
@@ -113,9 +113,9 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 # it means there is a background clip in between
                 if start_time_ms > end_time_ms:
                     # limiting the duration of background clips with MAX_BACKGROUND_DURATION_IN_MS
-                    clip_duration = start_time_ms - end_time_ms
-                    if clip_duration > self.MAX_BACKGROUND_DURATION_IN_MS:
-                        excess = clip_duration - self.MAX_BACKGROUND_DURATION_IN_MS
+                    clip_duration_nframes = start_time_ms - end_time_ms
+                    if clip_duration_nframes > self.MAX_BACKGROUND_DURATION_IN_MS:
+                        excess = clip_duration_nframes - self.MAX_BACKGROUND_DURATION_IN_MS
                         background_clip = [video_id, nclips_in_video, end_time_ms+excess/2, start_time_ms-excess/2, self.BACKGROUND_LABEL]
                     else:
                         background_clip = [video_id, nclips_in_video, end_time_ms, start_time_ms, self.BACKGROUND_LABEL]
@@ -133,9 +133,9 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             if end_time_ms < video_duration_i:
                 # background clips can be very long, so lets take, form the given interval, the central part
                 # up to MAX_BACKGROUND_DURATION_IN_MS msec
-                clip_duration = video_duration_i - end_time_ms
-                if clip_duration > self.MAX_BACKGROUND_DURATION_IN_MS:
-                    excess = clip_duration - self.MAX_BACKGROUND_DURATION_IN_MS
+                clip_duration_nframes = video_duration_i - end_time_ms
+                if clip_duration_nframes > self.MAX_BACKGROUND_DURATION_IN_MS:
+                    excess = clip_duration_nframes - self.MAX_BACKGROUND_DURATION_IN_MS
                     background_clip = [video_id, nclips_in_video, end_time_ms + excess / 2, video_duration_i - excess / 2,
                                        self.BACKGROUND_LABEL]
                 else:
