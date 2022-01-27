@@ -1,11 +1,13 @@
 import argparse
-import yaml
+
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torchvision.transforms as transforms
-import matplotlib.pyplot as plt
-from source.models.ViewClassifiers import SimpleVideoClassifier
+import yaml
+
 from source.dataloaders.EchocardiographicVideoDataset import EchoClassesDataset
+from source.models.ViewClassifiers import SimpleVideoClassifier
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -15,17 +17,16 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    # define some static transforms, i.e. transforms that apply to the entire data with
-    # no change. These transforms are not augmentation.
+    # Define some static transforms, i.e. transforms that apply to the entire dataset.
+    # These transforms are not augmentation.
     pretransform = transforms.Compose([
         transforms.ToPILImage(),
-        transforms.Resize(size=config['im_size']),
+        transforms.Resize(size=config['pretransform_im_size']),
         transforms.ToTensor(),  # this normalizes in
     ]
     )
 
-    #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    device = torch.device("cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     dataset = EchoClassesDataset(main_data_path=config['main_data_path'],
                                  participant_videos_list=config['participant_videos_list'],
                                  participant_path_json_list=config['participant_path_json_list'],
@@ -37,8 +38,6 @@ if __name__ == '__main__':
                                  use_tmp_storage=True,
                                  )
 
-    # create a dataloader that will serve the batches over the epochs
-    dataloader = torch.utils.data.DataLoader(dataset=dataset, batch_size=config['batch_size'], shuffle=True)
 
     ## USAGE
     print(f'Number of clips: {len(dataset)}')
@@ -49,23 +48,27 @@ if __name__ == '__main__':
     data_b = dataset[clip_index_b]
 
     print('Display the two clips:')
-
-    labelnames = ('bck', '4Ch')
-
+    labelnames = ('BKGR', '4CV')
     plt.figure()
     for f in range(data_a[0].shape[1]):
         plt.subplot(2, data_a[0].shape[1], f+1)
-        plt.imshow(data_a[0][0, f, ...], cmap='gray')
+        plt.imshow(data_a[0][0, f, ...].cpu().data.numpy(), cmap='gray')
+        plt.axis('off')
         plt.title('{} {}'.format(labelnames[data_a[1]], f))
     for f in range(data_b[0].shape[1]):
         plt.subplot(2, data_b[0].shape[1], f+data_b[0].shape[1]+1)
-        plt.imshow(data_b[0][0, f, ...], cmap='gray')
+        plt.imshow(data_b[0][0, f, ...].cpu().data.numpy(), cmap='gray')
+        plt.axis('off')
         plt.title('{} {}'.format(labelnames[data_b[1]], f))
     plt.show()
+
+    # Dataloader that will serve the batches over the epochs
+    dataloader = torch.utils.data.DataLoader(dataset=dataset, batch_size=config['batch_size'], shuffle=True)
 
     # -----------------------------------------
     # Do a loop as if we were training a model
     data_size = tuple(data_a[0].shape)
+    print(type(data_size))
     net = SimpleVideoClassifier(data_size)
     net.to(device)
     print(net)

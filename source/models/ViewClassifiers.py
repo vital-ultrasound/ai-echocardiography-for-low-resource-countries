@@ -1,7 +1,6 @@
-import math
-import torch
-import torch.nn as nn
 import numpy as np
+import torch.nn as nn
+
 
 class SimpleVideoClassifier(nn.Module):
 
@@ -28,9 +27,8 @@ class SimpleVideoClassifier(nn.Module):
             nn.ReLU(),
             nn.Linear(in_features=32, out_features=self.n_output_classes),
             nn.Sigmoid(),
-            )
+        )
 
     def forward(self, data):
         out = self.classifier(data)
         return out
-

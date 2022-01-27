@@ -11,7 +11,7 @@ from source.helpers.various import timer_func_decorator, msec_to_timestamp, to_g
     cropped_frame, masks_us_image
 
 # constants
-S2MS = 1000 # second to millisecond
+S2MS = 1000  # second to millisecond
 
 
 class EchoClassesDataset(torch.utils.data.Dataset):
@@ -44,7 +44,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             device=torch.device('cpu'),
             use_tmp_storage=False,
             max_background_duration_in_secs: int = 10
-            ):
+    ):
         self.main_data_path = main_data_path
         self.participant_videos_list = participant_videos_list
         self.participant_path_json_list = participant_path_json_list
@@ -54,7 +54,8 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         self.clip_n_frames = clip_duration_nframes
         self.device = device
         self.use_tmp_storage = use_tmp_storage
-        self.temp_folder = os.path.expanduser('~') + os.path.sep + 'tmp' + os.path.sep + 'echoviddata_{}frames'.format(self.clip_n_frames)
+        self.temp_folder = os.path.expanduser('~') + os.path.sep + 'tmp' + os.path.sep + 'echoviddata_{}frames'.format(
+            self.clip_n_frames)
         self.max_background_duration_in_secs = max_background_duration_in_secs
 
         videolist = os.path.join(main_data_path, participant_videos_list)
@@ -85,7 +86,8 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 json_data = json.load(json_file)
             # check that the annotation we need is encoded in the metadata
             if len(json_data['metadata']) == 0:
-                print('[ERROR] [EchoClassesDataset.__init__()] Error reading {} (empty). Removing from list'.format(json_filename_i))
+                print('[ERROR] [EchoClassesDataset.__init__()] Error reading {} (empty). Removing from list'.format(
+                    json_filename_i))
                 continue
 
             # get the video length. This will help define the segments outside the label as backgorund
@@ -96,8 +98,6 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 exit(-1)
             fps = cap.get(cv.CAP_PROP_FPS)
             frame_count = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
-            #frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
-            #frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
             video_duration_i = frame_count / fps * S2MS
             cap.release()
 
@@ -106,7 +106,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             end_time_ms = 0
             for seg_i, segment in enumerate(json_data['metadata']):
                 timestamps_of_labels = json_data['metadata'][segment]['z']
-                start_time_ms = timestamps_of_labels[0]  * S2MS
+                start_time_ms = timestamps_of_labels[0] * S2MS
                 # if for the first clip the start time is not 0, then there is a background clip before
                 # for the clips that are not the first one,
                 # if the start time is greater than the end time of the previous clip,
@@ -116,7 +116,8 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                     clip_duration_nframes = start_time_ms - end_time_ms
                     if clip_duration_nframes > self.MAX_BACKGROUND_DURATION_IN_MS:
                         excess = clip_duration_nframes - self.MAX_BACKGROUND_DURATION_IN_MS
-                        background_clip = [video_id, nclips_in_video, end_time_ms+excess/2, start_time_ms-excess/2, self.BACKGROUND_LABEL]
+                        background_clip = [video_id, nclips_in_video, end_time_ms + excess / 2,
+                                           start_time_ms - excess / 2, self.BACKGROUND_LABEL]
                     else:
                         background_clip = [video_id, nclips_in_video, end_time_ms, start_time_ms, self.BACKGROUND_LABEL]
                     self.idx_to_clip.append(background_clip)
@@ -136,7 +137,8 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 clip_duration_nframes = video_duration_i - end_time_ms
                 if clip_duration_nframes > self.MAX_BACKGROUND_DURATION_IN_MS:
                     excess = clip_duration_nframes - self.MAX_BACKGROUND_DURATION_IN_MS
-                    background_clip = [video_id, nclips_in_video, end_time_ms + excess / 2, video_duration_i - excess / 2,
+                    background_clip = [video_id, nclips_in_video, end_time_ms + excess / 2,
+                                       video_duration_i - excess / 2,
                                        self.BACKGROUND_LABEL]
                 else:
                     background_clip = [video_id, nclips_in_video, end_time_ms, video_duration_i, self.BACKGROUND_LABEL]
@@ -157,14 +159,14 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
             idx_to_clip_smaller = []
             # now randomly permute the background list
-            background_sublist = random.sample(idx_to_clip_i[self.BACKGROUND_LABEL], self.class_count[self.FOURCV_LABEL])
+            background_sublist = random.sample(idx_to_clip_i[self.BACKGROUND_LABEL],
+                                               self.class_count[self.FOURCV_LABEL])
             self.class_count[self.BACKGROUND_LABEL] = len(background_sublist)
             idx_to_clip_smaller.append(background_sublist)
             idx_to_clip_smaller.append(idx_to_clip_i[self.FOURCV_LABEL])
             self.idx_to_clip = [item for sublist in idx_to_clip_smaller for item in sublist]
 
         self.samples_count = len(self.idx_to_clip)
-
 
     def __len__(self):
         return self.samples_count
@@ -205,18 +207,13 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                     print('[ERROR] [EchoClassesDataset.__getitem__()] Video {} has less than 1 frame, skipping'.format(
                         video_name))
                     exit(-1)
-                    # print('[ERROR] [LusVideoDataset.__getitem__()] Unable to extract frame {} at ms {} from video {}, skipping'.format(len(frames_torch), msec, video_name))
                     # the video has finished
                     break
 
                 if frame is None:
-                    # no frame here! video is finished
+                    # no frame here! video has finished
                     break
 
-                # in pytorch, channels go first, then height, width
-                # frame_channelsfirst = np.moveaxis(gray_frame, -1, 0)
-                # frame_torch = torch.from_numpy(frame_channelsfirst)
-                # get the frame in grayscale
                 msec = cap.get(cv.CAP_PROP_POS_MSEC)
 
                 if msec > clip_latest_end_ms:
@@ -233,13 +230,10 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                     # image to tensor is covered by a pretransform (which we may always use) but leaving this here just in case.
                     frame_torch = ToImageTensor(cropped_masked_gray_frame).squeeze()
 
-
                 frames_torch.append(frame_torch)
             cap.release()
             # make a  tensor of the clip
             video_data = torch.stack(frames_torch)
-
-            #print(video_data.size())
 
             if self.use_tmp_storage is True and os.path.isfile(save_filename) is False:
                 if not os.path.isdir(self.temp_folder):
@@ -292,7 +286,6 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         clip_data = clip_data.unsqueeze(0)
 
         return clip_data, clip_label, clip_frame0
-
 
 
 class ViewVideoDataset(torch.utils.data.Dataset):
