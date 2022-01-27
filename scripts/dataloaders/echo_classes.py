@@ -31,9 +31,12 @@ if __name__ == '__main__':
                                  crop_bounds_for_us_image=config['crop_bounds_for_us_image'],
                                  clip_duration_nframes=config['n_frames'],
                                  device=device,
-                                 max_background_duration_in_secs = config['max_background_duration_in_secs'],
+                                 max_background_duration_in_secs=config['max_background_duration_in_secs'],
                                  pretransform=pretransform,
                                  )
+
+    # create a dataloader that will serve the batches over the epochs
+    dataloader = torch.utils.data.DataLoader(dataset=dataset, batch_size=config['batch_size'], shuffle=True)
 
     ## USAGE
     print(f'Number of clips: {len(dataset)}')
@@ -57,3 +60,11 @@ if __name__ == '__main__':
         plt.imshow(data_b[0][0, f, ...], cmap='gray')
         plt.title('{} {}'.format(labelnames[data_b[1]], f))
     plt.show()
+
+    # -----------------------------------------
+    # Do a loop as if we were training a model
+    for epoch in range(config['max_epochs']):
+        for step, data in enumerate(dataloader):
+            clip = data[0]
+            label = data[1].to(device)
+        print('Done for epoch {}'.format(epoch))

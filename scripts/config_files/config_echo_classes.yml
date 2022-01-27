@@ -20,6 +20,10 @@ n_frames: 5
 ## Max duration of background clips
 max_background_duration_in_secs: 5
 
+## Training parameters
+batch_size: 8
+max_epochs: 100
+
 ### Video paths
 main_data_path: '/home/ag09/data/VITAL/echo'
 participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'
