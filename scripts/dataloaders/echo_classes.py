@@ -1,9 +1,10 @@
 import argparse
-import torch
 import yaml
+import torch
+import torch.nn as nn
 import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
-
+from source.models.ViewClassifiers import SimpleVideoClassifier
 from source.dataloaders.EchocardiographicVideoDataset import EchoClassesDataset
 
 if __name__ == '__main__':
@@ -64,9 +65,38 @@ if __name__ == '__main__':
 
     # -----------------------------------------
     # Do a loop as if we were training a model
-    
+    data_size = tuple(data_a[0].shape)
+    net = SimpleVideoClassifier(data_size)
+    net.to(device)
+    print(net)
+
+    optimizer = torch.optim.Adam(net.parameters()) # use default settings
+    loss_function = nn.CrossEntropyLoss()
+
+    losses = []
     for epoch in range(config['max_epochs']):
+        running_loss = 0
         for step, data in enumerate(dataloader):
             clip = data[0]
             label = data[1].to(device)
-        print('Done for epoch {}'.format(epoch))
+
+            out = net(clip)
+
+            loss = loss_function(out, label)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            running_loss += loss.detach().item()
+
+        running_loss /= len(dataloader)
+        losses.append(running_loss)
+
+        print('{:03.0f} {:.5f}'.format(epoch, running_loss))
+
+    plt.figure()
+    plt.plot(losses,'-')
+    plt.xlabel('Epochs')
+    plt.ylabel('Cross Entropy Loss')
+    plt.title('Training')
+    plt.show()
