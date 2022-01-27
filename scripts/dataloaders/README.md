@@ -23,13 +23,15 @@ Then, text files looks like as follows:
 
 ## Dataloaders
 
-### [echo_classes.py](echo_classes.py)
+### [echo_classes.py](echo_classes.py) and [echo_classes_notebook](echo_classes_notebook.ipynb)
 Open a terminal and load your conda environment 
 ```
 cd $HOME/repositories/echocardiography/scripts/dataloaders
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE
 python echo_classes.py --config ../config_files/config_echo_classes.yml
+#Notebook
+jupyter notebook
 ```
 
 

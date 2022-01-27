@@ -1,5 +1,5 @@
 import argparse
-
+import torch
 import yaml
 
 from source.dataloaders.EchocardiographicVideoDataset import EchoClassesDataset
@@ -12,26 +12,20 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     dataset = EchoClassesDataset(main_data_path=config['main_data_path'],
                                  participant_videos_list=config['participant_videos_list'],
                                  participant_path_json_list=config['participant_path_json_list'],
-                                 crop_bounds=config['crop_bounds'],
-                                 clip_duration=config['n_frames'])
+                                 crop_bounds_for_us_image=config['crop_bounds_for_us_image'],
+                                 clip_duration=config['n_frames'],
+                                 device=device,
+                                 max_background_duration_in_secs = 10
+                                 )
 
-    clip_index = 10  # this must be within the dataset length
-    data = dataset[clip_index]
-
-    print('data retrieved')
-    # print(f' {type(data)}, {data.size()} ')
-
-    # my_dloader = DataLoader(data,
-    #                     batch_size=1,
-    #                     shuffle=False,
-    #                     num_workers=0,
-    #                     pin_memory=True
-    #                     )
-
-    # for idx_batch, sample_batched in enumerate(my_dloader):
-    #     print(f' Index: {idx_batch}')
-    #     print(f' {type(sample_batched)}, {sample_batched.size()} ')
-    #     # print(f' Batch: {batch}')
+    ## USAGE
+    print(f'Number of clips: {len(dataset)}')
+    print(f'Load two clips: ')
+    clip_index_a = 0  # this must be within the dataset length
+    clip_index_b = 17  # this must be within the dataset length
+    data = dataset[clip_index_a]
+    data = dataset[clip_index_b]

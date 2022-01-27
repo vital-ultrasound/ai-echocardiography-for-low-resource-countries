@@ -5,7 +5,7 @@ software_version: 'R2'
 Transducers: 'Convex probe C1-5-D'
 
 ## Image bounds
-crop_bounds:
+crop_bounds_for_us_image:
   start_x: 480
   start_y: 120
   width: 1130
@@ -14,7 +14,12 @@ crop_bounds:
 ## number of frames per clip
 n_frames: 5
 
+### Video paths
+#main_data_path: '/home/ag09/data/VITAL/echo'
+#participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'
+#participant_path_json_list: '/home/ag09/data/VITAL/echo/annotation_list_train.txt'
+
 ## Video paths
-main_data_path: '/home/ag09/data/VITAL/echo'
-participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'
-participant_path_json_list: '/home/ag09/data/VITAL/echo/annotation_list_train.txt'
+main_data_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo-test'
+participant_videos_list: '/home/mx19/repositories/echocardiography/scripts/config_files/data_lists/video_list_train.txt'
+participant_path_json_list: '/home/mx19/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_train.txt'
