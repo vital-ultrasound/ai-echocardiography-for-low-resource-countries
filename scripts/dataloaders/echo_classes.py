@@ -33,6 +33,7 @@ if __name__ == '__main__':
                                  device=device,
                                  max_background_duration_in_secs=config['max_background_duration_in_secs'],
                                  pretransform=pretransform,
+                                 use_tmp_storage=True,
                                  )
 
     # create a dataloader that will serve the batches over the epochs
@@ -63,6 +64,7 @@ if __name__ == '__main__':
 
     # -----------------------------------------
     # Do a loop as if we were training a model
+    
     for epoch in range(config['max_epochs']):
         for step, data in enumerate(dataloader):
             clip = data[0]
