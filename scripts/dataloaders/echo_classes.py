@@ -23,10 +23,24 @@ if __name__ == '__main__':
         transforms.ToPILImage(),
         transforms.Resize(size=config['pretransform_im_size']),
         transforms.ToTensor(),  # this normalizes in
-    ]
-    )
+    ])
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    # define some transforms for data augmentation: they have all random parameters that
+    # will change at each epoch.
+    if config['use_augmentation']:
+        transform = transforms.Compose([
+            transforms.ToPILImage(),
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomRotation(degrees=5), # in degrees
+            transforms.RandomEqualize(p=0.5),
+            transforms.RandomAffine(degrees=0, translate=(0.1, 0.1), scale=(0.9, 1.1)),
+            transforms.ToTensor(),  # this normalizes in
+        ])
+    else:
+        transform=None
+
+    device = torch.device("cpu")
+    #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     dataset = EchoClassesDataset(main_data_path=config['main_data_path'],
                                  participant_videos_list=config['participant_videos_list'],
                                  participant_path_json_list=config['participant_path_json_list'],
@@ -35,6 +49,7 @@ if __name__ == '__main__':
                                  device=device,
                                  max_background_duration_in_secs=config['max_background_duration_in_secs'],
                                  pretransform=pretransform,
+                                 transform=transform,
                                  use_tmp_storage=True,
                                  )
 

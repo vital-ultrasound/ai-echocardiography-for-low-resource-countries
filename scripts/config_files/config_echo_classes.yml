@@ -23,13 +23,14 @@ max_background_duration_in_secs: 5
 ## Training parameters
 batch_size: 8
 max_epochs: 100
+use_augmentation: True
 
 ## Video paths
-#main_data_path: '/home/ag09/data/VITAL/echo'
-#participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'
-#participant_path_json_list: '/home/ag09/data/VITAL/echo/annotation_list_train.txt'
+main_data_path: '/home/ag09/data/VITAL/echo'
+participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'
+participant_path_json_list: '/home/ag09/data/VITAL/echo/annotation_list_train.txt'
 
 ## Video paths
-main_data_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo-test'
-participant_videos_list: '/home/mx19/repositories/echocardiography/scripts/config_files/data_lists/video_list_train.txt'
-participant_path_json_list: '/home/mx19/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_train.txt'
+#main_data_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo-test'
+#participant_videos_list: '/home/mx19/repositories/echocardiography/scripts/config_files/data_lists/video_list_train.txt'
+#participant_path_json_list: '/home/mx19/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_train.txt'
