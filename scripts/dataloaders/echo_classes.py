@@ -65,7 +65,7 @@ if __name__ == '__main__':
     # Dataloader that will serve the batches over the epochs
     dataloader = torch.utils.data.DataLoader(dataset=dataset, batch_size=config['batch_size'], shuffle=True)
 
-    # -----------------------------------------
+    # TODO in #34
     # Do a loop as if we were training a model
     data_size = tuple(data_a[0].shape)
     print(type(data_size))

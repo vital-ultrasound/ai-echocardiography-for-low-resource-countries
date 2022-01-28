@@ -30,7 +30,7 @@ cd $HOME/repositories/echocardiography/scripts/dataloaders
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE
 python echo_classes.py --config ../config_files/config_echo_classes.yml
-#Notebook
+# Alternavively with the use of jupyter notebook
 jupyter notebook
 ```
 
