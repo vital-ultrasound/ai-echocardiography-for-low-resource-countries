@@ -25,7 +25,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         crop_bounds_for_us_image (Tuple) - Crop bounds, a dictionary in format ('start_x':w0, 'start_y':h0, 'width':w, 'height':h).
         pretransform (torch.Transform): a transform, e.g. normalization, etc, that is done determninistically and before augmentation (Default = None)
         transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
-        clip_duration_nframes (int): duration of the clips, in number of frames
+        number_of_frames_per_segment_in_a_clip (int): duration of the clips, in number of frames
         device: It could be torch.device('cpu') or torch.device('cuda:0') etc
         use_tmp_storage: It is set to true, saves clips into a tmp folder to speed up training.
         max_background_duration_in_secs: to limit their max length to 10 seconds. background clips might be long (60 seconds sampled at 30fps),
@@ -40,7 +40,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             crop_bounds_for_us_image=None,
             pretransform=None,
             transform=None,
-            clip_duration_nframes: int = 20,
+            number_of_frames_per_segment_in_a_clip: int = 20,
             device=torch.device('cpu'),
             use_tmp_storage=False,
             max_background_duration_in_secs: int = 10
@@ -51,11 +51,11 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         self.crop_bounds_for_us_image = crop_bounds_for_us_image
         self.transform = transform
         self.pretransform = pretransform
-        self.clip_n_frames = clip_duration_nframes
+        self.number_of_frames_per_segment_in_a_clip = number_of_frames_per_segment_in_a_clip
         self.device = device
         self.use_tmp_storage = use_tmp_storage
         self.temp_folder = os.path.expanduser('~') + os.path.sep + 'tmp' + os.path.sep + 'echoviddata_{}frames'.format(
-            self.clip_n_frames)
+            self.number_of_frames_per_segment_in_a_clip)
         self.max_background_duration_in_secs = max_background_duration_in_secs
 
         videolist = os.path.join(main_data_path, participant_videos_list)
@@ -113,9 +113,9 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 # it means there is a background clip in between
                 if start_time_ms > end_time_ms:
                     # limiting the duration of background clips with MAX_BACKGROUND_DURATION_IN_MS
-                    clip_duration_nframes = start_time_ms - end_time_ms
-                    if clip_duration_nframes > self.MAX_BACKGROUND_DURATION_IN_MS:
-                        excess = clip_duration_nframes - self.MAX_BACKGROUND_DURATION_IN_MS
+                    number_of_frames_per_segment_in_a_clip = start_time_ms - end_time_ms
+                    if number_of_frames_per_segment_in_a_clip > self.MAX_BACKGROUND_DURATION_IN_MS:
+                        excess = number_of_frames_per_segment_in_a_clip - self.MAX_BACKGROUND_DURATION_IN_MS
                         background_clip = [video_id, nclips_in_video, end_time_ms + excess / 2,
                                            start_time_ms - excess / 2, self.BACKGROUND_LABEL]
                     else:
@@ -134,9 +134,9 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             if end_time_ms < video_duration_i:
                 # background clips can be very long, so lets take, form the given interval, the central part
                 # up to MAX_BACKGROUND_DURATION_IN_MS msec
-                clip_duration_nframes = video_duration_i - end_time_ms
-                if clip_duration_nframes > self.MAX_BACKGROUND_DURATION_IN_MS:
-                    excess = clip_duration_nframes - self.MAX_BACKGROUND_DURATION_IN_MS
+                number_of_frames_per_segment_in_a_clip = video_duration_i - end_time_ms
+                if number_of_frames_per_segment_in_a_clip > self.MAX_BACKGROUND_DURATION_IN_MS:
+                    excess = number_of_frames_per_segment_in_a_clip - self.MAX_BACKGROUND_DURATION_IN_MS
                     background_clip = [video_id, nclips_in_video, end_time_ms + excess / 2,
                                        video_duration_i - excess / 2,
                                        self.BACKGROUND_LABEL]
@@ -186,7 +186,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         clip_label = self.idx_to_clip[index][4]
 
         prefix = self.participant_videos_list.split('.')[0].split('_')[-1]
-        save_filename = self.temp_folder + '/video_l{}_{}_{}.pth'.format(clip_label, prefix, index)
+        save_filename = self.temp_folder + '/videoID_{}_label_{}_{}.pth'.format(index, clip_label, prefix)
 
         if self.use_tmp_storage is True and os.path.isfile(save_filename) is True:
             video_data = torch.load(save_filename)
@@ -243,20 +243,20 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                     os.makedirs(self.temp_folder, exist_ok=False)
                 torch.save(video_data, save_filename)
 
-        # Now extract a random clio of clip_n_frames form the video data.
+        # Now extract a random segment of number_of_frames_per_segment_in_a_clip from the video data.
         # This could be done perhaps using data augmentation
-        # clip_duration_ms = self.clip_n_frames / self.video_framerate * S2MS
+        # clip_duration_ms = self.number_of_frames_per_segment_in_a_clip / self.video_framerate * S2MS
         n_available_frames = video_data.shape[0]
-        if n_available_frames < self.clip_n_frames:
+        if n_available_frames < self.number_of_frames_per_segment_in_a_clip:
             clip_frame0 = 0
             clip_frame1 = n_available_frames
         else:
-            # randomly pick a window within
-            latest_start_frame = np.max((n_available_frames - self.clip_n_frames, 0))
-            earliest_end_frame = self.clip_n_frames
+            # randomly pick a window segment within the clip
+            latest_start_frame = np.max((n_available_frames - self.number_of_frames_per_segment_in_a_clip, 0))
+            earliest_end_frame = self.number_of_frames_per_segment_in_a_clip
             clip_frame0 = int(np.random.uniform(np.min((latest_start_frame, earliest_end_frame)),
                                                 np.max((latest_start_frame, earliest_end_frame))))
-            clip_frame1 = np.min((clip_frame0 + self.clip_n_frames, n_available_frames))
+            clip_frame1 = np.min((clip_frame0 + self.number_of_frames_per_segment_in_a_clip, n_available_frames))
         clip_data = video_data[clip_frame0:clip_frame1, ...]
 
         if clip_data.shape[0] == 0:
@@ -264,9 +264,9 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             print('[ERROR] [EchoClassesDataset.__get_item__()] Empty video in {}'.format(index))
             exit(-1)
 
-        if clip_data.shape[0] < self.clip_n_frames:
+        if clip_data.shape[0] < self.number_of_frames_per_segment_in_a_clip:
             # if < 30frames, add the last one over, as if the user had frozen
-            extra_frames = [clip_data[-1, ...].unsqueeze(0)] * (self.clip_n_frames - clip_data.shape[0])
+            extra_frames = [clip_data[-1, ...].unsqueeze(0)] * (self.number_of_frames_per_segment_in_a_clip - clip_data.shape[0])
             clip_data = torch.cat([clip_data] + extra_frames, dim=0)
 
         if self.transform is not None:
@@ -282,8 +282,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             clip_data = torch.stack(clip_data_transformed)
 
         clip_data = clip_data.to(self.device)
-        # add channel data
-        clip_data = clip_data.unsqueeze(0)
+        clip_data = clip_data.unsqueeze(0) # add channel data
 
         return clip_data, clip_label, clip_frame0
 

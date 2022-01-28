@@ -34,6 +34,12 @@ python echo_classes.py --config ../config_files/config_echo_classes.yml
 jupyter notebook
 ```
 
+Description when using echo_classes.py
+* 'participant 072 with T1-01clips; T2-03clips; T3-02clips' with`echo_classes.py` generates 12 clips
+* 'participant 074 - T1-02clips; T2-02clips; T3-00clips' with `echo_classes.py` generates 8 clips
+  * 'participant 072 with T1-01clips;' with `echo_classes.py` generate 2 clips 
+  * 'participant 072 with T2-03clips;' with `echo_classes.py` generate 6 clips
+  * 'participant 072 with T3-02clips;' with `echo_classes.py` generate 4 clips
 
 ### dataloader_4CV.py
 Open a terminal and load your conda environment 
