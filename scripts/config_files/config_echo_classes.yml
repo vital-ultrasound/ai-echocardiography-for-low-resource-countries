@@ -1,0 +1,37 @@
+### US Device 
+us_device_brand:  'GE'
+model: 'Venue Go'
+software_version: 'R2'
+Transducers: 'Convex probe C1-5-D'
+
+## Image bounds
+crop_bounds_for_us_image:
+  start_x: 480
+  start_y: 120
+  width: 1130
+  height: 810
+
+## Size to which the cropped area is resized to.
+pretransform_im_size:  !!python/tuple [128, 128]
+
+## number of frames per clip
+number_of_frames_per_segment_in_a_clip: 10
+sliding_window_length_in_percentage_of_frames_per_segment: !!float 1.0
+
+## Max duration of background clips
+max_background_duration_in_secs: 5
+
+## Training parameters
+batch_size: 8
+max_epochs: 100
+use_augmentation: True
+
+## Video paths
+#main_data_path: '/home/ag09/data/VITAL/echo'
+#participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'
+#participant_path_json_list: '/home/ag09/data/VITAL/echo/annotation_list_train.txt'
+
+## Video paths
+main_data_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo-test'
+participant_videos_list: '/home/mx19/repositories/echocardiography/scripts/config_files/data_lists/video_list_train.txt'
+participant_path_json_list: '/home/mx19/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_train.txt'
