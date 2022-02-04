@@ -46,6 +46,7 @@ if __name__ == '__main__':
                                  participant_path_json_list=config['participant_path_json_list'],
                                  crop_bounds_for_us_image=config['crop_bounds_for_us_image'],
                                  number_of_frames_per_segment_in_a_clip=config['number_of_frames_per_segment_in_a_clip'],
+                                 sliding_window_length_in_percentage_of_frames_per_segment=config['sliding_window_length_in_percentage_of_frames_per_segment'],
                                  device=device,
                                  max_background_duration_in_secs=config['max_background_duration_in_secs'],
                                  pretransform=pretransform,
@@ -58,21 +59,22 @@ if __name__ == '__main__':
     number_of_clips = len(dataset)
     print(f'Plotting {number_of_clips} clips  and frames: ')
     print(config['number_of_frames_per_segment_in_a_clip'])
-    labelnames = ('BKGR', '4CV')
+    labelnames = ('B', '4') #('BKGR', '4CV')
+
 
     plt.figure()
     subplot_index = 0
     for clip_index_i in range(len(dataset)):
-        # print(f'Clip number: {clip_index_i}')
+        print(f'   Clip number: {clip_index_i}')
         data_idx = dataset[clip_index_i]
-        # print(f'   clip_frame0: {data_idx[2]}')
+        print(f'   Random index in the segment clip: {data_idx[2]} of n_available_frames {data_idx[3]}')
 
         for frame_i in range(data_idx[0].shape[1]):
             plt.subplot(number_of_clips, data_idx[0].shape[1], subplot_index+1)
             plt.imshow(data_idx[0][0, frame_i, ...].cpu().data.numpy(), cmap='gray')
             # plt.ylabel('{}'.format( clip_index_i  ) )
             plt.axis('off')
-            plt.title('{} f{}'.format(labelnames[data_idx[1]], frame_i))
+            plt.title('{}:f{}'.format(labelnames[data_idx[1]], frame_i))
 
             subplot_index +=1
 

@@ -41,6 +41,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             pretransform=None,
             transform=None,
             number_of_frames_per_segment_in_a_clip: int = 20,
+            sliding_window_length_in_percentage_of_frames_per_segment: float = 0.0,
             device=torch.device('cpu'),
             use_tmp_storage=False,
             max_background_duration_in_secs: int = 10
@@ -52,6 +53,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         self.transform = transform
         self.pretransform = pretransform
         self.number_of_frames_per_segment_in_a_clip = number_of_frames_per_segment_in_a_clip
+        self.sliding_window_length_in_percentage_of_frames_per_segment = sliding_window_length_in_percentage_of_frames_per_segment
         self.device = device
         self.use_tmp_storage = use_tmp_storage
         self.temp_folder = os.path.expanduser('~') + os.path.sep + 'tmp' + os.path.sep + 'echoviddata_{}frames'.format(
@@ -281,10 +283,23 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 clip_data_transformed.append(clip_data_transformed_f)
             clip_data = torch.stack(clip_data_transformed)
 
+        ## Sliding window for of random segment
+        slided_window_segment = []
+        if self.sliding_window_length_in_percentage_of_frames_per_segment > 0.0 and self.sliding_window_length_in_percentage_of_frames_per_segment < 1.0 :
+            sliding_window_length_in_frame_length = int(self.number_of_frames_per_segment_in_a_clip * self.sliding_window_length_in_percentage_of_frames_per_segment)
+            # print( f' sliding_window_length: {sliding_window_length_in_frame_length}' )
+            for i in range(0, self.number_of_frames_per_segment_in_a_clip):
+                max_window_length_i = i+ (sliding_window_length_in_frame_length-1)
+                if max_window_length_i < self.number_of_frames_per_segment_in_a_clip:
+                    # print('window_idx',i, max_window_length_i)
+                    window_i = clip_data[i: max_window_length_i+1]
+                    slided_window_segment.append(window_i)
+            clip_data = torch.cat(slided_window_segment, dim=0)
+
         clip_data = clip_data.to(self.device)
         clip_data = clip_data.unsqueeze(0) # add channel data
 
-        return clip_data, clip_label, clip_frame0
+        return clip_data, clip_label, clip_frame0, n_available_frames
 
 
 class ViewVideoDataset(torch.utils.data.Dataset):
