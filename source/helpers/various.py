@@ -8,6 +8,20 @@ import numpy as np
 import torch
 
 
+def concatenating_YAML_via_tags(loader, node):
+    """
+        custom tag handler to concatenating_YAML_via_tags
+    Arguments:
+        loader and node
+    Return
+          joined string
+    Reference:
+        https://stackoverflow.com/questions/5484016/
+    """
+    seq = loader.construct_sequence(node)
+    return ''.join([str(i) for i in seq])
+
+
 def ToImageTensor(image_np_array: np.ndarray) -> torch.Tensor:
     """
     Torch image tensor as C x H x W

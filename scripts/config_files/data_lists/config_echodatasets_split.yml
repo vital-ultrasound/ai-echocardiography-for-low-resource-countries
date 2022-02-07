@@ -1,0 +1,5 @@
+## Video paths
+user_path: &HOME_DIR /home/mx19
+echodataset_path: !join [*HOME_DIR, /datasets/vital-us/echocardiography/videos-echo-test]
+data_list_output_path: !join [*HOME_DIR, /repositories/echocardiography/scripts/config_files/data_lists/]
+ntraining: 1.0

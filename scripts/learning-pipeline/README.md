@@ -1,16 +1,26 @@
-# Pytorch dataloaders for echochardiography datasets
-A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format.
+# Learning pipeline
+Following the [Good Machine Learning Practices](https://www.fda.gov/media/122535/download), the learning pipeline for the echochardiography datasets will be based in the following elements: 
+1. Data-selection and management
+2. Model training and tuning
+3 .Model validation (performance evaluation and clinical evaluation)
 
 ## Generate list txt files for train / validate sets
+
 ### [split_train_validate_test.py](split_train_validate_test.py)
 Open a terminal and load your conda environment 
 ```
-cd $HOME/repositories/echocardiography/scripts/dataloaders
+cd $HOME/repositories/echocardiography/scripts/learning-pipeline
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
-conda activate rt-ai-echo-VE 
-python split_train_validate_test.py --echodataset_path $HOME/datasets/vital-us/echocardiography/videos-echo-test/ --data_list_output_path $HOME/repositories/echocardiography/scripts/config_files/data_lists/ --ntraining 0.8
+conda activate rt-ai-echo-VE
+python split_train_validate_test.py --config ../config_files/data_lists/config_echodatasets_split.yml 
 ```
-
+Edit [config_echodatasets_split.yml](../config_files/data_lists/config_echodatasets_split.yml) with the right paths and percentage of `ntraining`:  
+```
+user_path: &HOME_DIR /home/mx19
+echodataset_path: !join [*HOME_DIR, /datasets/vital-us/echocardiography/videos-echo-test]
+data_list_output_path: !join [*HOME_DIR, /repositories/echocardiography/scripts/config_files/data_lists/]
+ntraining: 0.5
+```
 Then, text files looks like as follows:
 ```
 ../config_files/data_lists/annotation_list_full.txt
@@ -19,14 +29,14 @@ Then, text files looks like as follows:
 ../config_files/data_lists/video_list_train.txt
 ```
 
-## Dataloaders
-### [echo_classes.py](echo_classes.py) and [echo_classes_notebook](echo_classes_notebook.ipynb)
+## Scripts 
+### [learning_pipeline.py](learning_pipeline.py) and [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb)
 Open a terminal and load your conda environment 
 ```
-cd $HOME/repositories/echocardiography/scripts/dataloaders
+cd $HOME/repositories/echocardiography/scripts/learning-pipeline
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE
-python echo_classes.py --config ../config_files/config_echo_classes.yml
+python learning_pipeline.py --config ../config_files/learning_pipeline/config_learning_pipeline.yml 
 # Alternavively with the use of jupyter notebook
 jupyter notebook
 ```

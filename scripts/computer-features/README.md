@@ -3,7 +3,7 @@
 ## Running code
 Open a terminal and type: 
 ```
-cd $HOME/repositories/echocardiography/scripts/machine-features
+cd $HOME/repositories/echocardiography/scripts/computer-features
 conda activate rt-ai-echo-VE 
 python print_system.py
 
