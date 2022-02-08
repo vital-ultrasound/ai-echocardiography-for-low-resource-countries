@@ -1,0 +1,19 @@
+// the configured options and settings for Plugin python
+#ifndef PLUGIN_4CHDETECTION_PYTHON_FOLDER
+#define PLUGIN_4CHDETECTION_PYTHON_FOLDER @PYTHON_INSTALL_PATH@
+
+namespace FourChDetection {
+
+char * getPythonFolder()
+{
+    return "@PYTHON_INSTALL_PATH@";
+}
+
+char * getArtFolder()
+{
+    return "@ART_INSTALL_PATH@";
+}
+
+}
+
+#endif // PLUGIN_4CHDETECTION_PYTHON_FOLDER

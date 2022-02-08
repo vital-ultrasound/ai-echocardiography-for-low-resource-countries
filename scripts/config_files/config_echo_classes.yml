@@ -15,16 +15,15 @@ crop_bounds_for_us_image:
 pretransform_im_size:  !!python/tuple [128, 128]
 
 ## number of frames per clip
-number_of_frames_per_segment_in_a_clip: 10
-sliding_window_length_in_percentage_of_frames_per_segment: !!float 1.0
+n_frames: 5
 
 ## Max duration of background clips
 max_background_duration_in_secs: 5
 
 ## Training parameters
-batch_size: 32
-max_epochs: 200
-use_augmentation: False
+batch_size: 8
+max_epochs: 100
+use_augmentation: True
 
 ## Video paths
 #main_data_path: '/home/ag09/data/VITAL/echo'
