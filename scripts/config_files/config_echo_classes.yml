@@ -22,7 +22,7 @@ sliding_window_length_in_percentage_of_frames_per_segment: !!float 1.0
 max_background_duration_in_secs: 5
 
 ## Training parameters
-batch_size: 8
+batch_size: 16
 max_epochs: 100
 use_augmentation: True
 
