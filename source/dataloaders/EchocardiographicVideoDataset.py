@@ -8,7 +8,7 @@ import torch
 from tqdm import tqdm
 
 from source.helpers.various import timer_func_decorator, msec_to_timestamp, to_grayscale, ToImageTensor, \
-    cropped_frame, masks_us_image
+    cropped_frame, masks_us_image, plot_image_numpy_array
 
 # constants
 S2MS = 1000  # second to millisecond
@@ -100,7 +100,19 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                 exit(-1)
             fps = cap.get(cv.CAP_PROP_FPS)
             frame_count = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+            frame_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+            frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
             video_duration_i = frame_count / fps * S2MS
+
+            # # Print video features
+            # print(f'  ')
+            # print(f'  ')
+            # print(f'  ')
+            # print(f'  VIDEO_FEATURES')
+            # print(f'    video_name={video_name}')
+            # print(f'    Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
+            # print(f'  ')
+            # print(f'  ')
             cap.release()
 
             # Now read the segments in the json file
@@ -189,7 +201,6 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
         prefix = self.participant_videos_list.split('.')[0].split('_')[-1]
         save_filename = self.temp_folder + '/videoID_{}_label_{}_{}.pth'.format(index, clip_label, prefix)
-
         if self.use_tmp_storage is True and os.path.isfile(save_filename) is True:
             video_data = torch.load(save_filename)
         else:

@@ -5,6 +5,7 @@ software_version: 'R2'
 Transducers: 'Convex probe C1-5-D'
 
 ## Image bounds
+## Capture Videos have the following features: frame_width=1920, frame_height=1080, fps=29.971...
 crop_bounds_for_us_image:
   start_x: 480
   start_y: 120
@@ -12,6 +13,7 @@ crop_bounds_for_us_image:
   height: 810
 
 ## Size to which the cropped area is resized to.
+use_pretransform_im_size: True
 pretransform_im_size:  !!python/tuple [128, 128]
 
 ## number of frames per clip
@@ -22,7 +24,7 @@ sliding_window_length_in_percentage_of_frames_per_segment: !!float 0.0
 max_background_duration_in_secs: 5
 
 ## Training parameters
-use_augmentation: True
+use_augmentation: False
 batch_size: 8
 max_epochs: 200
 
@@ -33,7 +35,7 @@ max_epochs: 200
 
 ## Video paths
 user_path: &HOME_DIR '/home/mx19'
-main_data_path: !join [*HOME_DIR, '/datasets/vital-us/echocardiography/videos-echo-test']
+main_data_path: !join [*HOME_DIR, '/datasets/vital-us/echocardiography/videos-echo-annotated']
 participant_videos_list: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_train.txt']
 participant_path_json_list: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_train.txt']
 

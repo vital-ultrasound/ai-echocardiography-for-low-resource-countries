@@ -1,8 +1,10 @@
 import argparse
 
 import torch
-import torchvision.transforms as transforms
+from torchvision import transforms, utils
+from torch.utils.data import DataLoader
 import yaml
+import matplotlib.pyplot as plt
 
 from source.dataloaders.EchocardiographicVideoDataset import EchoClassesDataset
 from source.helpers.various import concatenating_YAML_via_tags, plot_dataset_classes
@@ -20,11 +22,14 @@ if __name__ == '__main__':
 
     # Define some static transforms, i.e. transforms that apply to the entire dataset.
     # These transforms are not augmentation.
-    pretransform = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.Resize(size=config['pretransform_im_size']),
-        transforms.ToTensor(),  # this normalizes in
-    ])
+    if config['use_pretransform_im_size']:
+        pretransform = transforms.Compose([
+            transforms.ToPILImage(),
+            transforms.Resize(size=config['pretransform_im_size']),
+            transforms.ToTensor(),
+        ])
+    else:
+        pretransform = None
 
     # define some transforms for data augmentation: they have all random parameters that
     # will change at each epoch.
@@ -57,8 +62,10 @@ if __name__ == '__main__':
                                  )
 
 
-    # # Plotting all clips of the Echo classes
-    # plot_dataset_classes(dataset, config)
+    print(f'Number of clips: {len(dataset)} ')
+
+    # Plotting all clips of the Echo classes
+    plot_dataset_classes(dataset, config)
 
 
     print(f'Loaded EchoClassesDataset with {len(dataset)} clips ')

@@ -1,8 +1,8 @@
 # Learning pipeline
 Following the [Good Machine Learning Practices](https://www.fda.gov/media/122535/download), the learning pipeline for the echochardiography datasets will be based in the following elements: 
-1. Data-selection and management
-2. Model training and tuning
-3 .Model validation (performance evaluation and clinical evaluation)
+1. Data-selection and management  
+2. Model training and tuning  
+3 .Model validation (performance evaluation and clinical evaluation)  
 
 ## Generate list txt files for train / validate sets
 
@@ -29,9 +29,9 @@ Then, text files looks like as follows:
 ../config_files/data_lists/video_list_train.txt
 ```
 
-## Scripts 
+## Learning pipeline scripts 
 ### [learning_pipeline.py](learning_pipeline.py) and [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb)
-Open a terminal and load your conda environment 
+* Open a terminal, load your conda environment and run the script 
 ```
 cd $HOME/repositories/echocardiography/scripts/learning-pipeline
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
@@ -41,12 +41,29 @@ python learning_pipeline.py --config ../config_files/learning_pipeline/config_le
 jupyter notebook
 ```
 
-Description when using echo_classes.py
+* Description when using echo_classes.py
+``` 
 * 'participant 072 with T1-01clips; T2-03clips; T3-02clips' with`echo_classes.py` generates 12 clips
 * 'participant 074 - T1-02clips; T2-02clips; T3-00clips' with `echo_classes.py` generates 8 clips
   * 'participant 072 with T1-01clips;' with `echo_classes.py` generate 2 clips 
   * 'participant 072 with T2-03clips;' with `echo_classes.py` generate 6 clips
   * 'participant 072 with T3-02clips;' with `echo_classes.py` generate 4 clips
+```
+
+* Temporal files 
+`EchoClassesDataset()` creates a temporal tamp at `$HOME/tmp/echoviddata_{K}frames` where K are the `number_of_frames_per_segment_in_a_clip`.  
+Example:
+```
+mx19@sie133-lap:~/tmp/echoviddata_10frames$ ll
+total 269M
+10133820 drwxrwxr-x 2 mx19 mx19 4.0K Feb  9 12:25 .
+10133817 drwxrwxr-x 3 mx19 mx19 4.0K Feb  9 12:25 ..
+10094468 -rw-rw-r-- 1 mx19 mx19 9.4M Feb  9 12:25 videoID_0_label_0_train.pth
+10101267 -rw-rw-r-- 1 mx19 mx19 5.2M Feb  9 12:25 videoID_10_label_0_train.pth
+10101269 -rw-rw-r-- 1 mx19 mx19 9.4M Feb  9 12:25 videoID_11_label_0_train.pth
+10101278 -rw-rw-r-- 1 mx19 mx19 9.5M Feb  9 12:25 videoID_12_label_0_train.pth
+```
+
 
 ### dataloader_4CV.py
 Open a terminal and load your conda environment 
