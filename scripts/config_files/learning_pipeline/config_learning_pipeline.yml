@@ -17,7 +17,7 @@ use_pretransform_im_size: True
 pretransform_im_size:  !!python/tuple [128, 128]
 
 ## number of frames per clip
-number_of_frames_per_segment_in_a_clip: 10
+number_of_frames_per_segment_in_a_clip: 90
 sliding_window_length_in_percentage_of_frames_per_segment: !!float 0.0
 
 ## Max duration of background clips

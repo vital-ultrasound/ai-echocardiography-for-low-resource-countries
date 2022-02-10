@@ -307,8 +307,9 @@ class EchoClassesDataset(torch.utils.data.Dataset):
                     slided_window_segment.append(window_i)
             clip_data = torch.cat(slided_window_segment, dim=0)
 
-        clip_data = clip_data.to(self.device)
-        clip_data = clip_data.unsqueeze(0) # add channel data
+        clip_data = clip_data.to(self.device) # Tensor.Size([Fi,H,W])
+        clip_data = clip_data.unsqueeze(0) # add channel data Tensor.Size([C,Fi,H,W])
+        clip_data = clip_data.permute(1, 0, 2, 3) # Permute Tensor.Size([Fi,C,H,W])
 
         return clip_data, clip_label, clip_frame0, n_available_frames
 
