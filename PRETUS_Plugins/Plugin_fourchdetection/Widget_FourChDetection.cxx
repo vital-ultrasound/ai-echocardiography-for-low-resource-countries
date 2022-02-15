@@ -60,8 +60,8 @@ void Widget_FourChDetection::Build_AI_View(std::vector<std::string> &labelnames)
                         QColor("black"), // background colour
                         QColor("silver"))); // text colour
 
-        cardiacViewDetectionTrafficLightConfig.MetadataLabelsKey = "FourChamberDetection_labels";
-        cardiacViewDetectionTrafficLightConfig.MetadataValuesKey = "FourChamberDetection_confidences";
+        cardiacViewDetectionTrafficLightConfig.MetadataLabelsKey = "FourChDetection_labels";
+        cardiacViewDetectionTrafficLightConfig.MetadataValuesKey = "FourChDetection_confidences";
         cardiacViewDetectionTrafficLightConfig.MetadataSplitCharacter = ',';
 
         auto infoPanel = new QtInfoPanelTrafficLightBase(cardiacViewDetectionTrafficLightConfig, this);
@@ -126,8 +126,6 @@ void Widget_FourChDetection::SendImageToWidgetImpl(ifind::Image::Pointer image){
     stream << "Sending " << ifind::StreamTypeSetToString(this->mStreamTypes);
 
     mLabel->setText(stream.str().c_str());
-
-
 
     Q_EMIT this->ImageAvailable(image);
 }
