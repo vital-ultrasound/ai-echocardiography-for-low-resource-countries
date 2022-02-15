@@ -53,5 +53,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 option(BUILD_PLUGIN_FCH "Build plugin to detect 4 chamber views in echo" ON)
 if (BUILD_PLUGIN_FCH)
-  add_subdirectory(Plugin_4chdetection)
+  add_subdirectory(Plugin_fourchdetection)
 endif()
