@@ -24,6 +24,12 @@ For further details on the system, see [here](docs/system).
 ![fig](figures/rt-ai-system.png)    
 _**Fig 3.** Real-time AI-empowered clinical system._  
 
+## Contents
+
+In addition to the python code, this repo contains:
+
+* [PRETUS_Plugins](PRETUS_Plugins) with plugins for [pretus](https://github.com/gomezalberto/pretus).
+
 ## Clone repository
 After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), you can then clone the repository by typing (or copying) the following lines in a terminal:
 ```
