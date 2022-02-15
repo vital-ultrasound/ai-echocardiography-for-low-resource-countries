@@ -3,7 +3,7 @@
 Author: Alberto Gomez (alberto.gomez@kcl.ac.uk)
 
 # Summary
-PRETUS Plug-ins for the lung ultrasound work. These plug-ins work with the pretus software which can be retrieved  [here](https://github.com/gomezalberto/pretus).
+PRETUS Plug-ins for the echo ultrasound work. These plug-ins work with the pretus software which can be retrieved  [here](https://github.com/gomezalberto/pretus).
 
 If you use PRETUS please cite our preprint:
 
@@ -13,7 +13,7 @@ If you use PRETUS please cite our preprint:
 
 The following plug-ins are available:
 
-* [Plugin_lusclassification](Plugin_lusclassification) which conains the multi-class LUS classification model for 5 classes.
+* [Plugin_fourchdetection](Plugin_fourchdetection) which contains the four chamber detection plug-in that differentiates between 4 chamber and backgorund classes in real time.
 
 
 
