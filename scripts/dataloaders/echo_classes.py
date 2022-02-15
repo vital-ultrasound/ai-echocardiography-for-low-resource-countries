@@ -8,6 +8,7 @@ import yaml
 import os
 
 from source.dataloaders.EchocardiographicVideoDataset import EchoClassesDataset
+from source.models.ViewClassifiers import SimpleVideoClassifier
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

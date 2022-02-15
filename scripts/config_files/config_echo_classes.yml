@@ -21,7 +21,7 @@ n_frames: 5
 max_background_duration_in_secs: 5
 
 ## Training parameters
-batch_size: 8
+batch_size: 16
 max_epochs: 100
 use_augmentation: True
 
