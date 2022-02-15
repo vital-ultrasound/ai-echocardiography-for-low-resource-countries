@@ -1,7 +1,9 @@
-# 4 chamber detection for echocardiography
+# B-line classification for LUS - pytorch version
 
 Authors: 
 
+Hamideh Kerdegari (hamideh.kerdegari@kcl.ac.uk)
+Nhat Phung (nhat.phung@kcl.ac.uk)
 Alberto Gomez (alberto.gomez@kcl.ac.uk)
 
 # Summary

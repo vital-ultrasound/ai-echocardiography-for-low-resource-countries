@@ -118,6 +118,7 @@ if __name__ == '__main__':
 
     plt.show()
 
+
     # TODO in #34
     training = False
     if training == True:
