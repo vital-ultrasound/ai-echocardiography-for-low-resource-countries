@@ -4,7 +4,7 @@ Following the [Good Machine Learning Practices](https://www.fda.gov/media/122535
 2. Model training and tuning  
 3 .Model validation (performance evaluation and clinical evaluation)  
 
-## Generate list txt files for train / validate sets
+## 1. Generate list txt files for train / validate sets
 
 ### [split_train_validate_test.py](split_train_validate_test.py)
 Open a terminal and load your conda environment 
@@ -29,7 +29,7 @@ Then, text files looks like as follows:
 ../config_files/data_lists/video_list_train.txt
 ```
 
-## Learning pipeline scripts 
+## 2. Learning pipeline scripts 
 ### [learning_pipeline.py](learning_pipeline.py) and [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb)
 * Open a terminal, load your conda environment and run the script 
 ```
