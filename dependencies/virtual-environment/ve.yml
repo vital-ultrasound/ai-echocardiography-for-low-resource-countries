@@ -1,20 +1,25 @@
 ## USAGE
-## conda env create -f ve.yml
-## conda env update --file ve.yml --prune
-## conda activate rt-ai-echo-VE
+## cd $HOME/repositories/echocardiography/dependencies/virtual-environment
+## conda list -n codeVE # show list of installed packages
+## conda env create -f ve.yml   		## INSTALL
+## conda env update --file ve.yml --prune  	## UPDATE
+## conda activate rt-ai-echo-VE			## ACTIVATE
+## conda remove -n rt-ai-echo-VE --all		## REMOVE
+
 name: rt-ai-echo-VE
 channels:
   - pytorch # https://anaconda.org/pytorch/torchvision
   - nvidia
   - defaults
   - jmcmurray #https://anaconda.org/jmcmurray/json
-  - anaconda
-  - conda-forge
+  - anaconda # seaborn; pandas; scikit-learn
+  - conda-forge # torchinfo; ipywidgets
 dependencies:
   - python=3.8.*
-  - pytorch=1.9.* #1.9.* with cudatoolkit=11.1#OK    #1.10.* with cudatoolkit=11.1 found conflict! #1.10.* with cudatoolkit=11.3 found conflict!
+  - pytorch=1.9.* #1.9.* with cudatoolkit=11.1#OK
+  - torchvision=0.10.0  #0.2.2#OK #0.10.0 #OK
   - cudatoolkit=11.3.*
-  - torchvision=0.10.0  #0.2.2#OK #0.10.0 #OK #0.10.1 #0.11.* have conflicts (TODO check version conflicts)
+  # CONFLICTS  #pytorch1.10.* with cudatoolkit=11.1 found conflict!; #torchvision0.10.1 #torchvision0.11.*
   - matplotlib
   - numpy
   - pip
@@ -22,8 +27,13 @@ dependencies:
   - pyyaml
   - tqdm
   - pillow
-  - notebook
+  - notebook=6.*
   - jupyter_contrib_nbextensions # A good overview over other extensions: https://towardsdatascience.com/jupyter-notebook-extensions-517fa69d2231
+  - seaborn
+  - pandas=1.*
+  - torchinfo
+  - ipywidgets
+  ##ERROR- scikit-learn=* #https://anaconda.org/anaconda/scikit-learn SOLUTION within the VE: conda install -n rt-ai-echo-VE scikit-learn
   - pip:
      - pydicom
      - opencv-python
