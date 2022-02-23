@@ -54,7 +54,7 @@ class TestNet(nn.Module):
         return x #[10, 3, 3, 3]
 
 
-def train_loop(train_dataloader, model, criterion, optimizer, device):
+def train_validation_loop(train_dataloader, validation_dataloader, model, criterion, optimizer, device):
     """
     train_loop
     Arguments:
@@ -63,9 +63,11 @@ def train_loop(train_dataloader, model, criterion, optimizer, device):
     Return:
     """
     train_epoch_loss = 0
-    step = 0
+    train_epoch_acc = 0
+    step_train = 0
+    step_val = 0
     for clip_batch_idx, sample_batched in enumerate(train_dataloader):
-        step += 1
+        step_train += 1
         print(f' BATCH_OF_CLIPS_INDEX: {clip_batch_idx} ')
         X_train_batch, y_train_batch = sample_batched[0].to(device), sample_batched[1].to(device)
         optimizer.zero_grad()
@@ -76,17 +78,49 @@ def train_loop(train_dataloader, model, criterion, optimizer, device):
         #y_train_pred = model(X_train_batch) #torch.Size([9, 2])
         y_train_pred = model(X_train_batch).squeeze() #torch.Size([9, 2])
         train_loss = criterion(y_train_pred, y_train_batch)
+        train_acc = binary_accuracy(y_train_pred, y_train_batch)
         #print(train_loss)
 
         # Backpropagation
         train_loss.backward()
         optimizer.step()
         train_epoch_loss += train_loss.detach().item()
+        train_epoch_acc += train_acc.detach().item()
         #print(f'train_loss: {train_epoch_loss:.4f}')
 
-    train_epoch_loss /= step
+        with torch.no_grad():
+            model.eval()
+            val_epoch_loss = 0
+            val_epoch_acc = 0
+            for clip_batch_idx, sample_val_batched in enumerate(validation_dataloader):
+                step_val += 1
+                X_val_batch, y_val_batch = sample_val_batched[0].to(device), sample_val_batched[1].to(device)
+                X_val_batch, y_val_batch = X_val_batch.to(device), y_val_batch.to(device)
+                y_val_pred = model(X_val_batch).squeeze()
+                #y_val_pred = torch.unsqueeze(y_val_pred, 0)
+                val_loss = criterion(y_val_pred, y_val_batch)
+                val_acc = binary_accuracy(y_val_pred, y_val_batch)
+                val_epoch_loss += val_loss.detach().item()
+                val_epoch_acc += val_acc.detach().item()
 
-    return train_epoch_loss
+    train_epoch_loss /= step_train
+    train_epoch_acc /= step_train
+    val_epoch_loss /= step_val
+    val_epoch_acc /= step_val
+
+    return train_epoch_loss, train_epoch_acc, val_epoch_loss, val_epoch_acc
+
+
+def binary_accuracy(y_pred, y_test):
+    """
+    binary_accuracy to calculate accuracy per epoch.
+    """
+    y_pred_tag = torch.log_softmax(y_pred, dim = 1)
+    _, y_pred_tags = torch.max(y_pred_tag, dim = 1)
+    correct_results_sum = (y_pred_tags == y_test).sum().float()
+    accuracy = correct_results_sum/y_test.shape[0]
+    accuracy = torch.round(accuracy * 100)
+    return accuracy
 
 
 
