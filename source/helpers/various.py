@@ -244,6 +244,7 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
 
     ## Split and save txt files
     N = len(video_filenames)
+
     video_filenames_t = video_filenames[:int(N * ntraining)]
     label_filenames_t = label_filenames[:int(N * ntraining)]
     video_filenames_v = video_filenames[int(N * ntraining):]

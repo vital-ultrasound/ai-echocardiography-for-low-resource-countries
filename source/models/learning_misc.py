@@ -66,7 +66,7 @@ def train_loop(train_dataloader, model, criterion, optimizer, device):
     step = 0
     for clip_batch_idx, sample_batched in enumerate(train_dataloader):
         step += 1
-        print(f' CLIP_BATCH_INDEX: {clip_batch_idx} ')
+        print(f' BATCH_OF_CLIPS_INDEX: {clip_batch_idx} ')
         X_train_batch, y_train_batch = sample_batched[0].to(device), sample_batched[1].to(device)
         optimizer.zero_grad()
         # print(f'----------------------------------------------------------')
