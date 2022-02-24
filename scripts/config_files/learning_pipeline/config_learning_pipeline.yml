@@ -30,12 +30,7 @@ batch_size: 20
 max_epochs: 3
 
 ## Video paths
-#main_data_path: '/home/ag09/data/VITAL/echo'
-#participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'
-#participant_path_json_list: '/home/ag09/data/VITAL/echo/annotation_list_train.txt'
-
-## Video paths
-user_path: &HOME_DIR '/home/mx19'
+user_path: &HOME_DIR '/home/mx19'  ## CHANGE YOUR HOME PATH
 main_data_path: !join [*HOME_DIR, '/datasets/vital-us/echocardiography/videos-echo-annotated']
 participant_videos_list_train: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_train.txt']
 participant_path_json_list_train: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_train.txt']

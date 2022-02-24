@@ -54,7 +54,7 @@ class TestNet(nn.Module):
         return x #[10, 3, 3, 3]
 
 
-def train_validation_loop(train_dataloader, validation_dataloader, model, criterion, optimizer, device):
+def train_loop(train_dataloader, model, criterion, optimizer, device):
     """
     train_loop
     Arguments:
@@ -63,53 +63,39 @@ def train_validation_loop(train_dataloader, validation_dataloader, model, criter
     Return:
     """
     train_epoch_loss = 0
-    train_epoch_acc = 0
     step_train = 0
-    step_val = 0
+    #size = len(train_dataloader.dataset)
     for clip_batch_idx, sample_batched in enumerate(train_dataloader):
         step_train += 1
-        print(f' BATCH_OF_CLIPS_INDEX: {clip_batch_idx} ')
         X_train_batch, y_train_batch = sample_batched[0].to(device), sample_batched[1].to(device)
-        optimizer.zero_grad()
+
+        print(f' BATCH_OF_CLIPS_INDEX: {clip_batch_idx} ')
         # print(f'----------------------------------------------------------')
         # print(f'   X_train_batch.size(): {X_train_batch.size()}') # torch.Size([9, 60, 1, 128, 128]) clips, frames, channels, [width, height]
         # print(f'   y_train_batch.size(): {y_train_batch.size()}') # torch.Size([9])
 
-        #y_train_pred = model(X_train_batch) #torch.Size([9, 2])
-        y_train_pred = model(X_train_batch).squeeze() #torch.Size([9, 2])
+        # Compute prediction and loss
+        # y_train_pred = model(X_train_batch) #torch.Size([9, 2])
+        y_train_pred = model(X_train_batch).squeeze()  # torch.Size([9, 2])
         train_loss = criterion(y_train_pred, y_train_batch)
-        train_acc = binary_accuracy(y_train_pred, y_train_batch)
-        #print(train_loss)
+        #train_acc = binary_accuracy(y_train_pred, y_train_batch)
+        # print(train_loss)
 
         # Backpropagation
+        optimizer.zero_grad()
         train_loss.backward()
         optimizer.step()
-        train_epoch_loss += train_loss.detach().item()
-        train_epoch_acc += train_acc.detach().item()
-        #print(f'train_loss: {train_epoch_loss:.4f}')
 
-        with torch.no_grad():
-            model.eval()
-            val_epoch_loss = 0
-            val_epoch_acc = 0
-            for clip_batch_idx, sample_val_batched in enumerate(validation_dataloader):
-                step_val += 1
-                X_val_batch, y_val_batch = sample_val_batched[0].to(device), sample_val_batched[1].to(device)
-                X_val_batch, y_val_batch = X_val_batch.to(device), y_val_batch.to(device)
-                y_val_pred = model(X_val_batch).squeeze()
-                #y_val_pred = torch.unsqueeze(y_val_pred, 0)
-                val_loss = criterion(y_val_pred, y_val_batch)
-                val_acc = binary_accuracy(y_val_pred, y_val_batch)
-                val_epoch_loss += val_loss.detach().item()
-                val_epoch_acc += val_acc.detach().item()
+        # if clip_batch_idx % 10 == 0: ## Print loss values every 10 clip batches
+        #     train_loss, current = train_loss.item(), clip_batch_idx * len(X_train_batch)
+        #     print(f"loss: {train_loss:>7f}  [{current:>5d}/{size:>5d}]")
+
+        train_epoch_loss += train_loss.detach().item()
+
 
     train_epoch_loss /= step_train
-    train_epoch_acc /= step_train
-    val_epoch_loss /= step_val
-    val_epoch_acc /= step_val
 
-    return train_epoch_loss, train_epoch_acc, val_epoch_loss, val_epoch_acc
-
+    return train_epoch_loss
 
 def binary_accuracy(y_pred, y_test):
     """
@@ -123,24 +109,31 @@ def binary_accuracy(y_pred, y_test):
     return accuracy
 
 
+def test_loop(dataloader, model, criterion, device):
+    """
+    test_loop(dataloader, model, criterion, device)
+    """
 
-def test_loop(dataloader, model_net, loss_fn, device):
-    """
-    test_loop(dataloader, model, loss_fn):
-    """
+    train_epoch_acc = 0
+    step_test = 0
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
-    test_loss, correct = 0, 0
+    test_epoch_loss, correct = 0, 0
 
     with torch.no_grad():
-        for batch, data in enumerate(dataloader):
-            clip = data[0]
-            label = data[1].to(device)
-            pred = model_net(clip)
-            test_loss += loss_fn(pred, label).item()
-            correct += (pred.argmax(1) == label).type(torch.float).sum().item()
+        #model.eval()
+        #val_epoch_loss = 0
+        #val_epoch_acc = 0
+        for clip_batch_idx, sample_val_batched in enumerate(dataloader):
+            step_test += 1
+            X_val_batch, y_val_batch = sample_val_batched[0].to(device), sample_val_batched[1].to(device)
+            X_val_batch, y_val_batch = X_val_batch.to(device), y_val_batch.to(device)
 
-    test_loss /= num_batches
+            y_val_pred = model(X_val_batch)
+            test_epoch_loss += criterion(y_val_pred, y_val_batch).detach().item()
+            correct += (y_val_pred.argmax(1) == y_val_batch).type(torch.float).sum().detach().item()
+
+    test_epoch_loss /= num_batches
     correct /= size
 
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    return test_epoch_loss, correct
