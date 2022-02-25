@@ -244,13 +244,12 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
 
     ## Split and save txt files
     N = len(video_filenames)
+    video_filenames_train = video_filenames[:int(N * ntraining)]
+    label_filenames_train = label_filenames[:int(N * ntraining)]
+    video_filenames_validation = video_filenames[int(N * ntraining):]
+    label_filenames_validation = label_filenames[int(N * ntraining):]
 
-    video_filenames_t = video_filenames[:int(N * ntraining)]
-    label_filenames_t = label_filenames[:int(N * ntraining)]
-    video_filenames_v = video_filenames[int(N * ntraining):]
-    label_filenames_v = label_filenames[int(N * ntraining):]
-
-    write_list_to_txtfile(video_filenames_t, 'video_list_train.txt', data_list_output_path)
-    write_list_to_txtfile(label_filenames_t, 'annotation_list_train.txt', data_list_output_path)
-    write_list_to_txtfile(video_filenames_v, 'video_list_validate.txt', data_list_output_path)
-    write_list_to_txtfile(label_filenames_v, 'annotation_list_validate.txt', data_list_output_path)
+    write_list_to_txtfile(video_filenames_train, 'video_list_train.txt', data_list_output_path)
+    write_list_to_txtfile(label_filenames_train, 'annotation_list_train.txt', data_list_output_path)
+    write_list_to_txtfile(video_filenames_validation, 'video_list_validate.txt', data_list_output_path)
+    write_list_to_txtfile(label_filenames_validation, 'annotation_list_validate.txt', data_list_output_path)

@@ -14,4 +14,5 @@ if __name__ == '__main__':
     with open(args.config, 'r') as yml:
         config = yaml.load(yml, Loader=yaml.FullLoader)
 
-    split_train_validate_sets(config['echodataset_path'], config['data_list_output_path'], config['ntraining'], config['randomise_file_list'])
+    split_train_validate_sets(config['echodataset_path'], config['data_list_output_path'], config['ntraining'],
+                              config['randomise_file_list'])
