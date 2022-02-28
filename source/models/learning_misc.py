@@ -34,6 +34,44 @@ class BasicCNNClassifier(nn.Module):
         out = self.classifier(data)
         return out
 
+class basicVGGNet(nn.Module):
+
+    def __init__(self, input_size, n_classes=2, cnn_channels=(1, 16, 32)):
+        """
+        Simple Visual Geometry Group Network (VGGNet) to classify two US image classes (background and 4CV).
+
+        Args:
+
+        """
+        super(basicVGGNet, self).__init__()
+        self.name = 'basicVGGNet'
+
+        self.input_size = input_size
+        self.n_classes = n_classes
+
+        # define the CNN
+        self.n_output_channels = cnn_channels
+        print(f' self.n_output_channels {self.n_output_channels}')
+        self.kernel_size = (3, ) * (len(cnn_channels) -1)
+        print( f' self.kernel_size {self.kernel_size}')
+
+        self.n_frames_per_clip = 60
+        self.n_features = np.prod(self.input_size)*self.n_frames_per_clip
+
+        self.classifier = nn.Sequential(
+            nn.Conv3d(in_channels=self.n_frames_per_clip, out_channels=self.n_classes, kernel_size = (1,1,1)),
+            nn.ReLU(),
+            nn.Conv3d(in_channels=self.n_frames_per_clip, out_channels=self.n_classes, kernel_size=(1, 1, 1)),
+            nn.ReLU(),
+            nn.MaxPool3d(kernel_size=(1, 1, 1), stride=(1, 1, 1), padding=(0,1,1)),
+            nn.Linear(in_features=self.n_frames_per_clip, out_features=self.n_classes),
+            nn.Sigmoid()
+        )
+
+    def forward(self, data):
+        #print(f' [10, 60, 1, 128, 128] {data.size()}') # torch.Size([10, 60, 1, 128, 128])  clips, frames, channels, [width, height]
+        out = self.classifier(data)
+        return out
 
 class TestNet(nn.Module):
     def __init__(self):
