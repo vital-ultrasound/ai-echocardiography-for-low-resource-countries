@@ -14,7 +14,7 @@ Open a terminal and load your conda environment
 cd $HOME/repositories/echocardiography/scripts/learning-pipeline
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE
-python split_train_validate_test.py --config ../config_files/data_lists/config_echodatasets_split.yml 
+python split_train_validate_test.py --config ../config_files/users_paths_files/config_users_paths_files_username_$USER.yml 
 ```
 Edit [config_echodatasets_split.yml](../config_files/data_lists/config_echodatasets_split.yml) with the right paths and percentage of `ntraining`:  
 ```
@@ -37,10 +37,9 @@ Then, text files looks like as follows:
 ```
 cd $HOME/repositories/echocardiography/scripts/learning-pipeline
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
-conda activate rt-ai-echo-VE
-python learning_pipeline.py --config ../config_files/learning_pipeline/config_learning_pipeline.yml 
+conda activate rt-ai-echo-VE 
 # Alternavively with the use of jupyter notebook
-jupyter notebook
+jupyter notebook # to open learning_pipeline_notebook.ipynb
 ```
 
 * Description when using echo_classes.py
