@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
 class BasicCNNClassifier(nn.Module):
 
     def __init__(self, input_size, n_classes=2):
@@ -30,13 +29,17 @@ class BasicCNNClassifier(nn.Module):
             nn.Sigmoid()
         )
 
-    def forward(self, data):
-        out = self.classifier(data)
-        return out
+    def forward(self, x):
+        x = self.classifier(x)
+        #print(f'  x.size():::::::  {x.size()}')  #   x.size():::::::  torch.Size([2, 2])
+        #print(x)
+        #tensor([[0.1271, 0.6632],
+        #        [0.3063, 0.5489]], device='cuda:0', grad_fn= < SigmoidBackward >)
+        return x
 
 class basicVGGNet(nn.Module):
 
-    def __init__(self, input_size, n_classes=2, cnn_channels=(1, 16, 32)):
+    def __init__(self, tensor_shape_size, n_classes=2, cnn_channels=(1, 16, 32)):
         """
         Simple Visual Geometry Group Network (VGGNet) to classify two US image classes (background and 4CV).
 
@@ -46,51 +49,34 @@ class basicVGGNet(nn.Module):
         super(basicVGGNet, self).__init__()
         self.name = 'basicVGGNet'
 
-        self.input_size = input_size
+        self.tensor_shape_size = tensor_shape_size
         self.n_classes = n_classes
 
         # define the CNN
-        self.n_output_channels = cnn_channels
-        print(f' self.n_output_channels {self.n_output_channels}')
-        self.kernel_size = (3, ) * (len(cnn_channels) -1)
-        print( f' self.kernel_size {self.kernel_size}')
+        self.n_output_channels = cnn_channels ##  self.n_output_channels::: (1, 16, 32)
+        self.kernel_size = (3, ) * (len(cnn_channels) -1) ## self.kernel_size::: (3, 3)
 
-        self.n_frames_per_clip = 60
-        self.n_features = np.prod(self.input_size)*self.n_frames_per_clip
+        self.n_batch_size_of_clip_numbers = self.tensor_shape_size[0]
+        self.n_frames_per_clip = self.tensor_shape_size[1]
+        self.n_number_of_image_channels = self.tensor_shape_size[2]
+        self.input_shape_tensor = self.n_batch_size_of_clip_numbers * self.n_frames_per_clip * self.n_number_of_image_channels
 
-        self.classifier = nn.Sequential(
-            nn.Conv3d(in_channels=self.n_frames_per_clip, out_channels=self.n_classes, kernel_size = (1,1,1)),
-            nn.ReLU(),
-            nn.Conv3d(in_channels=self.n_frames_per_clip, out_channels=self.n_classes, kernel_size=(1, 1, 1)),
-            nn.ReLU(),
-            nn.MaxPool3d(kernel_size=(1, 1, 1), stride=(1, 1, 1), padding=(0,1,1)),
-            nn.Linear(in_features=self.n_frames_per_clip, out_features=self.n_classes),
-            nn.Sigmoid()
-        )
+        self.conv1 = nn.Conv3d(in_channels=self.n_batch_size_of_clip_numbers, out_channels=64,
+                               kernel_size=(1, 1, 1), stride=(1, 1, 1), padding = (0, 0, 0)
+                               )
+                    #IN: [N,Cin,D,H,W]; OUT: (N,Cout,Dout,Hout,Wout)
 
-    def forward(self, data):
-        #print(f' [10, 60, 1, 128, 128] {data.size()}') # torch.Size([10, 60, 1, 128, 128])  clips, frames, channels, [width, height]
-        out = self.classifier(data)
-        return out
-
-class TestNet(nn.Module):
-    def __init__(self):
-        super(TestNet, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=10, kernel_size=3)
-        self.conv2 = nn.Conv2d(10, 20, kernel_size=3)
-        self.conv2_drop = nn.Dropout2d()
-        self.fc1 = nn.Linear(720, 1024)
-        self.fc2 = nn.Linear(1024, 2)
+        self.maxpool3d = nn.MaxPool3d(kernel_size=(1, 1, 1), stride=(1, 1, 1), padding=(0, 0, 0))
+        self.fc1 = nn.Linear(in_features=62914560, out_features=self.n_classes)
 
     def forward(self, x):
-        x = F.relu(F.max_pool2d(self.conv1(x), 2))
-        x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
-        x = x.view(x.shape[0], -1)
-        x = F.relu(self.fc1(x))
-        x = F.dropout(x, training=self.training)
-        x = self.fc2(x)
-        return x #[10, 3, 3, 3]
-
+        x = torch.permute(x, (2, 0, 1, 3, 4)) ##[channels, batch_size, depth, height, width]
+        x = F.relu(self.conv1(x))
+        x = self.maxpool3d(x)
+        x = x.reshape(x.shape[0], -1)
+        x = F.dropout(x, p=0.5) #dropout was included to combat overfitting
+        x = self.fc1(x)
+        return x
 
 def train_loop(train_dataloader, model, criterion, optimizer, device):
     """
