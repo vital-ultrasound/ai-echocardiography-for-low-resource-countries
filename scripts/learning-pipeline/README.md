@@ -1,14 +1,10 @@
 # Learning pipeline
-The learning pipeline for the echochardiography datasets will be based in the following elements:
-* Data-selection and management
-* Model training and tuning
-* Model validation (performance evaluation and clinical evaluation)
-* AI-based device modification 
-* (perhaps) AI-based production model
-
+## Introduction 
+The learning pipeline for the echochardiography datasets will be based in the following elements: 
+Data-selection and management; Model training and tuning; Model validation (performance evaluation and clinical evaluation); AI-based device modification, and (perhaps) AI-based production model.
 See Figure 1 that illustrates [Good Machine Learning Practices](https://www.fda.gov/media/122535/download).  
-![fig](../../figures/fig2-good-ml-dl-practices.png)
-**Fig 1. Total product lifecycle (TPLC) approach on AI/ML workflow from [Good Machine Learning Practices](https://www.fda.gov/media/122535/download)**
+![fig](../../figures/fig2-good-ml-dl-practices.png)   
+_Fig 1. Total product lifecycle (TPLC) approach on AI/ML workflow from [Good Machine Learning Practices](https://www.fda.gov/media/122535/download)_
 
 ## 1. Generate list txt files for train / validate sets
 
@@ -99,5 +95,3 @@ export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environme
 conda activate rt-ai-echo-VE 
 jupyter notebook
 ```
-
-
