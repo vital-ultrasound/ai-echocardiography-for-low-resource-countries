@@ -1,9 +1,7 @@
 # Pytorch dataloaders for echochardiography datasets
 A Pytorch dataloader to preprocess and serve data samples extracted from videos using annotations in json format.
 
-
 ## Generate list txt files for train / validate sets
-
 ### [split_train_validate_test.py](split_train_validate_test.py)
 Open a terminal and load your conda environment 
 ```
@@ -22,7 +20,6 @@ Then, text files looks like as follows:
 ```
 
 ## Dataloaders
-
 ### [echo_classes.py](echo_classes.py) and [echo_classes_notebook](echo_classes_notebook.ipynb)
 Open a terminal and load your conda environment 
 ```
@@ -49,6 +46,8 @@ export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environme
 conda activate rt-ai-echo-VE 
 python dataloader_4CV.py --config ../config_files/config_4cv.yml
 ```
+The following figure illustrate the pipeline to create classes for background and 4CH; segments of random clips; segment sampling and frame sliding window techniques.
+![fig](../../figures/classes-windowing-sampling.png)
 
 ### Setting config file 
 For datapaths of other users, you can edit ../config_files/config_4cv.yml and add respective participant video path and json files path. 

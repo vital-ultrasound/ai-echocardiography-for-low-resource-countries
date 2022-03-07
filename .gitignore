@@ -7,3 +7,10 @@
 
 ## .ipynb_checkpoints/
 **/.ipynb_checkpoints
+
+## Ignores lists for train and validation files
+annotation_list_??*.txt
+video_list_??*.txt
+
+## Ignore user config  files
+config_users_paths_files_username_????.yml

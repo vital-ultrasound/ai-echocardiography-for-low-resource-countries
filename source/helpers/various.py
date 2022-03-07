@@ -4,8 +4,63 @@ from time import time
 from typing import Tuple, List
 
 import cv2 as cv
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
+
+def plot_image_numpy_array(numpy_image, frame_index_i = None) -> None:
+    """
+    plot_image_numpy_array
+    """
+
+    plt.figure()
+    # plt.imshow(data_idx[0][0, frame_i, ...].cpu().data.numpy(), cmap='gray')
+    plt.imshow(numpy_image)
+    # plt.ylabel()
+    # plt.axis('off')
+    plt.title(f' Frame_index_i {frame_index_i}')
+    plt.show()
+
+
+def plot_dataset_classes(dataset, config) -> None:
+    """
+    Plotting frames of the EchoClassesDataset()
+    """
+    number_of_clips = len(dataset)
+    print(f'Plotting {number_of_clips} clips  and frames: ')
+    print(config['number_of_frames_per_segment_in_a_clip'])
+    labelnames = ('BKGR', '4CV')
+
+    plt.figure()
+    subplot_index = 0
+    for clip_index_i in range(len(dataset)):
+        data_idx = dataset[clip_index_i]
+        print(f'   Clip number: {clip_index_i}; Label: {labelnames[data_idx[1]]}   Random index in the segment clip: {data_idx[2]}             of n_available_frames {data_idx[3]}')
+
+        for frame_i in range(data_idx[0].shape[1]):
+            plt.subplot(number_of_clips, data_idx[0].shape[1], subplot_index + 1)
+            plt.imshow(data_idx[0][0, frame_i, ...].cpu().data.numpy(), cmap='gray')
+            # plt.ylabel('{}'.format( clip_index_i  ) )
+            plt.axis('off')
+            plt.title('{}:f{}'.format(labelnames[data_idx[1]], frame_i))
+
+            subplot_index += 1
+
+    plt.show()
+
+
+def concatenating_YAML_via_tags(loader, node):
+    """
+        custom tag handler to concatenating_YAML_via_tags
+    Arguments:
+        loader and node
+    Return
+          joined string
+    Reference:
+        https://stackoverflow.com/questions/5484016/
+    """
+    seq = loader.construct_sequence(node)
+    return ''.join([str(i) for i in seq])
 
 
 def ToImageTensor(image_np_array: np.ndarray) -> torch.Tensor:
@@ -138,7 +193,7 @@ def write_list_to_txtfile(list: List, filename: str, files_path: str) -> None:
         textfile.write(element + "\n")
 
 
-def split_train_validate_sets(echodataset_path: str, data_list_output_path: str, ntraining: float) -> None:
+def split_train_validate_sets(echodataset_path: str, data_list_output_path: str, ntraining: float, randomise_file_list: bool = True) -> None:
     """
 
     Split paths to train and validate sets
@@ -163,14 +218,15 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     videolist = '{}{}'.format(data_list_output_path, all_videos_file)
     labellist = '{}{}'.format(data_list_output_path, all_labels_file)
 
-    ## List all files
-    result = list(Path(echodataset_path).rglob("*echo*.[mM][pP][4]"))
+    ## List all files with *echo*.[mM][pP][4]
+    result = list(sorted(Path(echodataset_path).rglob("*echo*.[mM][pP][4]")) )
     with open(videolist, 'w') as f:
         for fn in result:
             fn_nopath = str(fn).replace(echodataset_path, '')
             f.write(fn_nopath + '\n')
 
-    result = list(Path(echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]"))
+    ## List all files with *4CV.[jJ][sS][oO][nN]
+    result = list(sorted(Path(echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]")))
     with open(labellist, 'w') as f:
         for fn in result:
             fn_nopath = str(fn).replace(echodataset_path, '')
@@ -181,18 +237,19 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     label_filenames = [line.strip() for line in open(labellist)]
 
     ## Randomly shuffle lists
-    c = list(zip(video_filenames, label_filenames))
-    random.shuffle(c)
-    video_filenames, label_filenames = zip(*c)
+    if randomise_file_list:
+        c = list(zip(video_filenames, label_filenames))
+        random.shuffle(c)
+        video_filenames, label_filenames = zip(*c)
 
     ## Split and save txt files
     N = len(video_filenames)
-    video_filenames_t = video_filenames[:int(N * ntraining)]
-    label_filenames_t = label_filenames[:int(N * ntraining)]
-    video_filenames_v = video_filenames[int(N * ntraining):]
-    label_filenames_v = label_filenames[int(N * ntraining):]
+    video_filenames_train = video_filenames[:int(N * ntraining)]
+    label_filenames_train = label_filenames[:int(N * ntraining)]
+    video_filenames_validation = video_filenames[int(N * ntraining):]
+    label_filenames_validation = label_filenames[int(N * ntraining):]
 
-    write_list_to_txtfile(video_filenames_t, 'video_list_train.txt', data_list_output_path)
-    write_list_to_txtfile(label_filenames_t, 'annotation_list_train.txt', data_list_output_path)
-    write_list_to_txtfile(video_filenames_v, 'video_list_validate.txt', data_list_output_path)
-    write_list_to_txtfile(label_filenames_v, 'annotation_list_validate.txt', data_list_output_path)
+    write_list_to_txtfile(video_filenames_train, 'video_list_train.txt', data_list_output_path)
+    write_list_to_txtfile(label_filenames_train, 'annotation_list_train.txt', data_list_output_path)
+    write_list_to_txtfile(video_filenames_validation, 'video_list_validate.txt', data_list_output_path)
+    write_list_to_txtfile(label_filenames_validation, 'annotation_list_validate.txt', data_list_output_path)
