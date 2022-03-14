@@ -1,9 +1,9 @@
 ## USAGE
 ## cd $HOME/repositories/echocardiography/dependencies/virtual-environment
 ## conda list -n codeVE # show list of installed packages
-## conda env create -f ve.yml   		## INSTALL
+## conda env create -f ve.yml   		    ## INSTALL
 ## conda env update --file ve.yml --prune  	## UPDATE
-## conda activate rt-ai-echo-VE			## ACTIVATE
+## conda activate rt-ai-echo-VE			    ## ACTIVATE
 ## conda remove -n rt-ai-echo-VE --all		## REMOVE
 
 name: rt-ai-echo-VE
@@ -12,7 +12,7 @@ channels:
   - nvidia
   - defaults
   - jmcmurray #https://anaconda.org/jmcmurray/json
-  - anaconda # seaborn; pandas; scikit-learn
+  - anaconda # seaborn; pandas; scikit-learn; jupyter
   - conda-forge # torchinfo; ipywidgets
 dependencies:
   - python=3.8.*
@@ -29,6 +29,7 @@ dependencies:
   - pillow
   - notebook=6.*
   - jupyter_contrib_nbextensions # A good overview over other extensions: https://towardsdatascience.com/jupyter-notebook-extensions-517fa69d2231
+  - jupyter
   - seaborn
   - pandas=1.*
   - torchinfo

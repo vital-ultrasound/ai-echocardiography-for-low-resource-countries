@@ -44,6 +44,7 @@ class basicVGGNet(nn.Module):
         Simple Visual Geometry Group Network (VGGNet) to classify two US image classes (background and 4CV).
 
         Args:
+            tensor_shape_size: [Batch_clips, Depth, Channels, Height, Depth]
 
         """
         super(basicVGGNet, self).__init__()
@@ -61,21 +62,25 @@ class basicVGGNet(nn.Module):
         self.n_number_of_image_channels = self.tensor_shape_size[2]
         self.input_shape_tensor = self.n_batch_size_of_clip_numbers * self.n_frames_per_clip * self.n_number_of_image_channels
 
-        self.conv1 = nn.Conv3d(in_channels=self.n_batch_size_of_clip_numbers, out_channels=64,
+        self.conv1 = nn.Conv3d(in_channels=self.n_number_of_image_channels, out_channels=64,
                                kernel_size=(1, 1, 1), stride=(1, 1, 1), padding = (0, 0, 0)
                                )
                     #IN: [N,Cin,D,H,W]; OUT: (N,Cout,Dout,Hout,Wout)
+                    #[batch_size, channels, depth, height, width].
 
         self.maxpool3d = nn.MaxPool3d(kernel_size=(1, 1, 1), stride=(1, 1, 1), padding=(0, 0, 0))
         self.fc1 = nn.Linear(in_features=62914560, out_features=self.n_classes)
 
     def forward(self, x):
-        x = torch.permute(x, (2, 0, 1, 3, 4)) ##[channels, batch_size, depth, height, width]
-        x = F.relu(self.conv1(x))
-        x = self.maxpool3d(x)
-        x = x.reshape(x.shape[0], -1)
-        x = F.dropout(x, p=0.5) #dropout was included to combat overfitting
-        x = self.fc1(x)
+        print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([10, 60, 1, 128, 128])
+        x = torch.permute(x, (0, 2, 1 , 3, 4)) ##[batch_size, channels, depth, height, width]
+        print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([10, 1, 60, 128, 128])
+        # x = F.relu(self.conv1(x))
+        # x = self.maxpool3d(x)
+        # x = x.reshape(x.shape[0], -1)
+        # x = F.dropout(x, p=0.5) #dropout was included to combat overfitting
+        # x = self.fc1(x)
+
         return x
 
 def train_loop(train_dataloader, model, criterion, optimizer, device):
