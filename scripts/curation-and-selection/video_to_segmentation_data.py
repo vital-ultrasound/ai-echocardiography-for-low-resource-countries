@@ -32,12 +32,13 @@ def imreconstruct(marker: np.ndarray, mask: np.ndarray, radius: int = 1):
         marker = expanded
 
 
-def contour_to_mask(frame, th=5):
+def contour_to_mask(frame, th=20):
 
     # by default BGR
 
     #cv.imwrite('/home/ag09/data/VITAL/frame.png', frame)
     R = frame[..., 2].astype(np.float)
+    G = frame[..., 1].astype(np.float)
     B = frame[..., 0].astype(np.float)
 
     BR = B-R
@@ -119,15 +120,23 @@ def not_suitable_image(image):
         return True
     return False
 
-def search_for_no_annot_frame(cap, img, bounds, th_BR_contour, th_GR_contour, mode='back'):
+def search_for_no_annot_frame(cap, img, bounds, th_BR_contour, th_GR_contour, mode='back', max_frame=-1):
+    """
+    max frame is the furthest frame to search
+    """
     found=-1
     found_ms, found_img = None, None
     while True:
         current_frame = cap.get(cv.CAP_PROP_POS_FRAMES)
         if mode == 'back':
             previous_frame = current_frame - 1
+            if max_frame > -1 and previous_frame < max_frame:
+                break
+
         else:
             previous_frame = current_frame + 1
+            if max_frame > -1 and previous_frame > max_frame:
+                break
         if previous_frame >= 0 and previous_frame < cap.get(cv.CAP_PROP_FRAME_COUNT):
             cap.set(cv.CAP_PROP_POS_FRAMES, previous_frame-1)
             success, image = cap.read()
@@ -247,6 +256,7 @@ def ProcessVideo(videofile_in, bounds=(), th_d = 25, th_GB_contour = -5, th_BR_c
     no_contour_images = []
     last_found = -1
     looking_for_annotated_frame = True
+    found_in_frame = -1
     while True:
         success, image = cap.read()
         if not success:
@@ -274,10 +284,10 @@ def ProcessVideo(videofile_in, bounds=(), th_d = 25, th_GB_contour = -5, th_BR_c
             # Here we should save the current frame, and go back in time until we find the label-less contour.
             #current_contour_frame_idx = i
             current_contour_frame_msec = cap.get(cv.CAP_PROP_POS_MSEC)
-            found_in_frame, found_ms, found_img = search_for_no_annot_frame(cap, image, bounds, th_BR_contour, th_GR_contour, mode='back')
+            found_in_frame, found_ms, found_img = search_for_no_annot_frame(cap, image, bounds, th_BR_contour, th_GR_contour, mode='back', max_frame=found_in_frame)
             cap.set(cv.CAP_PROP_POS_MSEC, current_contour_frame_msec)
             if found_in_frame < 0:
-                found_in_frame, found_ms, found_img = search_for_no_annot_frame(cap, image, bounds, th_BR_contour, th_GR_contour, mode='forward')
+                found_in_frame, found_ms, found_img = search_for_no_annot_frame(cap, image, bounds, th_BR_contour, th_GR_contour, mode='forward', max_frame=found_in_frame)
             # continue where we left it
             cap.set(cv.CAP_PROP_POS_MSEC, current_contour_frame_msec+100)
             if found_in_frame < 0:
