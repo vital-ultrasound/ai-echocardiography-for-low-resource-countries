@@ -1,5 +1,18 @@
 # Preprocessing Echochardiography Ultrasound data
 
+## Validation of 4-chamber-view labels
+
+* Open a terminal, load your conda environment and run the script 
+```
+cd $HOME/repositories/echocardiography/scripts/preprocessing
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
+conda activate rt-ai-echo-VE 
+jupyter notebook # to open learning_pipeline_notebook.ipynb
+```
+
+Data should be located here `$HOME/datasets/vital-us/echocardiography/videos-echo-annotated`
+
+
 ## Cropping and Masking Datasets
 
 ### Running script
