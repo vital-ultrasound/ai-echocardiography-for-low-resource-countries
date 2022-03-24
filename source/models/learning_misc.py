@@ -98,14 +98,14 @@ def train_loop(train_dataloader, model, criterion, optimizer, device):
         step_train += 1
         X_train_batch, y_train_batch = sample_batched[0].to(device), sample_batched[1].to(device)
 
-        print(f' BATCH_OF_CLIPS_INDEX: {clip_batch_idx} ')
+        #print(f' BATCH_OF_CLIPS_INDEX: {clip_batch_idx} ')
         # print(f'----------------------------------------------------------')
         # print(f'   X_train_batch.size(): {X_train_batch.size()}') # torch.Size([9, 60, 1, 128, 128]) clips, frames, channels, [width, height]
         # print(f'   y_train_batch.size(): {y_train_batch.size()}') # torch.Size([9])
 
         # Compute prediction and loss
-        # y_train_pred = model(X_train_batch) #torch.Size([9, 2])
-        y_train_pred = model(X_train_batch).squeeze()  # torch.Size([9, 2])
+        y_train_pred = model(X_train_batch) #torch.Size([9, 2])
+        #y_train_pred = model(X_train_batch).squeeze()  # torch.Size([9, 2])
         train_loss = criterion(y_train_pred, y_train_batch)
         #train_acc = binary_accuracy(y_train_pred, y_train_batch)
         # print(train_loss)
