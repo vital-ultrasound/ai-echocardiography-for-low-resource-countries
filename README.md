@@ -1,14 +1,14 @@
 # Real-time AI-empowered echocardiography 
 
 ## Summary 
-This repository contains code, data and documentation for real-time artificial-intelligence-empowered echocardiography.  
+This repository contains code, data and documentation for real-time artificial-intelligence-empowered echocardiography. 
 The [learning pipeline for the echochardiography datasets](scripts/learning-pipeline) is based in the following elements: 
 Data-selection and management; 
 Model training and tuning; 
 Model validation (performance evaluation and clinical evaluation); 
 AI-based device modification, and (perhaps) AI-based production model (Figure 1). 
-![fig](figures/pipeline.png)
-_Fig 1. Pipeline of AI-empowered echocardiography._
+![fig](figures/DL-pipeline.png)     
+_**Fig 1.** Pipeline of AI-empowered echocardiography._
 
 ## Clone repository
 After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), then you can clone the repository by typing (or copying) the following lines in a terminal:
