@@ -48,4 +48,4 @@ $ ./launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --video
 ```
 
 Which produces a session similar to the one shown in the figure below:
-![pretus](../../../figures/pretus-echo.gif)
+![pretus](art/pretus-echo.gif)
