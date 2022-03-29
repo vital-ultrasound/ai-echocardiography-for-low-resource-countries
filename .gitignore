@@ -20,8 +20,3 @@ config_users_paths_files_username_????*.yml
 
 ## ignore models.pth
 **/model.pth
-**/metric_model.pth
-**/*metric_model.pth
-
-## ignore _anonymised.cvs
-**/*_anonymised.csv

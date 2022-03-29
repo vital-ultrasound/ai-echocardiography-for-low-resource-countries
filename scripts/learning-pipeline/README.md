@@ -96,31 +96,14 @@ cd $HOME/datasets/vital-us/echocardiography/videos-echo-annotated
 </details>
 
 
-## 2. Generate list text files for train and validate datasets
-### [split_train_validate_test.py](split_train_validate_test.py)
-Open a terminal and load your conda environment 
-```
-cd $HOME/repositories/echocardiography/scripts/learning-pipeline
-export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
-conda activate rt-ai-echo-VE
-python split_train_validate_test.py --config ../config_files/users_paths_files/config_users_paths_files_username_$USER.yml 
-```
-Edit [config_users_paths_files_username_$USER.yml](../config_files/users_paths_files/config_users_paths_files_username_template.yml) with the right paths and percentage of `ntraining`:  
-```
-echodataset_path: !join [*HOME_DIR, /datasets/vital-us/echocardiography/videos-echo-test]
-data_list_output_path: !join [*HOME_DIR, /repositories/echocardiography/scripts/config_files/data_lists/]
-ntraining: 0.8
-randomise_file_list: False
-```
-
-## 3. Learning pipeline scripts 
+## 2. Learning pipeline scripts 
 ### [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb)
 * Open a terminal, load your conda environment and run the script.
 ```
 cd $HOME/repositories/echocardiography/scripts/learning-pipeline
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE 
-jupyter notebook # to open learning_pipeline_notebook.ipynb in your web-browser
+jupyter notebook # to open *.ipynb in your web-browser
 ```
 **NOTE**. You might like to delete previous frames at `$HOME/tmp/echoviddata_{K}frames` where K are the `number_of_frames_per_segment_in_a_clip`.
 
