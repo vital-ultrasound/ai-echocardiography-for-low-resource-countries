@@ -249,7 +249,15 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     video_filenames_validation = video_filenames[int(N * ntraining):]
     label_filenames_validation = label_filenames[int(N * ntraining):]
 
+    ## Display filenames
+    print(f'video_filenames_train: {video_filenames_train}')
+    print(f'label_filenames_train: {label_filenames_train}')
+    print(f'video_filenames_validation: {video_filenames_validation}')
+    print(f'label_filenames_validation: {label_filenames_validation}')
+
     write_list_to_txtfile(video_filenames_train, 'video_list_train.txt', data_list_output_path)
     write_list_to_txtfile(label_filenames_train, 'annotation_list_train.txt', data_list_output_path)
     write_list_to_txtfile(video_filenames_validation, 'video_list_validate.txt', data_list_output_path)
     write_list_to_txtfile(label_filenames_validation, 'annotation_list_validate.txt', data_list_output_path)
+
+    print(f'Files were successfully written at {data_list_output_path}')

@@ -309,7 +309,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
         clip_data = clip_data.to(self.device) # Tensor.Size([Fi,H,W])
         clip_data = clip_data.unsqueeze(0) # add channel data Tensor.Size([C,Fi,H,W])
-        clip_data = clip_data.permute(1, 0, 2, 3) # Permute Tensor.Size([Fi,C,H,W])
+        #clip_data = clip_data.permute(1, 0, 2, 3) # Permute Tensor.Size([Fi,C,H,W])
 
         return clip_data, clip_label, clip_frame0, n_available_frames
 
