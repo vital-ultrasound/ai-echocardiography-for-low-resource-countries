@@ -30,22 +30,8 @@ In addition to the python code, this repo contains:
 
 * [PRETUS_Plugins](PRETUS_Plugins) with plugins for [pretus](https://github.com/gomezalberto/pretus).
 
-## Contents
-
-In addition to the python code, this repo contains:
-
-* [PRETUS_Plugins](PRETUS_Plugins) with plugins for [pretus](https://github.com/gomezalberto/pretus).
-
-## Contents
-
-In addition to the python code, this repo contains:
-
-* [PRETUS_Plugins](PRETUS_Plugins) with plugins for [pretus](https://github.com/gomezalberto/pretus).
-
-## Contents
-
-In addition to the python code, this repo contains:
-
+## Content 
+* [Machine learning pipeline](scripts/learning-pipeline)
 * [PRETUS_Plugins](PRETUS_Plugins) with plugins for [pretus](https://github.com/gomezalberto/pretus).
 
 ## Clone repository
