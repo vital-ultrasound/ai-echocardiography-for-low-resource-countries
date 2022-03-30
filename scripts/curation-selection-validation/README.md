@@ -275,8 +275,7 @@ export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environme
 conda activate rt-ai-echo-VE
 jupyter notebook # to open *.ipynb in your web-browser
 ```
-
-
+**NOTE**. Create a new config file called `config_users_paths_files_username_$USER_validation.yml` (see further instructions [here](../config_files/users_paths_files/README.md))
 
 ## [`video_to_imageframes.py`](video_to_imageframes.py)
 The script converts mp4 videos to png image frames of masked videos (Fig 1).
