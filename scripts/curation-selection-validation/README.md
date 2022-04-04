@@ -268,7 +268,8 @@ mx19@sie133-lap:~/datasets/vital-us/echocardiography/videos-echo-annotated$ tree
 
 
 ## Notebook [`validation-of-4cv-labels.ipynb`](validation-of-4cv-labels.ipynb)
-Load notebook using the following commands:
+* Create `config_users_paths_files_username_$USER_validation.yml` [as shown here](../../scripts/config_files/users_paths_files) 
+* Load notebook using the following commands:
 ```
 cd $HOME/repositories/echocardiography/scripts/curation-selection-validation
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
