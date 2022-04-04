@@ -740,7 +740,6 @@ See all figures [here](../../figures/framegrabber/)
 
 
 ## References
-https://gist.github.com/aziraphale/f40044af69c5e001b296242fccbd33e3     
-https://linux-hardware.org/index.php?id=usb:1bcf-2c99 
-
-
+https://github.com/gomezalberto/pretus/blob/main/src/Plugins/Plugin_PnPframegrabber/capture_video.py  
+https://gist.github.com/aziraphale/f40044af69c5e001b296242fccbd33e3       
+https://linux-hardware.org/index.php?id=usb:1bcf-2c99
