@@ -1,4 +1,4 @@
-# Real-time AI-empowered echocardiography 
+# Real-time AI-empowered echocardiography
 
 ## Summary 
 This repository contains code, data and documentation for real-time artificial-intelligence-empowered echocardiography. 
@@ -10,15 +10,11 @@ AI-based device modification, and (perhaps) AI-based production model (Figure 1)
 ![fig](figures/DL-pipeline.png)     
 _**Fig 1.** Pipeline of AI-empowered echocardiography._
 
-
-## Real-time AI-empowered clinical system.
-
-Figure 2 illustrate the real-time AI-empowered clinical system based on [EPIQ 7 ultrasound](https://www.philips.co.uk/a-w/about/news/archive/standard/news/backgrounders/Inside-Innovation-EPIQ.html) [X5-1 xMATRIX array transducer ](https://www.philips.co.uk/healthcare/product/HC989605400801/x5-1) and  [framegrabber avio-hd](https://www.epiphan.com/products/avio-hd/).
-For installation, see more [here](docs/system)
-
-![fig](figures/rt-ai-system.png)
-_**Fig 1.** Real-time AI-empowered clinical system._
-
+## Real-time AI-empowered clinical system.  
+Figure 2 illustrate the real-time AI-empowered clinical system based on [EPIQ 7 ultrasound](https://www.philips.co.uk/a-w/about/news/archive/standard/news/backgrounders/Inside-Innovation-EPIQ.html), [X5-1 xMATRIX array transducer ](https://www.philips.co.uk/healthcare/product/HC989605400801/x5-1) and [framegrabber avio-hd](https://www.epiphan.com/products/avio-hd/).
+For further details on the system, see [here](docs/system).   
+![fig](figures/rt-ai-system.png)    
+_**Fig 1.** Real-time AI-empowered clinical system._  
 
 ## Clone repository
 After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), then you can clone the repository by typing (or copying) the following lines in a terminal:
