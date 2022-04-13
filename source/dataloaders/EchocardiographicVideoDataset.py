@@ -19,7 +19,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
     EchoClassesDataset Class to load video and json labels using torch.utils.data.
 
     Arguments:
-        main_data_path(str): Main path of videos and json files
+        echodataset_path(str): Main path of videos and json files
         temporal_data_path (str): Path for temporal data files
         participant_videos_list (srt):  Lists of video files
         participant_path_json_list (srt): List of json files
@@ -36,7 +36,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
     def __init__(
             self,
-            main_data_path: str,
+            echodataset_path: str,
             temporal_data_path: str,
             participant_videos_list: str,
             participant_path_json_list: str,
@@ -50,7 +50,7 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             max_background_duration_in_secs: int = 10,
             use_tmp_storage=False
     ):
-        self.main_data_path = main_data_path
+        self.echodataset_path = echodataset_path
         self.participant_videos_list = participant_videos_list
         self.participant_path_json_list = participant_path_json_list
         self.crop_bounds_for_us_image = crop_bounds_for_us_image
@@ -65,11 +65,11 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             self.number_of_frames_per_segment_in_a_clip, self.pretransform_im_size[0], self.pretransform_im_size[1])
         self.max_background_duration_in_secs = max_background_duration_in_secs
 
-        videolist = os.path.join(main_data_path, participant_videos_list)
-        annotationlist = os.path.join(main_data_path, participant_path_json_list)
+        videolist = os.path.join(echodataset_path, participant_videos_list)
+        annotationlist = os.path.join(echodataset_path, participant_path_json_list)
 
-        self.video_filenames = [self.main_data_path + os.sep + line.strip() for line in open(videolist)]
-        self.annotation_filenames = [self.main_data_path + os.sep + line.strip() for line in open(annotationlist)]
+        self.video_filenames = [self.echodataset_path + os.sep + line.strip() for line in open(videolist)]
+        self.annotation_filenames = [self.echodataset_path + os.sep + line.strip() for line in open(annotationlist)]
 
         self.BACKGROUND_LABEL = 0
         self.FOURCV_LABEL = 1
@@ -203,16 +203,15 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         clip_earliest_start_ms = self.idx_to_clip[index][2]
         clip_latest_end_ms = self.idx_to_clip[index][3]
         clip_label = self.idx_to_clip[index][4]
-
         prefix = self.participant_videos_list.split('.')[0].split('_')[-1]
-        save_filename = self.temporal_data_path + '/videoID_{}_label_{}_{}.pth'.format(index, clip_label, prefix)
+        save_filename = self.temporal_data_path + '/videoID_{}_label_{}.pth'.format(index, clip_label)
         if self.use_tmp_storage is True and os.path.isfile(save_filename) is True:
             video_data = torch.load(save_filename)
         else:
             video_name = self.video_filenames[video_idx]
             cap = cv.VideoCapture(video_name)
             if cap.isOpened() == False:
-                print('[ERROR] [LusVideoDataset.__getitem__()] Unable to read video ' + video_name)
+                print('[ERROR] [EchoClassesDataset.__getitem__()] Unable to read video ' + video_name)
                 exit(-1)
 
             # extract the frames of the clip

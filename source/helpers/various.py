@@ -229,7 +229,7 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
             file_list_txt.write(file_n_nopath + '\n')
 
     ## List all files with *4CV.[jJ][sS][oO][nN]
-    result = list(sorted(Path(echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]")))
+    result = list(sorted(Path(echodataset_path).rglob("*4[cC][vV].[jJ][sS][oO][nN]")))
     with open(labellist, 'w') as file_list_txt:
         for file_n in result:
             file_n_nopath = str(file_n).replace(echodataset_path, '')
@@ -257,11 +257,11 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     print(f'======= video_filenames: {video_filenames}')
     print(f'======= label_filenames: {label_filenames}')
     print(f'==================================')
-    print(f'======= video_filenames_train: {video_filenames_train}')
-    print(f'======= label_filenames_train: {label_filenames_train}')
+    print(f'== video_filenames_train: {video_filenames_train}')
+    print(f'== label_filenames_train: {label_filenames_train}')
     print(f'==================================')
-    print(f'======= video_filenames_validation: {video_filenames_validation}')
-    print(f'======= label_filenames_validation: {label_filenames_validation}')
+    print(f'== video_filenames_validation: {video_filenames_validation}')
+    print(f'== label_filenames_validation: {label_filenames_validation}')
 
     write_list_to_txtfile(video_filenames_train, 'video_list_train.txt', data_list_output_path)
     write_list_to_txtfile(label_filenames_train, 'annotation_list_train.txt', data_list_output_path)
