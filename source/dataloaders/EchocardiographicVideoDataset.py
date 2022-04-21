@@ -200,15 +200,16 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         """
 
         video_idx = self.idx_to_clip[index][0]
+        video_name = self.video_filenames[video_idx]
         clip_earliest_start_ms = self.idx_to_clip[index][2]
         clip_latest_end_ms = self.idx_to_clip[index][3]
         clip_label = self.idx_to_clip[index][4]
+        video_file_name_id = os.path.splitext(os.path.basename(video_name))[0][10:15]
         prefix = self.participant_videos_list.split('.')[0].split('_')[-1]
-        save_filename = self.temporal_data_path + '/videoID_{}_label_{}.pth'.format(index, clip_label)
+        save_filename = self.temporal_data_path + '/videoID_{:02d}_{}_label_{:02d}.pth'.format(index, video_file_name_id, clip_label)
         if self.use_tmp_storage is True and os.path.isfile(save_filename) is True:
             video_data = torch.load(save_filename)
         else:
-            video_name = self.video_filenames[video_idx]
             cap = cv.VideoCapture(video_name)
             if cap.isOpened() == False:
                 print('[ERROR] [EchoClassesDataset.__getitem__()] Unable to read video ' + video_name)
