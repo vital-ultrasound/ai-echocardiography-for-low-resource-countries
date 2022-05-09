@@ -11,6 +11,15 @@ The following images were obtained with [python framegrabber_capturing_video.py 
 * frame_screenshot_W960H540PS60  
 ![fig](frame_screenshot_W960H540PS60.png)
 
+* frame_screenshot_W1024H768FPS60_MJPG
+![fig](frame_screenshot_W1024H768FPS60_MJPG.png)
+
+* frame_screenshot_W1280H960FPS30_MJPG
+![fig](frame_screenshot_W1280H960FPS30_MJPG.png)
+
+* frame_screenshot_W1280H960FPS60_MJPG
+![fig](frame_screenshot_W1280H960FPS60_MJPG.png)
+`
 *frame_screenshot_W1280H720PS60  
 ![fig](frame_screenshot_W1280H720PS60.png)
 

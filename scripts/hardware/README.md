@@ -11,6 +11,7 @@ conda activate rt-ai-echo-VE
 #python framegrabber_capturing_video.py --frame_width 960 --frame_height 540 --frames_per_second 60
 #python framegrabber_capturing_video.py --frame_width 1280 --frame_height 720 --frames_per_second 60
 #python framegrabber_capturing_video.py --frame_width 1024 --frame_height 768 --frames_per_second 60
+#python framegrabber_capturing_video.py --frame_width 1280 --frame_height 960 --frames_per_second 30 
 #python framegrabber_capturing_video.py --frame_width 1280 --frame_height 960 --frames_per_second 60 # DISPLAY BLACK_SCREEN
 #python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60
 ```
