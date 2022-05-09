@@ -2,9 +2,95 @@
 
 ## Frame-grabber MiraBox Video Capture
 
-### $ lsubs
+## Resolution tests
+```
+cd $HOME/repositories/echocardiography/scripts/hardware
+conda activate rt-ai-echo-VE 
+#python framegrabber_capturing_video.py --frame_width 640 --frame_height 480 --frames_per_second 60
+#python framegrabber_capturing_video.py --frame_width 800 --frame_height 600 --frames_per_second 60
+#python framegrabber_capturing_video.py --frame_width 960 --frame_height 540 --frames_per_second 60
+#python framegrabber_capturing_video.py --frame_width 1280 --frame_height 720 --frames_per_second 60
+#python framegrabber_capturing_video.py --frame_width 1024 --frame_height 768 --frames_per_second 60
+#python framegrabber_capturing_video.py --frame_width 1280 --frame_height 960 --frames_per_second 60 # DISPLAY BLACK_SCREEN
+#python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60
+```
+
+Terminal logs
+
+``` 
+python framegrabber_capturing_video.py --frame_width 1024 --frame_height 768 --frames_per_second 60
+
+fps: 60.0
+resolution: 1024.0x768.0
+mode: MJPG
+Buffer size: 1.0
+```
+
+``` 
+python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60
+
+fps: 60.0
+resolution: 1920.0x1080.0
+mode: MJPG
+Buffer size: 1.0
+```
+
+
+
+![fig](../../figures/framegrabber/framegrabber-mirabox.png)   
+See all figures [here](../../figures/framegrabber/)
+
+### $ lsusb
 ```
 Bus 002 Device 004: ID 1bcf:2c99 Sunplus Innovation Technology Inc. MiraBox Video Capture
+```
+
+### v4l2-ctl -d /dev/video2 --all
+``` 
+v4l2-ctl -d /dev/video2 --all
+Driver Info:
+	Driver name      : uvcvideo
+	Card type        : MiraBox Video Capture: MiraBox 
+	Bus info         : usb-0000:00:14.0-6
+	Driver version   : 5.13.19
+	Capabilities     : 0x84a00001
+		Video Capture
+		Metadata Capture
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04200001
+		Video Capture
+		Streaming
+		Extended Pix Format
+Priority: 2
+Video input : 0 (Camera 1: ok)
+Format Video Capture:
+	Width/Height      : 1280/960
+	Pixel Format      : 'MJPG' (Motion-JPEG)
+	Field             : None
+	Bytes per Line    : 0
+	Size Image        : 2457600
+	Colorspace        : sRGB
+	Transfer Function : Rec. 709
+	YCbCr/HSV Encoding: ITU-R 601
+	Quantization      : Default (maps to Full Range)
+	Flags             : 
+Crop Capability Video Capture:
+	Bounds      : Left 0, Top 0, Width 1280, Height 960
+	Default     : Left 0, Top 0, Width 1280, Height 960
+	Pixel Aspect: 1/1
+Selection Video Capture: crop_default, Left 0, Top 0, Width 1280, Height 960, Flags: 
+Selection Video Capture: crop_bounds, Left 0, Top 0, Width 1280, Height 960, Flags: 
+Streaming Parameters Video Capture:
+	Capabilities     : timeperframe
+	Frames per second: 60.000 (60/1)
+	Read buffers     : 0
+                     brightness 0x00980900 (int)    : min=0 max=255 step=1 default=128 value=128
+                       contrast 0x00980901 (int)    : min=0 max=255 step=1 default=128 value=128
+                     saturation 0x00980902 (int)    : min=0 max=255 step=1 default=128 value=128
+                            hue 0x00980903 (int)    : min=-32 max=31 step=1 default=0 value=0
+
 ```
 
 ### $ dmesg
@@ -696,47 +782,6 @@ Device Descriptor:
           wLockDelay         0x0000
 ```
 
-
-## Resolution tests
-
-```
-cd $HOME/repositories/echocardiography/scripts/hardware
-conda activate rt-ai-echo-VE 
-#python framegrabber_capturing_video.py --frame_width 640 --frame_height 480 --frames_per_second 60
-#python framegrabber_capturing_video.py --frame_width 800 --frame_height 600 --frames_per_second 60
-#python framegrabber_capturing_video.py --frame_width 960 --frame_height 540 --frames_per_second 60
-#python framegrabber_capturing_video.py --frame_width 1280 --frame_height 720 --frames_per_second 60
-python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60
-```
-
-
-Terminal logs
-``` 
-
-fps: 60.0
-resolution: 640.0x480.0
-mode: MJPG
-Buffer size: 1.0
-
-
-...
-
-fps: 60.0
-resolution: 800.0x600.0
-mode: MJPG
-Buffer size: 1.0
-
-..
-
-fps: 60.0
-resolution: 1920.0x1080.0
-mode: MJPG
-Buffer size: 1.0
-
-```
-
-![fig](../../figures/framegrabber/framegrabber-mirabox.png)   
-See all figures [here](../../figures/framegrabber/)
 
 
 ## References

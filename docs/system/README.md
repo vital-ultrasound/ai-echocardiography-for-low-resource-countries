@@ -6,6 +6,15 @@
 Serial Number: US714B0455
 Software Version: 1.7.1.24
 ```
+
+* Display specifications
+The DisplayPort output includes the entire display that can be either 16:10 or 16:9.
+The image setups provide:
+``` 
+* FullScreen 1920x1080 (1080p): The full display at 60 frames per second on the DisplayPort connector.
+* Image Area Only: 1024x768: Outputs the region of interest of the image are to the S-Video connector i NTSC or PAL format (depending on the system setting).
+```
+
 * Specifications
 ``` 
     System dimensions
@@ -18,7 +27,6 @@ Software Version: 1.7.1.24
     Degrees of movement: 180 degrees
     Height adjustment: 25.4 cm
 ```
-
 
 ## X5-1: xMATRIX array transducer with PureWave crystal technology
 * Serial number and software version 
@@ -47,7 +55,7 @@ Physical dimensions: 9.2 x 3.9 x 2.9 cm (3.6 x1.5 x 1.1 in) LWD
 
 ## USB framegrabber 
 
-### TreasLin Gaming USB3.0 Capture Card, 1080P 60FPS Video HDMI Capture Card   
+### MiraBox Video Capture 
 >  【HDMI USB3.0 Capture with Strong compatibility】The 1080P HDMi Capture Card Support for all 1080P 720P HDMI device, such as Wii U, PS4, PS3, Xbox One, Xbox 360, Wii, Switch, DVD, camera,Mobile phone(Apple iphone,Huawei), ZOSI security camera, DSLR and set top box etc. It is compatible with Linux, Mac OS, windows 7/8/10, very easy to setup, there is Plug and Play,No Need to Install Driver.  
 https://www.amazon.com/dp/B08Q7CG9PZ/ref=emc_b_5_t?th=1  
 ``` 

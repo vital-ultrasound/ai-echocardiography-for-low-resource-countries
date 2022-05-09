@@ -8,15 +8,14 @@ def decode_fourcc(cc):
 
 
 def CaptureVideoTests(frame_width: int, frame_height: int, frames_per_second: int):
-    ID_GRABBER = 2
+    ID_FRAMEGRABBER = 2
 
-    id = ID_GRABBER
-    cap = cv2.VideoCapture(id, cv2.CAP_V4L2)
+    cap = cv2.VideoCapture(ID_FRAMEGRABBER, cv2.CAP_V4L2)
     cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-    # cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('Y', 'V', '1', '2'))
-    # cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('Y', 'U', '1', '2'))
-    # cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('B', 'G', 'R', '3'))
-    cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
+    #cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('Y', 'U', 'Y', 'V'))
+    #cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('B', 'G', 'R', '3')) #don't make any effect and leave it as "YUYV"
+    #cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')) #don't make any effect and leave it as "YUYV"
+    cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')) #  motion-jpeg codec
     cap.set(cv2.CAP_PROP_FPS, frames_per_second)
 
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, frame_width)
@@ -24,7 +23,7 @@ def CaptureVideoTests(frame_width: int, frame_height: int, frames_per_second: in
 
     # Check if the device is opened correctly
     if not cap.isOpened():
-        raise IOError("Cannot open video source {}".format(id))
+        raise IOError("Cannot open video source {}".format(ID_FRAMEGRABBER))
 
     # print properties of te capture
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -34,12 +33,13 @@ def CaptureVideoTests(frame_width: int, frame_height: int, frames_per_second: in
     bs = cap.get(cv2.CAP_PROP_BUFFERSIZE)
 
     print('fps: {}'.format(fps))
-    print('resolution: {}x{}'.format(w, h))  # default 640 x 480
-    print('mode: {}'.format(decode_fourcc(fcc)))  # default 640 x 480
-    print('Buffer size: {}'.format(bs))  # default 640 x 480
+    print('resolution: {}x{}'.format(w, h))
+    print('mode: {}'.format(decode_fourcc(fcc)))
+    print('Buffer size: {}'.format(bs))
 
     while (True):
         ret, frame = cap.read()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         if frame is not None:
             cv2.imshow('frame', frame)
         else:
