@@ -1,4 +1,6 @@
  # Frame resolutions tests
+Test of different image size and frame rates. 
+![fig](framegrabber-mirabox.png)
 
 The following images were obtained with [python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60](../../scripts/hardware/) 
 
@@ -11,6 +13,15 @@ The following images were obtained with [python framegrabber_capturing_video.py 
 * frame_screenshot_W960H540PS60  
 ![fig](frame_screenshot_W960H540PS60.png)
 
+* frame_screenshot_W1024H768FPS60_MJPG
+![fig](frame_screenshot_W1024H768FPS60_MJPG.png)
+
+* frame_screenshot_W1280H960FPS30_MJPG
+![fig](frame_screenshot_W1280H960FPS30_MJPG.png)
+
+* frame_screenshot_W1280H960FPS60_MJPG
+![fig](frame_screenshot_W1280H960FPS60_MJPG.png)
+`
 *frame_screenshot_W1280H720PS60  
 ![fig](frame_screenshot_W1280H720PS60.png)
 
