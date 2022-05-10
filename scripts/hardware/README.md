@@ -3,6 +3,7 @@
 ## Frame-grabber MiraBox Video Capture
 
 ### Resolution tests
+* Scripts 
 ```
 cd $HOME/repositories/echocardiography/scripts/hardware
 conda activate rt-ai-echo-VE 
@@ -16,7 +17,7 @@ conda activate rt-ai-echo-VE
 #python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60
 ```
 
-Terminal logs
+* Terminal logs
 
 ``` 
 python framegrabber_capturing_video.py --frame_width 1024 --frame_height 768 --frames_per_second 60
@@ -35,9 +36,12 @@ resolution: 1920.0x1080.0
 mode: MJPG
 Buffer size: 1.0
 ```
+* Screenshots 
+
+Various images size with mainly 60 and 30 frames per second were tested.
+See all figures [here](../../figures/framegrabber/)
 
 ![fig](../../figures/framegrabber/framegrabber-mirabox.png)
-See all figures [here](../../figures/framegrabber/)
 
 ### $ lsusb
 ```
