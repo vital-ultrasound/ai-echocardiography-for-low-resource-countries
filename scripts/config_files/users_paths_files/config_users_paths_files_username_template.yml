@@ -4,25 +4,27 @@ model: 'Venue Go'
 software_version: 'R2'
 Transducers: 'Convex probe C1-5-D'
 
-## VIDEO PATHS
+## USER PATHS
 user_path: &HOME_DIR /home/mx19
-echodataset_path: !join [*HOME_DIR, /datasets/vital-us/echocardiography/videos-echo-annotated/] # Make use of '/' to create list without slash e.g. (01NVb-003-078/T3/01NVb-003-078-3 echo.mp4)
-temporal_data_path: !join [*HOME_DIR, '/datasets/vital-us/echocardiography/temporal-files/'] # Make use of `/` at the end of the str to save files at such path
-use_tmp_storage: True
 
+## VIDEO PATHS
+#echodataset_path: !join [*HOME_DIR, /datasets/vital-us/echocardiography/videos-echo-annotated/] # Make use of '/' to create list without slash e.g. (01NVb-003-078/T3/01NVb-003-078-3 echo.mp4)
+echodataset_path: !join [*HOME_DIR, /datasets/vital-us/echocardiography/videos-echo-annotated-in-verification/]
 data_list_output_path: !join [*HOME_DIR, /repositories/echocardiography/scripts/config_files/data_lists/] # Make use of `/` at the end of the str to save files at such path
+use_tmp_storage: True
+temporal_data_path: !join [*HOME_DIR, '/datasets/vital-us/echocardiography/temporal-files/'] # Make use of `/` at the end of the str to save files at such path
+
 ntraining: 0.1
 randomise_file_list: False
 
 ## Image bounds
 ## Capture Videos have the following features: frame_width=1920, frame_height=1080, fps=29.971...
-## US image size [width= 650 -480]; height= 810-120=690]
+## US image size [width= 650-480=650]; height= 810-120=690]
 crop_bounds_for_us_image:
   start_x: 480
   start_y: 120
   width: 1130
   height: 810
-
 
 ## Size to which the cropped area is resized to.
 use_pretransform_image_size: True
@@ -36,12 +38,13 @@ sliding_window_length_in_percentage_of_frames_per_segment: !!float 0.0
 max_background_duration_in_secs: 5
 
 ## Training parameters
-use_train_augmentation: False
-use_validation_augmentation: False
+use_train_augmentation: True
+use_validation_augmentation: True
 batch_size: 20
 max_epochs: 3
 
 ## LIST OF FILES in txt
+### FULL LIST
 participant_videos_list_full: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_full.txt']
 participant_path_json_list_full: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_full.txt']
 ### TO BE VERIFIED (tbv)
