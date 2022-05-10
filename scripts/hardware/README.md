@@ -2,7 +2,7 @@
 
 ## Frame-grabber MiraBox Video Capture
 
-## Resolution tests
+### Resolution tests
 ```
 cd $HOME/repositories/echocardiography/scripts/hardware
 conda activate rt-ai-echo-VE 
@@ -36,9 +36,7 @@ mode: MJPG
 Buffer size: 1.0
 ```
 
-
-
-![fig](../../figures/framegrabber/framegrabber-mirabox.png)   
+![fig](../../figures/framegrabber/framegrabber-mirabox.png)
 See all figures [here](../../figures/framegrabber/)
 
 ### $ lsusb
