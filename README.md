@@ -2,21 +2,27 @@
 
 ## Summary 
 This repository contains code, details of data and documentation for a clinical system to perform real-time artificial-intelligence-empowered echocardiography.
+The machine learning pipeline follow [the total product lifecycle (TPLC) approach on AI/ML workflow from Good Machine Learning Practices](scripts/learning-pipeline).
+
+## Data collection, validation and management 
+1. Video data from GE Venue Go GE using Probe 3SC-RS was collected with a Portable Video Recorder. See [more](data).
+2. Creation and verification of annotations with VGG Image Annotator (VIA) software.
+3. :notebook: for [data curation, selection and validation](scripts/curation-selection-validation); 
+![fig](figures/data-workflow.png)     
+_**Fig 1.** Data workflow._
 
 ## Deep learning pipeline
-The [learning pipeline for the echochardiography datasets](scripts/learning-pipeline) is based in the following elements: 
-[Data curation, selection and validation](scripts/curation-selection-validation); 
-Model training and tuning; 
-Model validation (performance evaluation and clinical evaluation); 
-AI-based device modification, and (perhaps) AI-based production model (Figure 1). 
+1. Model training and tuning; 
+2. Model validation (performance evaluation and clinical evaluation); 
+3. AI-based device modification, and (perhaps) AI-based production model (Figure 1). 
 ![fig](figures/DL-pipeline.png)     
-_**Fig 1.** Deep learning pipeline of the AI-empowered echocardiography._
+_**Fig 2.** Deep learning pipeline of the AI-empowered echocardiography._
 
 ## Clinical system  
 Figure 2 illustrate the real-time AI-empowered clinical system based on [EPIQ 7 ultrasound](https://www.philips.co.uk/a-w/about/news/archive/standard/news/backgrounders/Inside-Innovation-EPIQ.html), [X5-1 xMATRIX array transducer ](https://www.philips.co.uk/healthcare/product/HC989605400801/x5-1) and [framegrabber avio-hd](https://www.epiphan.com/products/avio-hd/).
 For further details on the system, see [here](docs/system).   
 ![fig](figures/rt-ai-system.png)    
-_**Fig 2.** Real-time AI-empowered clinical system._  
+_**Fig 3.** Real-time AI-empowered clinical system._  
 
 ## Clone repository
 After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), you can then clone the repository by typing (or copying) the following lines in a terminal:
