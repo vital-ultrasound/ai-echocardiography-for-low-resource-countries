@@ -4,15 +4,25 @@ model: 'Venue Go'
 software_version: 'R2'
 Transducers: 'Convex probe C1-5-D'
 
-## Video paths for `python split_train_validate_test.py`
-user_path: &HOME_DIR /home/$USER
-echodataset_path: !join [*HOME_DIR, /datasets/vital-us/echocardiography/videos-echo-annotated/] # Make use of '/' to create list without slash e.g. (01NVb-003-078/T3/01NVb-003-078-3 echo.mp4)
-data_list_output_path: !join [*HOME_DIR, /repositories/echocardiography/scripts/config_files/data_lists/] # Make use of `/` to save files at data_lists path
-ntraining: 0.8
+## USER PATHS
+user_path: &HOME_DIR /home/mx19
+sshd_path: &SSHD_DIR /media/mx19
+
+## VIDEO PATHS
+#echodataset_path: !join [*HOME_DIR, /datasets/vital-us/echocardiography/videos-echo-annotated/] # Make use of '/' to create list without slash e.g. (01NVb-003-078/T3/01NVb-003-078-3 echo.mp4)
+echodataset_path: !join [*SSHD_DIR, /vitaluskcl/datasets/echocardiography/videos-echo-annotated-in-verification40-49]
+
+## LIST and TEMP PATHS
+data_list_output_path: !join [*HOME_DIR, /repositories/echocardiography/scripts/config_files/data_lists/] # Make use of `/` at the end of the str to save files at such path
+use_tmp_storage: True
+temporal_data_path: !join [*HOME_DIR, '/datasets/vital-us/echocardiography/temporal-files/'] # Make use of `/` at the end of the str to save files at such path
+
+ntraining: 0.1
 randomise_file_list: False
 
 ## Image bounds
 ## Capture Videos have the following features: frame_width=1920, frame_height=1080, fps=29.971...
+## US image size [width= 650-480=650]; height= 810-120=690]
 crop_bounds_for_us_image:
   start_x: 480
   start_y: 120
@@ -21,10 +31,10 @@ crop_bounds_for_us_image:
 
 ## Size to which the cropped area is resized to.
 use_pretransform_image_size: True
-pretransform_im_size:  !!python/tuple [128, 128] #[width, height] #128*128 might be too big for 16GB GPU
+pretransform_im_size:  !!python/tuple [650, 690] #[width, height] #128*128 might be too big for 16GB GPU; [650, 690] original pixel size for VenueGO
 
 ## number of frames per clip
-number_of_frames_per_segment_in_a_clip: 60
+number_of_frames_per_segment_in_a_clip: 60  # Reduce it from 60 to 30 frames!
 sliding_window_length_in_percentage_of_frames_per_segment: !!float 0.0
 
 ## Max duration of background clips
@@ -36,10 +46,16 @@ use_validation_augmentation: True
 batch_size: 20
 max_epochs: 3
 
-## Video paths
-main_data_path: !join [*HOME_DIR, '/datasets/vital-us/echocardiography/videos-echo-annotated']
+## LIST OF FILES in txt
+### FULL LIST
+participant_videos_list_full: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_full.txt']
+participant_path_json_list_full: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_full.txt']
+### TO BE VERIFIED (tbv)
+participant_videos_list_tbv: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_tbv.txt']
+participant_path_json_list_tbv: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_tbv.txt']
+### TRAIN LIST
 participant_videos_list_train: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_train.txt']
 participant_path_json_list_train: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_train.txt']
+### VALIDATION LIST
 participant_videos_list_validation: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_validate.txt']
 participant_path_json_list_validation: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_validate.txt']
-

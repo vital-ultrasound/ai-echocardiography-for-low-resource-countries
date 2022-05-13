@@ -8,7 +8,7 @@ import torch
 from tqdm import tqdm
 
 from source.helpers.various import timer_func_decorator, msec_to_timestamp, to_grayscale, ToImageTensor, \
-    cropped_frame, masks_us_image, plot_image_numpy_array
+    cropped_frame, masks_us_image
 
 # constants
 S2MS = 1000  # second to millisecond
@@ -19,10 +19,12 @@ class EchoClassesDataset(torch.utils.data.Dataset):
     EchoClassesDataset Class to load video and json labels using torch.utils.data.
 
     Arguments:
-        main_data_path(str): Main path of videos and json files
+        echodataset_path(str): Main path of videos and json files
+        temporal_data_path (str): Path for temporal data files
         participant_videos_list (srt):  Lists of video files
         participant_path_json_list (srt): List of json files
         crop_bounds_for_us_image (Tuple) - Crop bounds, a dictionary in format ('start_x':w0, 'start_y':h0, 'width':w, 'height':h).
+        pretransform_im_size (Tuple) - 'width':w, 'height':h
         pretransform (torch.Transform): a transform, e.g. normalization, etc, that is done determninistically and before augmentation (Default = None)
         transform (torch.Transform): a transform, e.g. for data augmentation, normalization, etc (Default = None)
         number_of_frames_per_segment_in_a_clip (int): duration of the clips, in number of frames
@@ -34,37 +36,40 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
     def __init__(
             self,
-            main_data_path: str,
+            echodataset_path: str,
+            temporal_data_path: str,
             participant_videos_list: str,
             participant_path_json_list: str,
             crop_bounds_for_us_image=None,
+            pretransform_im_size=None,
             pretransform=None,
             transform=None,
             number_of_frames_per_segment_in_a_clip: int = 20,
             sliding_window_length_in_percentage_of_frames_per_segment: float = 0.0,
             device=torch.device('cpu'),
-            use_tmp_storage=False,
-            max_background_duration_in_secs: int = 10
+            max_background_duration_in_secs: int = 10,
+            use_tmp_storage=False
     ):
-        self.main_data_path = main_data_path
+        self.echodataset_path = echodataset_path
         self.participant_videos_list = participant_videos_list
         self.participant_path_json_list = participant_path_json_list
         self.crop_bounds_for_us_image = crop_bounds_for_us_image
         self.transform = transform
+        self.pretransform_im_size = pretransform_im_size
         self.pretransform = pretransform
         self.number_of_frames_per_segment_in_a_clip = number_of_frames_per_segment_in_a_clip
         self.sliding_window_length_in_percentage_of_frames_per_segment = sliding_window_length_in_percentage_of_frames_per_segment
         self.device = device
         self.use_tmp_storage = use_tmp_storage
-        self.temp_folder = os.path.expanduser('~') + os.path.sep + 'tmp' + os.path.sep + 'echoviddata_{}frames'.format(
-            self.number_of_frames_per_segment_in_a_clip)
+        self.temporal_data_path = temporal_data_path + 'echovideodatafiles_FRAMESPERCLIP{}_PIXELSIZE_{}W{}H'.format(
+            self.number_of_frames_per_segment_in_a_clip, self.pretransform_im_size[0], self.pretransform_im_size[1])
         self.max_background_duration_in_secs = max_background_duration_in_secs
 
-        videolist = os.path.join(main_data_path, participant_videos_list)
-        annotationlist = os.path.join(main_data_path, participant_path_json_list)
+        videolist = os.path.join(echodataset_path, participant_videos_list)
+        annotationlist = os.path.join(echodataset_path, participant_path_json_list)
 
-        self.video_filenames = [self.main_data_path + os.sep + line.strip() for line in open(videolist)]
-        self.annotation_filenames = [self.main_data_path + os.sep + line.strip() for line in open(annotationlist)]
+        self.video_filenames = [self.echodataset_path + os.sep + line.strip() for line in open(videolist)]
+        self.annotation_filenames = [self.echodataset_path + os.sep + line.strip() for line in open(annotationlist)]
 
         self.BACKGROUND_LABEL = 0
         self.FOURCV_LABEL = 1
@@ -195,19 +200,19 @@ class EchoClassesDataset(torch.utils.data.Dataset):
         """
 
         video_idx = self.idx_to_clip[index][0]
+        video_name = self.video_filenames[video_idx]
         clip_earliest_start_ms = self.idx_to_clip[index][2]
         clip_latest_end_ms = self.idx_to_clip[index][3]
         clip_label = self.idx_to_clip[index][4]
-
+        video_file_name_id = os.path.splitext(os.path.basename(video_name))[0][10:15]
         prefix = self.participant_videos_list.split('.')[0].split('_')[-1]
-        save_filename = self.temp_folder + '/videoID_{}_label_{}_{}.pth'.format(index, clip_label, prefix)
+        save_filename = self.temporal_data_path + '/videoID_{:02d}_{}_label_{:02d}.pth'.format(index, video_file_name_id, clip_label)
         if self.use_tmp_storage is True and os.path.isfile(save_filename) is True:
             video_data = torch.load(save_filename)
         else:
-            video_name = self.video_filenames[video_idx]
             cap = cv.VideoCapture(video_name)
             if cap.isOpened() == False:
-                print('[ERROR] [LusVideoDataset.__getitem__()] Unable to read video ' + video_name)
+                print('[ERROR] [EchoClassesDataset.__getitem__()] Unable to read video ' + video_name)
                 exit(-1)
 
             # extract the frames of the clip
@@ -249,11 +254,11 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             video_data = torch.stack(frames_torch)
 
             if self.use_tmp_storage is True and os.path.isfile(save_filename) is False:
-                if not os.path.isdir(self.temp_folder):
+                if not os.path.isdir(self.temporal_data_path):
                     print(
                         '[INFO] [EchoClassesDataset.__getitem__()] - computing clips and saving to temporary folder {}'.format(
-                            self.temp_folder))
-                    os.makedirs(self.temp_folder, exist_ok=False)
+                            self.temporal_data_path))
+                    os.makedirs(self.temporal_data_path, exist_ok=False)
                 torch.save(video_data, save_filename)
 
         # Now extract a random segment of number_of_frames_per_segment_in_a_clip from the video data.
@@ -279,7 +284,8 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
         if clip_data.shape[0] < self.number_of_frames_per_segment_in_a_clip:
             # if < 30frames, add the last one over, as if the user had frozen
-            extra_frames = [clip_data[-1, ...].unsqueeze(0)] * (self.number_of_frames_per_segment_in_a_clip - clip_data.shape[0])
+            extra_frames = [clip_data[-1, ...].unsqueeze(0)] * (
+                    self.number_of_frames_per_segment_in_a_clip - clip_data.shape[0])
             clip_data = torch.cat([clip_data] + extra_frames, dim=0)
 
         if self.transform is not None:
@@ -296,20 +302,21 @@ class EchoClassesDataset(torch.utils.data.Dataset):
 
         ## Sliding window for of random segment
         slided_window_segment = []
-        if self.sliding_window_length_in_percentage_of_frames_per_segment > 0.0 and self.sliding_window_length_in_percentage_of_frames_per_segment < 1.0 :
-            sliding_window_length_in_frame_length = int(self.number_of_frames_per_segment_in_a_clip * self.sliding_window_length_in_percentage_of_frames_per_segment)
+        if self.sliding_window_length_in_percentage_of_frames_per_segment > 0.0 and self.sliding_window_length_in_percentage_of_frames_per_segment < 1.0:
+            sliding_window_length_in_frame_length = int(
+                self.number_of_frames_per_segment_in_a_clip * self.sliding_window_length_in_percentage_of_frames_per_segment)
             # print( f' sliding_window_length: {sliding_window_length_in_frame_length}' )
             for i in range(0, self.number_of_frames_per_segment_in_a_clip):
-                max_window_length_i = i+ (sliding_window_length_in_frame_length-1)
+                max_window_length_i = i + (sliding_window_length_in_frame_length - 1)
                 if max_window_length_i < self.number_of_frames_per_segment_in_a_clip:
                     # print('window_idx',i, max_window_length_i)
-                    window_i = clip_data[i: max_window_length_i+1]
+                    window_i = clip_data[i: max_window_length_i + 1]
                     slided_window_segment.append(window_i)
             clip_data = torch.cat(slided_window_segment, dim=0)
 
-        clip_data = clip_data.to(self.device) # Tensor.Size([Fi,H,W])
-        clip_data = clip_data.unsqueeze(0) # add channel data Tensor.Size([C,Fi,H,W])
-        #clip_data = clip_data.permute(1, 0, 2, 3) # Permute Tensor.Size([Fi,C,H,W])
+        clip_data = clip_data.to(self.device)  # Tensor.Size([Fi,H,W])
+        clip_data = clip_data.unsqueeze(0)  # add channel data Tensor.Size([C,Fi,H,W])
+        # clip_data = clip_data.permute(1, 0, 2, 3) # Permute Tensor.Size([Fi,C,H,W])
 
         return clip_data, clip_label, clip_frame0, n_available_frames
 

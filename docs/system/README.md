@@ -1,5 +1,24 @@
 # Clinical system specifications  
 
+## GE Venue Go with software_version: 'R2'
+> A simple, fast and precise ultrasound for every moment, GE Healthcare’s Venue Go™ point of care ultrasound is designed to simplify the complex [:links:](https://www.gehealthcare.co.uk/products/ultrasound/point-of-care-ultrasound/venuego).
+
+* Display shows depth scale with focus marker, also used as depth and focal position gesture controller.
+
+## GE Probe 3SC-RS
+``` 
+Model: 3Sc-RS
+Type: Phased Array
+Specialism: Cardiology, Renal, Transcranial, Pediatric, Fetal
+Mode: 2D-Mode; M-Mode; Color Flow; CW Doppler; PW Doppler
+Frequency:  1.1 – 4.7 MHz
+Footprint: 18.4 x 23.7 mm
+FOV: 120 degrees
+```
+The mark in the probe is used to identify the side of the probe corresponding to the side of the image having the orientation mark on the display.
+The orientation marker on display match the orientation marker on the probe (Usually 'GE Venue' in green or yellow colour).
+
+
 ## EPIQ 7: Ultrasound system for cardiology  
 * Serial number and software version 
 ```

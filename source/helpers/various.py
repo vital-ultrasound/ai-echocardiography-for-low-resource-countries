@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-def plot_image_numpy_array(numpy_image, frame_index_i = None) -> None:
+
+def plot_image_numpy_array(numpy_image, frame_index_i=None) -> None:
     """
     plot_image_numpy_array
     """
@@ -35,7 +36,8 @@ def plot_dataset_classes(dataset, config) -> None:
     subplot_index = 0
     for clip_index_i in range(len(dataset)):
         data_idx = dataset[clip_index_i]
-        print(f'   Clip number: {clip_index_i}; Label: {labelnames[data_idx[1]]}   Random index in the segment clip: {data_idx[2]}             of n_available_frames {data_idx[3]}')
+        print(
+            f'   Clip number: {clip_index_i}; Label: {labelnames[data_idx[1]]}   Random index in the segment clip: {data_idx[2]}             of n_available_frames {data_idx[3]}')
 
         for frame_i in range(data_idx[0].shape[1]):
             plt.subplot(number_of_clips, data_idx[0].shape[1], subplot_index + 1)
@@ -193,7 +195,8 @@ def write_list_to_txtfile(list: List, filename: str, files_path: str) -> None:
         textfile.write(element + "\n")
 
 
-def split_train_validate_sets(echodataset_path: str, data_list_output_path: str, ntraining: float, randomise_file_list: bool = True) -> None:
+def split_train_validate_sets(echodataset_path: str, data_list_output_path: str, ntraining: float,
+                              randomise_file_list: bool = True) -> None:
     """
 
     Split paths to train and validate sets
@@ -219,18 +222,18 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     labellist = '{}{}'.format(data_list_output_path, all_labels_file)
 
     ## List all files with *echo*.[mM][pP][4]
-    result = list(sorted(Path(echodataset_path).rglob("*echo*.[mM][pP][4]")) )
-    with open(videolist, 'w') as f:
-        for fn in result:
-            fn_nopath = str(fn).replace(echodataset_path, '')
-            f.write(fn_nopath + '\n')
+    result = list(sorted(Path(echodataset_path).rglob("*echo*.[mM][pP][4]")))
+    with open(videolist, 'w') as file_list_txt:
+        for file_n in result:
+            file_n_nopath = str(file_n).replace(echodataset_path, '')
+            file_list_txt.write(file_n_nopath + '\n')
 
     ## List all files with *4CV.[jJ][sS][oO][nN]
-    result = list(sorted(Path(echodataset_path).rglob("*4CV.[jJ][sS][oO][nN]")))
-    with open(labellist, 'w') as f:
-        for fn in result:
-            fn_nopath = str(fn).replace(echodataset_path, '')
-            f.write(fn_nopath + '\n')
+    result = list(sorted(Path(echodataset_path).rglob("*4[cC][vV].[jJ][sS][oO][nN]")))
+    with open(labellist, 'w') as file_list_txt:
+        for file_n in result:
+            file_n_nopath = str(file_n).replace(echodataset_path, '')
+            file_list_txt.write(file_n_nopath + '\n')
 
     ## Load filenames into list
     video_filenames = [line.strip() for line in open(videolist)]
@@ -250,10 +253,15 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     label_filenames_validation = label_filenames[int(N * ntraining):]
 
     ## Display filenames
-    print(f'video_filenames_train: {video_filenames_train}')
-    print(f'label_filenames_train: {label_filenames_train}')
-    print(f'video_filenames_validation: {video_filenames_validation}')
-    print(f'label_filenames_validation: {label_filenames_validation}')
+    print(f'==================================')
+    print(f'======= video_filenames: {video_filenames}')
+    print(f'======= label_filenames: {label_filenames}')
+    print(f'==================================')
+    print(f'== video_filenames_train: {video_filenames_train}')
+    print(f'== label_filenames_train: {label_filenames_train}')
+    print(f'==================================')
+    print(f'== video_filenames_validation: {video_filenames_validation}')
+    print(f'== label_filenames_validation: {label_filenames_validation}')
 
     write_list_to_txtfile(video_filenames_train, 'video_list_train.txt', data_list_output_path)
     write_list_to_txtfile(label_filenames_train, 'annotation_list_train.txt', data_list_output_path)

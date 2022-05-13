@@ -13,7 +13,15 @@ annotation_list_??*.txt
 video_list_??*.txt
 
 ## Ignore user config  files
-config_users_paths_files_username_????.yml
+config_users_paths_files_username_????*.yml
 
 ## ignores vim temporal files
 **/*.swp
+
+## ignore models.pth
+**/model.pth
+**/metric_model.pth
+**/*metric_model.pth
+
+## ignore _anonymised.cvs
+**/*_anonymised.csv
