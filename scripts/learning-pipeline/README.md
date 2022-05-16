@@ -272,7 +272,8 @@ $ tree -s
 
 ## 2. Learning pipeline notebook
 The jupyter nobebook [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb) involves pre-processing, segment sampling, model and hyperparameter tunning pipeline (Fig. 1).
-![fig](../../figures/DL-pipeline.png)     
+
+![fig](../../figures/DL-pipeline.png)       
 _**Fig 1.** Deep learning pipeline of the AI-empowered echocardiography._
 
 * Open a terminal, load your conda environment and run the script.
@@ -285,8 +286,6 @@ jupyter notebook # to open *.ipynb in your web-browser
 
 * Temporal files
 `EchoClassesDataset()` creates a temporal tamp at `$HOME/datasets/vital-us/echocardiography/temporal-files/echovideodatafiles_FRAMESPERCLIP{$K}_PIXELSIZE_{$NW}W{$NH}H` where K are the `number_of_frames_per_segment_in_a_clip` and `{$NW}` and `{$NH}` are pixel size of the ultrasound image.
-
-**NOTE**. You might like to delete previous frames at `$HOME/tmp/echoviddata_{K}frames` where K are the `number_of_frames_per_segment_in_a_clip`.
 
 Example:
 ```
