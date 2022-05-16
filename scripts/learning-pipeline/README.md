@@ -1,22 +1,87 @@
 # Learning pipeline
 ## Introduction 
 The learning pipeline for the echochardiography datasets is based in the following elements: 
-Data-selection and management; Model training and tuning; Model validation (performance evaluation and clinical evaluation); AI-based device modification, and (perhaps) AI-based production model (Figure 1).   
+Data-selection and management; Model training and tuning; Model validation (performance evaluation and clinical evaluation); AI-based device modification, and (perhaps) AI-based production model (Fig. 1).   
 ![fig](../../figures/fig2-good-ml-dl-practices.png)   
 _Fig 1. Total product lifecycle (TPLC) approach on AI/ML workflow from [Good Machine Learning Practices](https://www.fda.gov/media/122535/download)_
 
 ## 1. Setting up your datasets and labels
-Prepare your mp4 files and annotations files as suggested [here](../curation-and-selection). 
-It is suggested that files have following organisation and localisation.
+Prepare your mp4 files and annotations files as suggested [here](../curation-selection-validation). 
+It is suggested that files follow this organisation and localisation.
 **NOTE**. extra video files can be renamed with a different extension to avoid taking them into account.
 
 <details>
   <summary>Click to expand and see files organisation and location! </summary>
   
 ```
-cd $HOME/datasets/vital-us/echocardiography/videos-echo-annotated
- tree -s
+
+$ cd /media/mx19/vitaluskcl/datasets/echocardiography/videos-echo-annotated-ALL
+$ tree -s
 .
+├── [       4096]  01NVb-003-050
+│   ├── [       4096]  T1
+│   │   ├── [        986]  01NVb-003-050-1-4CV.json
+│   │   └── [ 1803334463]  01NVb-003-050-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [        988]  01NVb-003-050-2-4CV.json
+│   │   └── [ 1752445210]  01NVb-003-050-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [        987]  01NVb-003-050-3-4CV.json
+│       └── [ 1062609410]  01NVb-003-050-3 echo.mp4
+├── [       4096]  01NVb-003-051
+│   ├── [       4096]  T1
+│   │   ├── [        986]  01NVb-003-051-1-4CV.json
+│   │   └── [  826247505]  01NVb-003-051-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [        988]  01NVb-003-051-2-4CV.json
+│   │   └── [ 1234164657]  01NVb-003-051-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [        906]  01NVb-003-051-3-4CV.json
+│       └── [ 1198707159]  01NVb-003-051-3 echo.mp4
+├── [       4096]  01NVb-003-054
+│   ├── [       4096]  T1
+│   │   ├── [        988]  01NVb-003-054-1-4CV.json
+│   │   └── [  999313763]  01NVb-003-054-1 echo.mp4
+│   ├── [       4096]  T2
+│   └── [       4096]  T3
+│       ├── [        987]  01NVb-003-054-3-4CV.json
+│       └── [  948032732]  01NVb-003-054-3 echo.mp4
+├── [       4096]  01NVb-003-055
+│   ├── [       4096]  T1
+│   ├── [       4096]  T2
+│   └── [       4096]  T3
+├── [       4096]  01NVb-003-056
+│   ├── [       4096]  T1
+│   ├── [       4096]  T2
+│   │   ├── [        905]  01NVb-003-056-2-4CV.json
+│   │   ├── [  278549244]  01NVb-003-056-2 echo cont_mp4_
+│   │   └── [ 2101040630]  01NVb-003-056-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [        906]  01NVb-003-056-3-4CV.json
+│       ├── [  370831920]  01NVb-003-056-3 echo cont_mp4_
+│       └── [ 2101400984]  01NVb-003-056-3 echo.mp4
+├── [       4096]  01NVb-003-057
+│   ├── [       4096]  T1
+│   ├── [       4096]  T2
+│   │   ├── [        908]  01NVb-003-057-2-4CV.json
+│   │   └── [ 2097924623]  01NVb-003-057-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [        994]  01NVb-003-057-3-4CV.json
+│       └── [ 1488090627]  01NVb-003-057-3 echo.mp4
+├── [       4096]  01NVb-003-058
+│   ├── [       4096]  T1
+│   │   ├── [        904]  01NVb-003-058-1-4CV.json
+│   │   └── [ 1903280524]  01NVb-003-058-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [        986]  01NVb-003-058-2-4CV.json
+│   │   └── [ 1093631405]  01NVb-003-058-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [       1068]  01NVb-003-058-3-4CV.json
+│       └── [  928612373]  01NVb-003-058-3 echo.mp4
+├── [       4096]  01NVb-003-059
+│   ├── [       4096]  T1
+│   ├── [       4096]  T2
+│   └── [       4096]  T3
 ├── [       4096]  01NVb-003-060
 │   ├── [       4096]  T1
 │   │   ├── [        904]  01NVb-003-060-1-4CV.json
@@ -80,24 +145,136 @@ cd $HOME/datasets/vital-us/echocardiography/videos-echo-annotated
 │   └── [       4096]  T3
 │       ├── [        998]  01NVb-003-068-3-4CV.json
 │       └── [ 1104881573]  01NVb-003-068-3 echo.mp4
-└── [       4096]  01NVb-003-069
+├── [       4096]  01NVb-003-069
+│   ├── [       4096]  T1
+│   │   ├── [        987]  01NVb-003-069-1-4CV.json
+│   │   └── [ 1358342013]  01NVb-003-069-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [        987]  01NVb-003-069-2-4CV.json
+│   │   └── [ 1783210718]  01NVb-003-069-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [        988]  01NVb-003-069-3-4CV.json
+│       └── [ 1178134931]  01NVb-003-069-3 echo.mp4
+├── [       4096]  01NVb-003-070
+│   ├── [       4096]  T1
+│   │   ├── [       1263]  01NVb-003-070-1-4CV.json
+│   │   └── [ 1787863710]  01NVb-003-070-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [       1267]  01NVb-003-070-2-4CV.json
+│   │   └── [ 2041918386]  01NVb-003-070-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [       1017]  01NVb-003-070-3-4CV.json
+│       └── [ 1240743015]  01NVb-003-070-3 echo.mp4
+├── [       4096]  01NVb-003-071
+│   ├── [       4096]  T1
+│   │   ├── [       1017]  01NVb-003-071-1-4CV.json
+│   │   └── [ 1364777706]  01NVb-003-071-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [       1097]  01NVb-003-071-2-4CV.json
+│   │   └── [ 1298512277]  01NVb-003-071-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [       1017]  01NVb-003-071-3-4CV.json
+│       └── [ 1301733199]  01NVb-003-071-3 echo.mp4
+├── [       4096]  01NVb-003-072
+│   ├── [       4096]  T1
+│   │   ├── [ 1388265714]  01NVb-003-072-1-echo.mp4
+│   │   └── [        973]  01NVb_003_072_T1_4CV.json
+│   ├── [       4096]  T2
+│   │   ├── [ 1322123044]  01NVb-003-072-2-echo-cont.mp4
+│   │   ├── [       1152]  01NVb_003_072_T2_4CV.json
+│   │   └── [       4096]  extras
+│   │       └── [  249100024]  01NVb-003-072-2-echo_mp4_
+│   └── [       4096]  T3
+│       ├── [ 1226636344]  01NVb-003-072-3-echo.mp4
+│       └── [       1060]  01NVb_003_072_T3_4CV.json
+├── [       4096]  01NVb-003-073
+│   ├── [       4096]  T1
+│   │   ├── [       1101]  01NVb-003-073-1-4CV.json
+│   │   └── [ 1484818675]  01NVb-003-073-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [       1017]  01NVb-003-073-2-4CV.json
+│   │   └── [ 1195148922]  01NVb-003-073-2 echo.mp4
+│   └── [       4096]  T3
+├── [       4096]  01NVb-003-074
+│   ├── [       4096]  T1
+│   │   ├── [       1101]  01NVb-003-074-1-4CV.json
+│   │   └── [ 1092197139]  01NVb-003-074-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [       1094]  01NVb-003-074-2-4CV.json
+│   │   └── [ 1123518452]  01NVb-003-074-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [        934]  01NVb-003-074-3-4CV.json
+│       └── [ 1383799102]  01NVb-003-074-3 echo.mp4
+├── [       4096]  01NVb-003-075
+│   ├── [       4096]  T1
+│   │   ├── [       1017]  01NVb-003-075-1-4CV.json
+│   │   └── [ 1400306121]  01NVb-003-075-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [       1101]  01NVb-003-075-2-4CV.json
+│   │   └── [  849445313]  01NVb-003-075-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [       1098]  01NVb-003-075-3-4CV.json
+│       └── [  745483429]  01NVb-003-075-3 echo.mp4
+├── [       4096]  01NVb-003-076
+│   ├── [       4096]  T1
+│   │   ├── [       1016]  01NVb-003-076-1-4CV.json
+│   │   └── [ 1766650850]  01NVb-003-076-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [       1014]  01NVb-003-076-2-4CV.json
+│   │   └── [ 1731627481]  01NVb-003-076-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [       1098]  01NVb-003-076-3-4CV.json
+│       └── [ 1092363409]  01NVb-003-076-3 echo.mp4
+├── [       4096]  01NVb-003-077
+│   ├── [       4096]  T1
+│   │   ├── [        934]  01NVb-003-077-1-4CV.json
+│   │   ├── [ 2099232646]  01NVb-003-077-1 echo.mp4
+│   │   └── [       4096]  extras
+│   │       └── [  563329651]  01NVb-003-077-1_cont_mp4_
+│   ├── [       4096]  T2
+│   │   ├── [        934]  01NVb-003-077-2-4CV.json
+│   │   └── [  839594375]  01NVb-003-077-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [        934]  01NVb-003-077-3-4CV.json
+│       └── [  965203789]  01NVb-003-077-3 echo.mp4
+├── [       4096]  01NVb-003-078
+│   ├── [       4096]  T1
+│   │   ├── [       1017]  01NVb-003-078-1-4CV.json
+│   │   └── [ 1222683293]  01NVb-003-078-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [       1014]  01NVb-003-078-2-4CV.json
+│   │   └── [  789414594]  01NVb-003-078-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [       1015]  01NVb-003-078-3-4CV.json
+│       └── [  934204569]  01NVb-003-078-3 echo.mp4
+├── [       4096]  01NVb-003-079
+│   ├── [       4096]  T1
+│   │   ├── [       1017]  01NVb-003-079-1-4CV.json
+│   │   └── [  956782521]  01NVb-003-079-1 echo.mp4
+│   ├── [       4096]  T2
+│   │   ├── [       1099]  01NVb-003-079-2-4CV.json
+│   │   └── [  999452084]  01NVb-003-079-2 echo.mp4
+│   └── [       4096]  T3
+│       ├── [       1099]  01NVb-003-079-3-4CV.json
+│       └── [  854992210]  01NVb-003-079-3 echo.mp4
+└── [       4096]  01NVb-003-080
     ├── [       4096]  T1
-    │   ├── [        987]  01NVb-003-069-1-4CV.json
-    │   └── [ 1358342013]  01NVb-003-069-1 echo.mp4
+    │   ├── [       1014]  01NVb-003-080-1-4CV.json
+    │   └── [  945233039]  01NVb-003-080-1-echo.mp4
     ├── [       4096]  T2
-    │   ├── [        987]  01NVb-003-069-2-4CV.json
-    │   └── [ 1783210718]  01NVb-003-069-2 echo.mp4
+    │   └── [  878901648]  01NVb-003-080-2 echo_mp4_
     └── [       4096]  T3
-        ├── [        988]  01NVb-003-069-3-4CV.json
-        └── [ 1178134931]  01NVb-003-069-3 echo.mp4
+        └── [  527090944]  01NVb-003-080-3 echo_mp4_
 
-37 directories, 36 files
+115 directories, 132 files
 ```
 </details>
 
+## 2. Learning pipeline notebook
+The jupyter nobebook [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb) involves pre-processing, segment sampling, model and hyperparameter tunning pipeline (Fig. 1).
+![fig](../../figures/DL-pipeline.png)     
+_**Fig 1.** Deep learning pipeline of the AI-empowered echocardiography._
 
-## 2. Learning pipeline scripts 
-### [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb)
 * Open a terminal, load your conda environment and run the script.
 ```
 cd $HOME/repositories/echocardiography/scripts/learning-pipeline
@@ -130,7 +307,3 @@ total 269M
 10101278 -rw-rw-r-- 1 mx19 mx19 9.5M Feb  9 12:25 videoID_12_label_0_train.pth
 ```
 
-### Echochardiography classes
-The following figure illustrate the pipeline to create classes for background and 4CH; segments of random clips; segment sampling and frame sliding window techniques.
-![fig](../../figures/classes-windowing-sampling.png)  
-_Fig 2. Description of clips, videos and classes for 4CV_

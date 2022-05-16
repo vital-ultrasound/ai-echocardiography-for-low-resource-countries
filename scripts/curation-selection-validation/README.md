@@ -287,6 +287,11 @@ See further instructions [here](../config_files/users_paths_files).
 The animation illustrates clips for background and four chamber view for a specified subject and number of frames per clip. 
 ![fig](../../figures/example_of_subject073_clips_1-4.gif)
 
+## 3. Echochardiography classes
+The following figure illustrate the pipeline to create classes for background and 4CH; segments of random clips; segment sampling and frame sliding window techniques.
+![fig](../../figures/classes-windowing-sampling.png)  
+_Fig 2. Description of clips, videos and classes for 4CV_
+
 ## 3. Other scripts for curation, selection and validation 
 
 ### [`video_to_imageframes.py`](video_to_imageframes.py)
