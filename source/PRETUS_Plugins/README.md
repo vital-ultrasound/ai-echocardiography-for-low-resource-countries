@@ -1,4 +1,4 @@
-# PRETUS Plug-ins
+# Plug-in based, Real-time Ultrasound (PRETUS) Plugins
 
 ## Authors
 Author: Alberto Gomez (alberto.gomez@kcl.ac.uk)   
