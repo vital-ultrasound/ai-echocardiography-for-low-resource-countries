@@ -282,28 +282,22 @@ export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environme
 conda activate rt-ai-echo-VE 
 jupyter notebook # to open *.ipynb in your web-browser
 ```
+
+* Temporal files
+`EchoClassesDataset()` creates a temporal tamp at `$HOME/datasets/vital-us/echocardiography/temporal-files/echovideodatafiles_FRAMESPERCLIP{$K}_PIXELSIZE_{$NW}W{$NH}H` where K are the `number_of_frames_per_segment_in_a_clip` and `{$NW}` and `{$NH}` are pixel size of the ultrasound image.
+
 **NOTE**. You might like to delete previous frames at `$HOME/tmp/echoviddata_{K}frames` where K are the `number_of_frames_per_segment_in_a_clip`.
 
-* Description when using echo_classes.py
-``` 
-* 'participant 072 with T1-01clips; T2-03clips; T3-02clips' with`echo_classes.py` generates 12 clips
-* 'participant 074 - T1-02clips; T2-02clips; T3-00clips' with `echo_classes.py` generates 8 clips
-* 'participant 072 with T1-01clips;' with `echo_classes.py` generate 2 clips 
-* 'participant 072 with T2-03clips;' with `echo_classes.py` generate 6 clips
-* 'participant 072 with T3-02clips;' with `echo_classes.py` generate 4 clips
-```
-
-* Temporal files 
-`EchoClassesDataset()` creates a temporal tamp at `$HOME/tmp/echoviddata_{K}frames` where K are the `number_of_frames_per_segment_in_a_clip`.  
 Example:
 ```
-mx19@sie133-lap:~/tmp/echoviddata_10frames$ ll
-total 269M
-10133820 drwxrwxr-x 2 mx19 mx19 4.0K Feb  9 12:25 .
-10133817 drwxrwxr-x 3 mx19 mx19 4.0K Feb  9 12:25 ..
-10094468 -rw-rw-r-- 1 mx19 mx19 9.4M Feb  9 12:25 videoID_0_label_0_train.pth
-10101267 -rw-rw-r-- 1 mx19 mx19 5.2M Feb  9 12:25 videoID_10_label_0_train.pth
-10101269 -rw-rw-r-- 1 mx19 mx19 9.4M Feb  9 12:25 videoID_11_label_0_train.pth
-10101278 -rw-rw-r-- 1 mx19 mx19 9.5M Feb  9 12:25 videoID_12_label_0_train.pth
+mx19@sie133-lap:~/datasets/vital-us/echocardiography/temporal-files/echovideodatafiles_FRAMESPERCLIP500_PIXELSIZE_200W200H$ ll
+total 1.9G
+13370667 drwxrwxr-x 2 mx19 mx19  12K May 16 13:50 .
+12599341 drwxrwxr-x 3 mx19 mx19 4.0K May 16 13:48 ..
+13373904 -rw-rw-r-- 1 mx19 mx19  24M May 16 13:49 videoID_00_040-1_label_00.pth
+13374254 -rw-rw-r-- 1 mx19 mx19  23M May 16 13:49 videoID_00_043-2_label_00.pth
+13373934 -rw-rw-r-- 1 mx19 mx19  23M May 16 13:49 videoID_01_040-2_label_00.pth
+13374255 -rw-rw-r-- 1 mx19 mx19  23M May 16 13:49 videoID_01_041-3_label_00.pth
+13373958 -rw-rw-r-- 1 mx19 mx19  23M May 16 13:49 videoID_02_040-1_label_00.pth
 ```
 
