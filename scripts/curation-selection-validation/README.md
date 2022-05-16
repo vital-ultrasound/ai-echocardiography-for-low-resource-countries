@@ -1,9 +1,13 @@
 # Curation, selection and validation of US imaging datasets
 
-## Datasets file organisation and localisation 
+## 1. Datasets file organisation and localisation 
 It is suggested that datasets in the local machine are placed in the following location:
 ``` 
 cd $HOME/datasets/vital-us/echocardiography/videos-echo-annotated
+```
+Alternatively, data can also be located in a portable hard-drive, e.g.:
+``` 
+cd /media/mx19/vitaluskcl/datasets/echocardiography/
 ```
 
 <details>
@@ -267,7 +271,7 @@ mx19@sie133-lap:~/datasets/vital-us/echocardiography/videos-echo-annotated$ tree
 </details>
 
 
-## Notebook [`validation-of-4cv-labels.ipynb`](validation-of-4cv-labels.ipynb)
+## 2. Jupyter notebook [`validation-of-4cv-labels.ipynb`](validation-of-4cv-labels.ipynb)
 * Create `config_users_paths_files_username_$USER_validation.yml` [as shown here](../../scripts/config_files/users_paths_files) 
 * Load notebook using the following commands:
 ```
@@ -276,9 +280,16 @@ export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environme
 conda activate rt-ai-echo-VE
 jupyter notebook # to open *.ipynb in your web-browser
 ```
-**NOTE**. Create a new config file called `config_users_paths_files_username_$USER_validation.yml` (see further instructions [here](../config_files/users_paths_files/README.md))
+**NOTE**. Create a new config file called `config_users_paths_files_username_$USER_validation.yml`.
+See further instructions [here](../config_files/users_paths_files). 
 
-## [`video_to_imageframes.py`](video_to_imageframes.py)
+* Temporal files will be created at `$HOME/datasets/vital-us/echocardiography/temporal-files`
+The animation illustrates clips for background and four chamber view for a specified subject and number of frames per clip. 
+![fig](../../figures/example_of_subject073_clips_1-4.gif)
+
+## 3. Other scripts for curation, selection and validation 
+
+### [`video_to_imageframes.py`](video_to_imageframes.py)
 The script converts mp4 videos to png image frames of masked videos (Fig 1).
 ![fig](../../figures/masked-captured-image-frame.png)
 **Fig 1** Example of masks (green geometric forms) in the capture ultrasound image.
@@ -291,12 +302,12 @@ conda activate rt-ai-echo-VE
 python video_to_imageframes.py --config ../config_files/config_v2i.yml  
 ```
 
-See output of convered frames at
+See output of converted frames at
 ``` 
 cd $HOME/datasets/vital-us/echocardiography/preprocessed-datasets
 ```
 
-## [`png_to_avi.py`](png_to_avi.py)
+### [`png_to_avi.py`](png_to_avi.py)
 Terminal commands:
 ```
 conda activate rt-ai-echo-VE
@@ -305,7 +316,7 @@ python png_to_avi.py --config ../config_files/config_i2v.yml
 ```
 
 
-## [`video2sliding-video.py`](video_to_sliding_video.py)
+### [`video2sliding-video.py`](video_to_sliding_video.py)
 Terminal commands:
 ```
 conda activate rt-ai-echo-VE
@@ -315,7 +326,7 @@ python video_to_sliding_video.py
     --videofile_out $HOME/datasets/vital-us/preprocessed-datasets/tmp/01NVb-003-001-echo-sliced.mp4 --bounds 100 100  
 ```
 
-## [`video_channel_measurement.py`](video_channel_measurement.py) 
+### [`video_channel_measurement.py`](video_channel_measurement.py) 
 This script helps identify good pairs of images/labels and save them to a folder.   
 Terminal commands:
 ``` 
@@ -327,8 +338,11 @@ python video_channel_measurement.py
 ```
 
 
-## Curated datasets of Cropped Four Chamber View datasets
-### Paths 
+### Curated datasets of Cropped Four Chamber View datasets
+
+<details>
+  <summary>Click to expand and see files organisation and location! </summary>
+
 ``` 
 mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb-003-072$ tree -d
 .
@@ -470,3 +484,5 @@ mx19@sie133-lap:~/datasets/vital-us/echocardiography/preprocessed-datasets/01NVb
 
 0 directories, 6 files
 ```
+
+</details>
