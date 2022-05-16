@@ -19,4 +19,4 @@ config_users_paths_files_username_????*.yml
 **/*.swp
 
 ## ignore models.pth
-**/model.pth
+**/*model.pth
