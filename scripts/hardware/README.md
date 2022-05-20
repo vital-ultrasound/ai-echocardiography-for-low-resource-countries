@@ -14,28 +14,38 @@ conda activate rt-ai-echo-VE
 #python framegrabber_capturing_video.py --frame_width 1024 --frame_height 768 --frames_per_second 60
 #python framegrabber_capturing_video.py --frame_width 1280 --frame_height 960 --frames_per_second 30 
 #python framegrabber_capturing_video.py --frame_width 1280 --frame_height 960 --frames_per_second 60 # DISPLAY BLACK_SCREEN
-#python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60
+#python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60 --buffer_size 2
 ```
 
 * Terminal logs
 
+ * --fW 1024 --fH 768 --FPS 60 --buffer_size 1 
 ``` 
-python framegrabber_capturing_video.py --frame_width 1024 --frame_height 768 --frames_per_second 60
-
+python framegrabber_capturing_video.py --fW 1024 --fH 768 --FPS 60 --buffer_size 1 
 fps: 60.0
 resolution: 1024.0x768.0
 mode: MJPG
 Buffer size: 1.0
 ```
 
+ * --fW 1280 --fH 960 --FPS 30 --buffer_size 1
 ``` 
-python framegrabber_capturing_video.py --frame_width 1920 --frame_height 1080 --frames_per_second 60
+python framegrabber_capturing_video.py --fW 1280 --fH 960 --FPS 30 --buffer_size 1
+fps: 30.0
+resolution: 1280.0x960.0
+mode: MJPG
+Buffer size: 1.0
+``` 
 
+ * --fW 1920 --fH 1080 --FPS 60 --buffer_size 1
+``` 
+python framegrabber_capturing_video.py --fW 1920 --fH 1080 --FPS 60 --buffer_size 1
 fps: 60.0
 resolution: 1920.0x1080.0
 mode: MJPG
 Buffer size: 1.0
 ```
+
 * Screenshots 
 
 Various images size with mainly 60 and 30 frames per second were tested.

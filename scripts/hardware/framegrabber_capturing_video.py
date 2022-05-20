@@ -7,11 +7,11 @@ def decode_fourcc(cc):
     return "".join([chr((int(cc) >> 8 * i) & 0xFF) for i in range(4)])
 
 
-def CaptureVideoTests(frame_width: int, frame_height: int, frames_per_second: int):
+def CaptureVideoTests(frame_width: int, frame_height: int, frames_per_second: int, buffer_size: int):
     ID_FRAMEGRABBER = 2
 
     cap = cv2.VideoCapture(ID_FRAMEGRABBER, cv2.CAP_V4L2)
-    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+    cap.set(cv2.CAP_PROP_BUFFERSIZE, buffer_size)
     #cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('Y', 'U', 'Y', 'V'))
     #cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('B', 'G', 'R', '3')) #don't make any effect and leave it as "YUYV"
     #cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')) #don't make any effect and leave it as "YUYV"
@@ -52,12 +52,13 @@ def CaptureVideoTests(frame_width: int, frame_height: int, frames_per_second: in
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--frame_width', required=True, help='Specify width of the image', type=int)
-    parser.add_argument('--frame_height', required=True, help='Specify high of the image', type=int)
-    parser.add_argument('--frames_per_second', required=True, help='Specify FPS', type=int)
+    parser.add_argument('--fW', required=True, help='Specify width of the image', type=int)
+    parser.add_argument('--fH', required=True, help='Specify high of the image', type=int)
+    parser.add_argument('--FPS', required=True, help='Specify FPS', type=int)
+    parser.add_argument('--buffer_size', required=True, help='Specify buffer_size', type=int)
     args = parser.parse_args()
 
-    CaptureVideoTests(args.frame_width, args.frame_height, args.frames_per_second)
+    CaptureVideoTests(args.fW, args.fH, args.FPS, args.buffer_size)
 
 if __name__ == '__main__':
     main()
