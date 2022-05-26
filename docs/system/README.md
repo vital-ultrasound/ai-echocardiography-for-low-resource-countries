@@ -3,26 +3,8 @@
 ![fig](../../figures/rt-ai-system.png)
 _**Fig 1.** Real-time AI-empowered clinical system._
 
-## GE Venue Go with software_version: 'R2'
-> A simple, fast and precise ultrasound for every moment, GE Healthcare’s Venue Go™ point of care ultrasound is designed to simplify the complex [:links:](https://www.gehealthcare.co.uk/products/ultrasound/point-of-care-ultrasound/venuego).
-
-* Display shows depth scale with focus marker, also used as depth and focal position gesture controller.
-
-## GE Probe 3SC-RS
-``` 
-Model: 3Sc-RS
-Type: Phased Array
-Specialism: Cardiology, Renal, Transcranial, Pediatric, Fetal
-Mode: 2D-Mode; M-Mode; Color Flow; CW Doppler; PW Doppler
-Frequency:  1.1 – 4.7 MHz
-Footprint: 18.4 x 23.7 mm
-FOV: 120 degrees
-```
-The mark in the probe is used to identify the side of the probe corresponding to the side of the image having the orientation mark on the display.
-The orientation marker on display match the orientation marker on the probe (Usually 'GE Venue' in green or yellow colour).
-
-
-## EPIQ 7: Ultrasound system for cardiology  
+## Ultrasound Clinical Devices
+### EPIQ 7: Ultrasound system for cardiology  
 * Serial number and software version 
 ```
 Serial Number: US714B0455
@@ -54,7 +36,7 @@ References:
 https://www.philips.com/consumerfiles/newscenter/gb_en/standard/resources/pdf/Inside-Innovation-Backgrounder-EPIQ.pdf
 https://www.usa.philips.com/healthcare/product/HC795200C/epiq-7-ultrasound-system-for-cardiology#documents    
 
-## X5-1: xMATRIX array transducer with PureWave crystal technology
+### X5-1: xMATRIX array transducer with PureWave crystal technology
 * Serial number and software version 
 ```
 453561457413
@@ -80,7 +62,27 @@ Physical dimensions: 9.2 x 3.9 x 2.9 cm (3.6 x1.5 x 1.1 in) LWD
 References:   
 https://www.philips.co.uk/healthcare/product/HC989605400801/x5-1
 
-## USB framegrabber 
+### GE Venue Go with software_version: 'R2'
+> A simple, fast and precise ultrasound for every moment, GE Healthcare’s Venue Go™ point of care ultrasound is designed to simplify the complex [:links:](https://www.gehealthcare.co.uk/products/ultrasound/point-of-care-ultrasound/venuego).
+
+* Display shows depth scale with focus marker, also used as depth and focal position gesture controller.
+
+### GE Probe 3SC-RS
+``` 
+Model: 3Sc-RS
+Type: Phased Array
+Specialism: Cardiology, Renal, Transcranial, Pediatric, Fetal
+Mode: 2D-Mode; M-Mode; Color Flow; CW Doppler; PW Doppler
+Frequency:  1.1 – 4.7 MHz
+Footprint: 18.4 x 23.7 mm
+FOV: 120 degrees
+```
+The mark in the probe is used to identify the side of the probe corresponding to the side of the image having the orientation mark on the display.
+The orientation marker on display match the orientation marker on the probe (Usually 'GE Venue' in green or yellow colour).
+
+
+
+## USB video framegrabber 
 
 ### MiraBox Video Capture 
 >  【HDMI USB3.0 Capture with Strong compatibility】The 1080P HDMi Capture Card Support for all 1080P 720P HDMI device, such as Wii U, PS4, PS3, Xbox One, Xbox 360, Wii, Switch, DVD, camera,Mobile phone(Apple iphone,Huawei), ZOSI security camera, DSLR and set top box etc. It is compatible with Linux, Mac OS, windows 7/8/10, very easy to setup, there is Plug and Play,No Need to Install Driver.  
@@ -97,8 +99,9 @@ HDMI Input Formats 	480i,480p,576i,576p,720p50,720p60,1080i50,1080i60,1080p24/25
 Software Compatibility 	Windows Media Encoder (Windows), Adobe Flash Media Live Encoder (Windows), Real Producer Plus (Windows), VLC (Windows, Linux),Wirecast (Windows), Potplayer(Windows)and etc. 
 ``` 
 
-References:  
-https://miraboxbuy.com/collections/new-arrivals/products/hsv3211-video-capture-card 
+References:
+* Manufacturer: https://miraboxbuy.com/collections/new-arrivals/products/hsv3211-video-capture-card 
+* Manual: http://video.hotspotek.com.cn/hsv-3211.html
 
 ### epiphan avio-hd
 > The plug-and-play Epiphan AV.io HD™ capture card is as rugged as it is easy to use. Just connect your HDMI, DVI, or VGA video source to your AV.io HD, and your AV.io HD to your computer via USB. Windows, Mac, and Linux operating systems will auto-detect the AV.io HD capture card – no driver installation required.
