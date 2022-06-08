@@ -1,15 +1,10 @@
 # 4 chamber detection for echocardiography
-
-## Authors
-Author: Alberto Gomez (alberto.gomez@kcl.ac.uk)      
-Contributors: Miguel Xochicale (miguel.xochicale@kcl.ac.uk)   
-
 ## Summary
 This plug-in classifies input videos into 2 classes: Background or 4 chamber view. 
 The model is implemented in Pytorch.
 
 ## Usage within PRETUS
-After building the standalone software, you should see the plug-in and it's help when running pretus:
+* After building plugin, you can then run launcher help
 ```
 $ ./launcher_pretus.sh -h
 
@@ -39,10 +34,9 @@ $ ./launcher_pretus.sh -h
 	--fourchamberdetection_showassistant 0/1 [ type: BOOL]	whether to show the AI assistant (1) or not (0) (Default: 1) 
 
 ```
-
-To run the plug-in, you need to specify a video (or real time input). For instance:
+* Run the plug-in, where you need to specify a video (or real time input). For instance:
 ```
 $ ./launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/data/VITAL/echo/01NVb-003-004-1lus.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
 ```
-producing a GUI as shown below:
+producing a GUI as shown below:    
 ![pretus](art/pretus-echo.gif)

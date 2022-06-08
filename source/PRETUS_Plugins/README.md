@@ -1,17 +1,10 @@
-# PRETUS Plugins: Plug-in based, Real-time Ultrasound 
-
-## Authors
-Author: Alberto Gomez (alberto.gomez@kcl.ac.uk)   
-Contributors: Miguel Xochicale (miguel.xochicale@kcl.ac.uk)   
-
-## Summary
-[PRETUS](https://github.com/gomezalberto/pretus) Plug-ins for the echocardiography ultrasound. 
-These plug-ins work with the PRETUS software which can be retrieved.
+# Plug-in based, Real-time Ultrasound (PRETUS) Plugins
+These [PRETUS](https://github.com/gomezalberto/pretus) plug-ins for the echocardiography ultrasound. 
 
 ## Content
 * [Plugin_fourchdetection](Plugin_fourchdetection) which contains the four chamber detection plug-in that differentiates between 4 chamber and background classes in real-time.
 
-## Building and installation instructions with dependencies
+## Installation and dependencies
 See https://github.com/gomezalberto/pretus
 
 ## References
