@@ -62,6 +62,23 @@ Physical dimensions: 9.2 x 3.9 x 2.9 cm (3.6 x1.5 x 1.1 in) LWD
 References:   
 https://www.philips.co.uk/healthcare/product/HC989605400801/x5-1
 
+### X5-1 Modes in EPIQ 7
+* Adult Echo: EF & Volumen measurements
+```
+Simpson's: A4Cd, A4Cs, etc.
+A/L: LA A4C-A/L; RA A4C-A/L, etc...
+EF(options): EF A4C-a2DQ; EF VOL-HM; etc... 
+```
+
+* Echo Pen: EF & Volumen measurements
+```
+Simpson's: A4Cd, A4Cs, etc.
+A/L: LA A4C-A/L; RA A4C-A/L, etc...
+EF(options): EF A4C-a2DQ; EF VOL-HM; etc... 
+```
+
+* Abdomen (Abd Vasc) and TCD are also available 
+
 ### GE Venue Go with software_version: 'R2'
 > A simple, fast and precise ultrasound for every moment, GE Healthcare’s Venue Go™ point of care ultrasound is designed to simplify the complex [:links:](https://www.gehealthcare.co.uk/products/ultrasound/point-of-care-ultrasound/venuego).
 
