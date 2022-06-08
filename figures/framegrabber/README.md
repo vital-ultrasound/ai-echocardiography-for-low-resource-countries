@@ -4,7 +4,7 @@ Test of different image size and frame rates.
 
 The following images were obtained with [`python framegrabber_capturing_video.py --fW 1024 --fH 768 --FPS 60 --buffer_size `](../../scripts/hardware/) 
 
-## Using X5-1 probe 
+## X5-1: xMATRIX, PureWave; Number of elements: 3040; Frequency range: 5 - 1 MHz; Array Type: Sector, Volume Sector
 
 * W640H480PS60  
 ![fig](frame_screenshot_W640H480PS60.png)
@@ -28,21 +28,21 @@ The following images were obtained with [`python framegrabber_capturing_video.py
   * _W1280H960FPS60_MJPG
   ![fig](frame_screenshot_W1280H960FPS60_MJPG_X51_adultecho.png)
   
-* echopen 
+* echopen:
   * _W1280H960FPS30_MJPG
   ![fig](frame_screenshot_W1280H960FPS30_MJPG_X51_echopen.png)
   * _W1280H960FPS60_MJPG
   ![fig](frame_screenshot_W1280H960FPS60_MJPG_X51_echopen.png)
 
-* AbdVasc
+* AbdVasc:
   * _W1280H960FPS60_MJPG
   ![fig](frame_screenshot_W1280H960FPS60_MJPG_X51_AbdVasc.png)
 
-* TCD
+* TCD:
   * _W1280H960FPS60_MJPG
   ![fig](frame_screenshot_W1280H960FPS60_MJPG_X51_TCD.png)
 
-## Using X6-1 probe 
+## X6-1: xMATRIX, PureWave; Number of elements: 9212; Frequency range: 6 - 1 MHz; Array Type: Sector, Volume Sector
 
 * frame_screenshot_W1280H960FPS30_MJPG
 ![fig](frame_screenshot_W1280H960FPS30_MJPG.png)
