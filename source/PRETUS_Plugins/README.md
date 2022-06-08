@@ -12,12 +12,13 @@ See https://github.com/gomezalberto/pretus
 * Creating building paths
 ``` 
 Source code: $HOME/repositories/echocardiography/source/PRETUS_Plugins
-Where to build binaries: $HOME/build/pretus/release
+Where to build binaries: $HOME/build/pretus/4cv
 ```
 
 * CMake tags in PRETUS
 ``` 
     CMAKE_INSTALL_PREFIX set to $HOME/local/pretus   (Press configure)
+    PLUGIN_INCLUDE_DIR set to $HOME/local/pretus/include (Press configure)
     VTK_DIR set to $HOME/workspace/VTK/release  (Press configure)
     ITK_DIR set to $HOME/workspace/ITK/release (Press configure) 
     
@@ -38,7 +39,7 @@ Where to build binaries: $HOME/build/pretus/release
         
 ```
 
-* Go to the build folder in the terminal  `cd $HOME/build/pretus/4cv`, do make, and make install.
+* Go to the build folder in the terminal  `cd $HOME/build/pretus/4cv`, do `make`, and `make install`.
 
 
 ## References
