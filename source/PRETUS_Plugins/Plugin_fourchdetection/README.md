@@ -8,9 +8,8 @@ Contributors: Miguel Xochicale (miguel.xochicale@kcl.ac.uk)
 This plug-in classifies input videos into 2 classes: Background or 4 chamber view. 
 The model is implemented in Pytorch.
 
-
 ## Usage within PRETUS
-After building the standalone software [PRETUS](https://github.com/gomezalberto/pretus), and after adding the path where this plug-in is installed in the pretus config file (`~/.config/iFIND/PRETUS.conf`), you should see the plug-in and it's help when running pretus:
+After building the standalone software, you should see the plug-in and it's help when running pretus:
 ```
 $ ./launcher_pretus.sh -h
 
@@ -41,11 +40,9 @@ $ ./launcher_pretus.sh -h
 
 ```
 
-To run the plug-in, you need to specify a video (or real time input). An example call would be:
-
+To run the plug-in, you need to specify a video (or real time input). For instance:
 ```
 $ ./launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/data/VITAL/echo/01NVb-003-004-1lus.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
 ```
-
-Which produces a session similar to the one shown in the figure below:
+producing a GUI as shown below:
 ![pretus](art/pretus-echo.gif)

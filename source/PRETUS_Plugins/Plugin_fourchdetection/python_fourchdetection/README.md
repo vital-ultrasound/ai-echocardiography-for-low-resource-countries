@@ -1,5 +1,8 @@
-# Model information
+# python fourdetection with demos, models and utils
 
-## Models
-* `models/model_001` sketched
-* `models/model_002` re-trained by Nhat, also called `version_4_5_classes__freeze_all_layers_after_CNN_layers`
+## Running demo/worker
+``` 
+cd $HOME/repositories/echocardiography/source/PRETUS_Plugins/Plugin_fourchdetection/python_fourchdetection
+conda activate pretus
+python FourChDetection_demo.py
+```
