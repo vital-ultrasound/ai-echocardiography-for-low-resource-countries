@@ -16,11 +16,9 @@ link_directories(${Boost_LIBRARY_DIRS})
 ## Required for python bindings system
 ## #################################################################
 
-# For python stuff
 set(Python_ADDITIONAL_VERSIONS 3.6)
 find_package(PythonLibs 3.0  REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
-
 
 find_package(pybind11 REQUIRED)
 if(pybind11_INCLUDE_DIR)
@@ -61,8 +59,7 @@ set(PYTHON_FILES
 file(GLOB SOURCES "*.h" "*.cxx" "*.h.in")
 
 add_library(Plugin_fourchdetection "${PROJECT_BUILD_TYPE}"
-    ${SOURCES} 
-    # python stuff
+    ${SOURCES}
     ${PYTHON_FILES}
     )
 

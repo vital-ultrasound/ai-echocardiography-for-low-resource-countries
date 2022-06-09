@@ -8,7 +8,11 @@ These [PRETUS](https://github.com/gomezalberto/pretus) plug-ins for the echocard
 See https://github.com/gomezalberto/pretus
 
 ## Building plug-in
-* Open cmake-gui at 
+* Open cmake-gui
+```
+$HOME/repositories/echocardiography/source/PRETUS_Plugins
+cmake-gui .
+```
 * Creating building paths
 ``` 
 Source code: $HOME/repositories/echocardiography/source/PRETUS_Plugins
@@ -36,7 +40,6 @@ Where to build binaries: $HOME/build/pretus/4cv
         Qt5Widgets_DIR set to $HOME/Qt/5.12.5/gcc_64/lib/cmake/Qt5Widgets
         Qt5X11Extras_DIR set to $HOME/Qt/5.12.5/gcc_64/lib/cmake/Qt5X11Extras
         Qt5Xml_DIR set to $HOME/Qt/5.12.5/gcc_64/lib/cmake/Qt5Xml
-        
 ```
 
 * Go to the build folder in the terminal  `cd $HOME/build/pretus/4cv`, do `make`, and `make install`.
