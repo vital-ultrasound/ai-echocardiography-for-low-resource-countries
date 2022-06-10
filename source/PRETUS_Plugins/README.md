@@ -8,9 +8,19 @@ These [PRETUS](https://github.com/gomezalberto/pretus) plug-ins for the echocard
 See https://github.com/gomezalberto/pretus
 
 ## Building plug-in
+
+* Open terminal with conda environment
+``` 
+conda activate pretus
+```
+* Creating building paths
+``` 
+mkdir -p $HOME/build/pretus/4cv/ && cd $HOME/build/pretus/4cv/ 
+```
+
 * Open cmake-gui
 ```
-$HOME/repositories/echocardiography/source/PRETUS_Plugins
+cd $HOME/repositories/echocardiography/source/PRETUS_Plugins
 cmake-gui .
 ```
 * Creating building paths
@@ -23,6 +33,7 @@ Where to build binaries: $HOME/build/pretus/4cv
 ``` 
     CMAKE_INSTALL_PREFIX set to $HOME/local/pretus   (Press configure)
     PLUGIN_INCLUDE_DIR set to $HOME/local/pretus/include (Press configure)
+    PLUGIN_LIBRARY set to $HOME/local/pretus/lib/libPlugin.so (Press configure)
     VTK_DIR set to $HOME/workspace/VTK/release  (Press configure)
     ITK_DIR set to $HOME/workspace/ITK/release (Press configure) 
     
@@ -42,7 +53,13 @@ Where to build binaries: $HOME/build/pretus/4cv
         Qt5Xml_DIR set to $HOME/Qt/5.12.5/gcc_64/lib/cmake/Qt5Xml
 ```
 
-* Go to the build folder in the terminal  `cd $HOME/build/pretus/4cv`, do `make`, and `make install`.
+* Make project 
+``` 
+cd $HOME/build/pretus/4cv
+conda activate pretus
+make
+make install 
+```  
 
 
 ## References
