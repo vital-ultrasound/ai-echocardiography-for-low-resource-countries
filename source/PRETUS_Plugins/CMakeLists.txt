@@ -49,8 +49,6 @@ include_directories(${PLUGIN_INCLUDE_DIR})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}) # need this for the generated files
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 option(BUILD_PLUGIN_FCH "Build plugin to detect 4 chamber views in echo" ON)
 if (BUILD_PLUGIN_FCH)
   add_subdirectory(Plugin_fourchdetection)

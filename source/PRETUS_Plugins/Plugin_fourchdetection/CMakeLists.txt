@@ -5,8 +5,6 @@ include(${VTK_USE_FILE})
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 
 find_package(Boost REQUIRED COMPONENTS filesystem thread chrono)#COMPONENTS system filesystem thread date_time iostreams serialization)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -58,10 +56,7 @@ set(PYTHON_FILES
 
 file(GLOB SOURCES "*.h" "*.cxx" "*.h.in")
 
-add_library(Plugin_fourchdetection "${PROJECT_BUILD_TYPE}"
-    ${SOURCES}
-    ${PYTHON_FILES}
-    )
+add_library(Plugin_fourchdetection "${PROJECT_BUILD_TYPE}" ${SOURCES} ${PYTHON_FILES})
 
 target_link_libraries(Plugin_fourchdetection
     ${PLUGIN_LIBRARY}
@@ -72,17 +67,18 @@ target_link_libraries(Plugin_fourchdetection
     ${VTK_LIBRARIES}
     ${PYTHON_LIBRARIES}
     ${pybind11_LIBRARIES}
+    #videograbber
     )
 
 set(SCRIPT_INSTALL_PATH "${PLUGIN_SCRIPT_INSTALL_PREFIX}/")
-install( DIRECTORY python_fourchdetection/  DESTINATION "${SCRIPT_INSTALL_PATH}/${PYTHON_FOLDERS}" )
-install( DIRECTORY art/  DESTINATION "${SCRIPT_INSTALL_PATH}/art" )
+install(DIRECTORY python_fourchdetection/ DESTINATION "${SCRIPT_INSTALL_PATH}/${PYTHON_FOLDERS}")
+install(DIRECTORY art/ DESTINATION "${SCRIPT_INSTALL_PATH}/art")
 #message("Run the following command: export  PYTHONPATH=""${SCRIPT_INSTALL_PATH}${PYTHON_FOLDERS}":"$PYTHONPATH")
 
-install(TARGETS Plugin_fourchdetection
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    COMPONENT libraries
-    )
+install(TARGETS Plugin_fourchdetection ${EXTRA_TARGETS}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION pluginlib
+  ARCHIVE DESTINATION pluginlib
+  COMPONENT libraries
+  )
 
