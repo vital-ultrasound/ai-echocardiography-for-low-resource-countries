@@ -50,6 +50,8 @@ set(PYTHON_FILES
     python_fourchdetection/FourChDetection_worker.py
     python_fourchdetection/FourChDetection_demo.py
     python_fourchdetection/fcd_utils/classifiers.py
+    #python_fourchdetection/models/model_?.pth
+    #python_fourchdetection/models/model_?.pth
     )
 
 #include_directories("${CMAKE_SOURCE_DIR}")
@@ -77,8 +79,8 @@ install(DIRECTORY art/ DESTINATION "${SCRIPT_INSTALL_PATH}/art")
 
 install(TARGETS Plugin_fourchdetection ${EXTRA_TARGETS}
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION pluginlib
-  ARCHIVE DESTINATION pluginlib
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
   COMPONENT libraries
   )
 

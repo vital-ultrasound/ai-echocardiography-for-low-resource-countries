@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
 
 
-    modelfolder = '/home/ag09/local/VITAL-lung/Plugins/Plugin_lusclassificationp/models/model_001'
+    modelfolder = '../python_fourchdetection/models/model_???.pth'
     desired_size = (64, 64)
     worker.initialize(desired_size, modelfolder, verb=True)
 
