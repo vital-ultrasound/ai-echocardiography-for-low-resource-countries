@@ -6,9 +6,11 @@ The model is implemented in Pytorch.
 ## Usage within PRETUS
 * After building plugin, you can then run launcher help
 ```
-$ ./launcher_pretus.sh -h
-
+cd $HOME/local/pretus
+conda activate pretus
+sh launcher_pretus.sh -h
 ...
+
 15) Plugin Name: 'Four Chamber Detection'
 
 # PLUGIN Four Chamber Detection
@@ -36,7 +38,7 @@ $ ./launcher_pretus.sh -h
 ```
 * Run the plug-in, where you need to specify a video (or real time input). For instance:
 ```
-$ ./launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/data/VITAL/echo/01NVb-003-004-1lus.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
+$ sh launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/data/VITAL/echo/01NVb-003-004-1lus.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
 ```
 producing a GUI as shown below:    
 ![pretus](art/pretus-echo.gif)
