@@ -10,3 +10,7 @@ cp config_users_paths_files_username_template.yml config_users_paths_files_usern
 ``` 
 mv config_users_paths_files_username_mx19.yml ~/Desktop/
 ```
+* Move backup config files to here
+``` 
+mv ~/Desktop/config_users_paths_files_username_mx19.yml .
+```

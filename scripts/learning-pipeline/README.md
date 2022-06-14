@@ -276,6 +276,9 @@ The jupyter nobebook [learning_pipeline_notebook.ipynb](learning_pipeline_notebo
 ![fig](../../figures/DL-pipeline.png)       
 _**Fig 1.** Deep learning pipeline of the AI-empowered echocardiography._
 
+* config_files/users_paths_files
+See [README](../config_files/users_paths_files)
+
 * Open a terminal, load your conda environment and run the script.
 ```
 cd $HOME/repositories/echocardiography/scripts/learning-pipeline
