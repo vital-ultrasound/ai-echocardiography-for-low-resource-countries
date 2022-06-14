@@ -18,6 +18,31 @@ conda activate pretus
 mkdir -p $HOME/build/pretus/4cv/ && cd $HOME/build/pretus/4cv/ 
 ```
 
+* Config PLUGIN_* PATHS
+``` 
+* /home/mx19/build/pretus/release
+PLUGIN FOLDER: /home/mx19/build/pretus/release/lib
+
+* /home/mx19/build/pretus/4cv
+PLUGIN_INCLUDE_DIR ~/local/pretus/include
+MAKE_INSTALL_PREFIX ~/local/pretus-vital-echo
+
+```
+
+
+* build pretus and plugins
+``` 
+* ~/build/pretus/release$ make
+* ~/build/pretus/4cv$ make; make install
+```
+
+
+* Edit `~/.config/iFIND/PRETUS.conf`
+```
+[MainApp]
+plugin_folder="/home/mx19/build/pretus/release/lib;/home/mx19/local/pretus-vital-echo/lib"
+```
+
 * Open cmake-gui
 ```
 cd $HOME/repositories/echocardiography/source/PRETUS_Plugins
