@@ -14,6 +14,7 @@ video_list_??*.txt
 
 ## Ignore TEMP_TRAINING_CURVES_FOR_
 **/TEMP_TRAINING_CURVES_FOR_*
+**/TEMP_DICT_TRAINING_CURVES_FOR_*
 
 ## Ignore user config  files
 config_users_paths_files_username_????*.yml
