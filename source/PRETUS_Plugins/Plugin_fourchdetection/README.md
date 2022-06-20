@@ -4,14 +4,16 @@ This plug-in classifies input videos into 2 classes: Background or 4 chamber vie
 The model is implemented in Pytorch.
 
 ## Usage within PRETUS
-* After building plugin, you can then run launcher help
+* After building [plugin](../README.md), you can then run launcher help
 ```
 cd $HOME/local/pretus
 conda activate pretus
 sh launcher_pretus.sh -h
-...
+```
 
-15) Plugin Name: 'Four Chamber Detection'
+* Terminal output for help
+```
+(8) Plugin Name: 'Four Chamber Detection'
 
 # PLUGIN Four Chamber Detection
    Detection of four chamber view in echo clips.
@@ -34,11 +36,28 @@ sh launcher_pretus.sh -h
 	--fourchamberdetection_abscropbounds 0/1 [ type: BOOL]	whether the crop bounds are provided in relative values (0 - in %) or absolute 
                                                        		(1 -in pixels) (Default: 1) 
 	--fourchamberdetection_showassistant 0/1 [ type: BOOL]	whether to show the AI assistant (1) or not (0) (Default: 1) 
+	--fourchamberdetection_output <filename> [ type: STRING]	path to the output filename where results will be written (Default: output.txt) 
 
 ```
-* Run the plug-in, where you need to specify a video (or real time input). For instance:
+
+
+## Launching plug-in
+* Using pnpframegrabber
 ```
-$ sh launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/data/VITAL/echo/01NVb-003-004-1lus.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
+$ sh launcher_pretus.sh -pipeline "pnpframegrabber>gui" --pnpframegrabber_camid 2
 ```
-producing a GUI as shown below:    
+
+* Recording data
+```
+sh launcher_pretus.sh -pipeline "pnpframegrabber>imagefilewriter>gui" --pnpframegrabber_camid 2 --imagefilewriter_folder $HOME/datasets/pretus/echocardiography/ --imagefilewriter_framerate 30 --imagefilewriter_maxfiles 600 --imagefilewriter_verbose 0
+```
+![fig](art/Screenshot-of_launcher_pretus-pipeline-pnpframegrabber-imagefilewriter-gui.png)
+
+* Using video loop  
+```
+sh launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/data/VITAL/echo/01NVb-003-004-1lus.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
+```
+
+## Animated GUI
+Plugging launchs a GUI as shown below:    
 ![pretus](art/pretus-echo.gif)
