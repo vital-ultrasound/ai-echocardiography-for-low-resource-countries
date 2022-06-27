@@ -1,8 +1,9 @@
 
 import sys
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
-import LUSclassificationp_worker as worker
+import FourChDetection_worker as worker
 import SimpleITK as sitk
 import time
 import skimage
@@ -60,7 +61,7 @@ def resample(image, desired_size):
     return image
 
 
-def read_data_from_video(video_file, start_frame, duration, crop_bounds):
+def read_data_from_video(video_file, start_frame, duration, crop_bounds, desired_size):
     cap = cv.VideoCapture(video_file)
     frames_np = []
     cap.set(cv.CAP_PROP_POS_FRAMES, start_frame)
@@ -79,7 +80,7 @@ def read_data_from_video(video_file, start_frame, duration, crop_bounds):
 
     video_datag = video_data[:,0,...]
     # remove text and labels
-    aa = (video_data[:, 0, ...].astype(np.float) - video_data[:, 2, ...].astype(np.float)).squeeze() ** 2
+    aa = (video_data[:, 0, ...].astype(np.float64) - video_data[:, 2, ...].astype(np.float64)).squeeze() ** 2
     # plt.subplot(1,3,1)
     # plt.imshow(aa[-1,...])
     # plt.subplot(1, 3, 2)
@@ -99,67 +100,68 @@ def read_data_from_video(video_file, start_frame, duration, crop_bounds):
     #video_data = crop(video_data)
     video_datag = crop2(video_datag, crop_bounds)
     #cv.imwrite('{}_cropped.png'.format(video_file[:-4]), video_data[0, ...])
-    video_datag = resize(video_datag)
+    video_datag = resize(video_datag, desired_size)
     #cv.imwrite('{}_cropped_resized.png'.format(video_file[:-4]), video_data[0, ...])
     #video_data = normalize(video_data)
     #cv.imwrite('{}_cropped_resized_normalised.png'.format(video_file[:-4]), video_data[0, ...] * 255)
 
     return video_datag
 
-if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Missing one argument-input video")
-        exit(-1)
-    video_name = sys.argv[1]
-    print('Input video: {}'.format(video_name))
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--InputVideoID', required=True, help='Specify USB ID', type=int)
+    args = parser.parse_args()
 
+    print(f'Input video: {args.InputVideoID}')
     crop_bounds = (96, 25, 488, 389)
 
-    start_frame = 50
-    duration = 5
-    frames = read_data_from_video(video_name, start_frame, duration, crop_bounds)
+    start_frame = 10 #?
+    duration = 10 #?
+    desired_size = (128, 128)
+    frames = read_data_from_video(args.InputVideoID, start_frame, duration, crop_bounds, desired_size)
 
-
-
-    modelfolder = '../python_fourchdetection/models/model_???.pth'
-    desired_size = (64, 64)
-    worker.initialize(desired_size, modelfolder, verb=True)
+    modelfolder = '../python_fourchdetection/models'
+    modelname = 'metric_model.pth'
+    worker.initialize(desired_size, modelfolder, modelname, verb=True)
 
     print('Run the model inference')
     startt = time.time()
-    predictions, aw, attentions = worker.dowork(frames)
+    #predictions, aw, attentions = worker.dowork(frames) #predictions?, aw?, attentions?
+    predictions = worker.dowork(frames)
     endt = time.time()
-    print('Elapsed time: {}s'.format(endt - startt))
+    print(f'Elapsed time: {endt - startt}s')
 
     print(predictions)
 
-    # find peaks
-    awm0 = (attentions[0, 0,...] * (frames[-1,...]>0) ).astype(np.uint8)
-    (_, _, _, maxLoc0) = cv2.minMaxLoc(awm0)
-    awm1 = (attentions[0,-1, ...] * (frames[-1, ...] > 0)).astype(np.uint8)
-    (_, _, _, maxLoc1) = cv2.minMaxLoc(awm1)
+    ##\/ TOREVIEW
+    # # find peaks
+    # awm0 = (attentions[0, 0,...] * (frames[-1,...]>0) ).astype(np.uint8)
+    # (_, _, _, maxLoc0) = cv2.minMaxLoc(awm0)
+    # awm1 = (attentions[0,-1, ...] * (frames[-1, ...] > 0)).astype(np.uint8)
+    # (_, _, _, maxLoc1) = cv2.minMaxLoc(awm1)
+    #
+    # arrowlength = 15
+    #
+    # dir = np.array(maxLoc1)-np.array(maxLoc0)
+    # dir = dir/np.linalg.norm(dir)
+    # p1 = np.array(maxLoc1)- dir * 1
+    # p0= np.array(maxLoc1) - dir * (arrowlength +1)
+    # fr = frames[-1,...]
+    # fr2 = frames[-1,...]
+    # cv2.arrowedLine(fr2, tuple(p0.astype(np.int)), tuple(p1.astype(np.int)), (255, 255, 255), 1, tipLength=0.3)
+    ## plot attention
+    # plt.figure()
+    # plt.subplot(1, 2, 1)
+    # plt.imshow(frames, cmap='gray')
+    # plt.imshow(aw, alpha=aw.astype(np.float) / 255, cmap='jet')
+    # plt.subplot(1, 2, 2)
+    # plt.imshow(fr2)
+    # plt.show()
+    # #pred_segmentation = pred_segmentation[0, ...].squeeze()
+    # #pred_segmentation_t = (pred_segmentation.cpu().numpy() > 0.5).astype(np.uint8)
+    # #pred_area = np.sum(pred_segmentation_t)
+    ##/\ TOREVIEW
 
-    arrowlength = 15
+if __name__ == '__main__':
+    main()
 
-    dir = np.array(maxLoc1)-np.array(maxLoc0)
-    dir = dir/np.linalg.norm(dir)
-    p1 = np.array(maxLoc1)- dir * 1
-    p0= np.array(maxLoc1) - dir * (arrowlength +1)
-
-    fr = frames[-1,...]
-    fr2 = frames[-1,...]
-    cv2.arrowedLine(fr2, tuple(p0.astype(np.int)), tuple(p1.astype(np.int)), (255, 255, 255), 1, tipLength=0.3)
-
-    # plot attention
-
-    plt.figure()
-    plt.subplot(1, 2, 1)
-    plt.imshow(fr, cmap='gray')
-    plt.imshow(aw, alpha=aw.astype(np.float) / 255, cmap='jet')
-    plt.subplot(1, 2, 2)
-    plt.imshow(fr2)
-    plt.show()
-
-    #pred_segmentation = pred_segmentation[0, ...].squeeze()
-    #pred_segmentation_t = (pred_segmentation.cpu().numpy() > 0.5).astype(np.uint8)
-    #pred_area = np.sum(pred_segmentation_t)
