@@ -41,10 +41,11 @@ sh launcher_pretus.sh -h
 ```
 
 
-## Launching plug-in
-* Using pnpframegrabber
+## Launching plug-ins
+* Using `pnpframegrabber` with and without `pythonalgorithm`, `cppalgorithm`
 ```
-$ sh launcher_pretus.sh -pipeline "pnpframegrabber>gui" --pnpframegrabber_camid 2
+sh launcher_pretus.sh -pipeline "pnpframegrabber>gui" --pnpframegrabber_camid 2
+sh launcher_pretus.sh -pipeline "pnpframegrabber>pythonalgorithm>cppalgorithm>gui" --pnpframegrabber_camid 2
 ```
 
 * Recording data
@@ -52,6 +53,11 @@ $ sh launcher_pretus.sh -pipeline "pnpframegrabber>gui" --pnpframegrabber_camid 
 sh launcher_pretus.sh -pipeline "pnpframegrabber>imagefilewriter>gui" --pnpframegrabber_camid 2 --imagefilewriter_folder $HOME/datasets/pretus/echocardiography/ --imagefilewriter_framerate 30 --imagefilewriter_maxfiles 600 --imagefilewriter_verbose 0
 ```
 ![fig](art/Screenshot-of_launcher_pretus-pipeline-pnpframegrabber-imagefilewriter-gui.png)
+
+* Using `fourchamberdetection` 
+```
+sh launcher_pretus.sh -pipeline "pnpframegrabber>fourchamberdetection>gui" --pnpframegrabber_camid 2 --fourchamberdetection_verbose 1
+```
 
 * Using video loop  
 ```
