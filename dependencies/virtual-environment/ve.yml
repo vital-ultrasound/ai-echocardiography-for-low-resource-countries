@@ -30,7 +30,7 @@ dependencies:
   - notebook=6.*
   - jupyter_contrib_nbextensions # A good overview over other extensions: https://towardsdatascience.com/jupyter-notebook-extensions-517fa69d2231
   - jupyter
-  - seaborn
+  - seaborn=0.11.1 # 0.11.2 will creat https://github.com/Baukebrenninkmeijer/table-evaluator/issues/26
   - pandas=1.*
   - torchinfo
   - ipywidgets
