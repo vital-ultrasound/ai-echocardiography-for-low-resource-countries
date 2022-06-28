@@ -35,7 +35,7 @@ dependencies:
   - pandas=1.*
   - torchinfo
   - ipywidgets
-  - h5py=3.* ##current version 3.6.0
+  - h5py=3.* ##current version 3.6.0  ##1.10.4 pretus-compatibility   
   ##ERROR- scikit-learn=* #https://anaconda.org/anaconda/scikit-learn SOLUTION within the VE: conda install -n rt-ai-echo-VE scikit-learn
   - pip:
      - pydicom
