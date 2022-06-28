@@ -1,5 +1,6 @@
 ## USAGE
 ## cd $HOME/repositories/echocardiography/dependencies/virtual-environment
+## conda update --all                           ## UPDATE ALL base PACKAGES
 ## conda list -n codeVE # show list of installed packages
 ## conda env create -f ve.yml   		    ## INSTALL
 ## conda env update --file ve.yml --prune  	## UPDATE
@@ -12,7 +13,7 @@ channels:
   - nvidia
   - defaults
   - jmcmurray #https://anaconda.org/jmcmurray/json
-  - anaconda # seaborn; pandas; scikit-learn; jupyter
+  - anaconda # seaborn; pandas; scikit-learn; jupyter; h5py
   - conda-forge # torchinfo; ipywidgets
 dependencies:
   - python=3.8.*
@@ -34,6 +35,7 @@ dependencies:
   - pandas=1.*
   - torchinfo
   - ipywidgets
+  - h5py=3.* ##current version 3.6.0
   ##ERROR- scikit-learn=* #https://anaconda.org/anaconda/scikit-learn SOLUTION within the VE: conda install -n rt-ai-echo-VE scikit-learn
   - pip:
      - pydicom
