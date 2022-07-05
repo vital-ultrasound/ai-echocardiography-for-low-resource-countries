@@ -3,38 +3,204 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class BasicCNNClassifier(nn.Module):
 
-    def __init__(self, input_size, n_classes=2):
+################################
+##### Define VGG3D architecture
+class VGG3D(nn.Module):
+
+    def __init__(self, input_size, n_frames_per_clip, n_classes=2):
         """
         Simple Video classifier to classify into two classes:
-
         Args:
             input_size:  shape of the input image. Should be a 2 element vector for a 2D video (width, height) [e.g. 128, 128].
             n_classes: number of output classes
         """
 
-        super(BasicCNNClassifier, self).__init__()
-        self.name = 'BasicCNNClassifier'
+        super(VGG3D, self).__init__()
+        self.name = 'VGG00'
         self.input_size = input_size
         self.n_classes = n_classes
-        self.n_frames_per_clip = 60
-        self.n_features = np.prod(self.input_size)*self.n_frames_per_clip
+        self.n_frames_per_clip = n_frames_per_clip
+        self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
+
+        self.flatten = nn.Flatten()
+        self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
+        self.softmax = nn.Softmax()
+
+        # NOTES
+        # https://pytorch.org/docs/stable/generated/torch.nn.Conv3d.html
+        # IN: [N,Cin,D,H,W]; OUT: (N,Cout,Dout,Hout,Wout)
+        # [batch_size, channels, depth, height, width].
+
+        self.conv0 = nn.Sequential(
+            nn.Conv3d(in_channels=1, out_channels=32,
+                      kernel_size=(3, 1, 1),  ## (-depth, -height, -width)
+                      stride=(1, 1, 1),  ##(depth/val0, height/val1, width/val2)
+                      padding=(0, 0, 0),
+                      bias=False),
+            nn.BatchNorm3d(32),
+            nn.ReLU(True)
+        )
+
+        self.conv1 = nn.Sequential(
+            nn.Conv3d(in_channels=32, out_channels=32,
+                      kernel_size=(3, 1, 1),  ## (-depth, -height, -width)
+                      stride=(1, 1, 1),  ##(depth/val0, height/val1, width/val2)
+                      padding=(0, 0, 0),
+                      bias=False),
+            nn.BatchNorm3d(32),
+            nn.ReLU(True)
+        )
+
+        self.conv2 = nn.Sequential(
+            nn.Conv3d(in_channels=32, out_channels=64,
+                      kernel_size=(3, 1, 1),  ## (-depth, -height, -width)
+                      stride=(1, 1, 1),  ##(depth/val0, height/val1, width/val2)
+                      padding=(0, 0, 0),
+                      bias=False),
+            nn.BatchNorm3d(64),
+            nn.ReLU(True)
+        )
+
+        self.conv3 = nn.Sequential(
+            nn.Conv3d(in_channels=64, out_channels=128,
+                      kernel_size=(3, 1, 1),  ## (-depth, -height, -width)
+                      stride=(1, 1, 1),  ##(depth/val0, height/val1, width/val2)
+                      padding=(0, 0, 0),
+                      bias=False),
+            nn.BatchNorm3d(128),
+            nn.ReLU(True)
+        )
+
+        #         self.conv4 = nn.Sequential(
+        #                                 nn.Conv3d(in_channels=128, out_channels=256,
+        #                                     kernel_size = (3, 1, 1),  ## (-depth, -height, -width)
+        #                                     stride =      (1, 1, 1), ##(depth/val0, height/val1, width/val2)
+        #                                     padding =     (0, 0, 0),
+        #                                     bias=False),
+        #                                 nn.BatchNorm3d(256),
+        #                                 nn.ReLU(True)
+        #                                 )
+
+        #         self.conv0 = nn.Conv3d(in_channels=1, out_channels=64,
+        #                                kernel_size = (3, 3, 3),  ## (-depth, -height, -width)
+        #                                stride =      (3, 3, 3), ##(depth/val0, height/val1, width/val2)
+        #                                padding =     (0, 0, 0)
+        #                                )
+
+        #         self.conv1 = nn.Conv3d(in_channels=64, out_channels=128,
+        #                                kernel_size = (3, 3, 3),  # (-depth, -height, -width)
+        #                                stride =      (3, 3, 3), ##(depth/val0, height/val1, width/val2)
+        #                                padding =     (0, 0, 0)
+        #                                )
+
+        #         self.conv2 = nn.Conv3d(in_channels=128, out_channels=256,
+        #                                kernel_size =  (1, 3, 3),  # (-depth, -height, -width)
+        #                                stride =       (3, 3, 3), ##(depth/val0, height/val1, width/val2)
+        #                                padding =      (0, 0, 0)
+        #                                )
+
+        #         self.conv3 = nn.Conv3d(in_channels=256, out_channels=512,
+        #                                kernel_size=   (2, 2, 2),  # (-depth, -height, -width)
+        #                                stride=        (2, 2, 2), ##(depth/val0, height/val1, width/val2)
+        #                                padding =      (0, 0, 0)
+        #                                )
+
+        #         self.pool0 = nn.MaxPool3d(
+        #                                 kernel_size = (1, 3, 3),  # (-depth, -height, -width)
+        #                                 stride =      (1, 1, 1),
+        #                                 padding =     (0, 0, 0),
+        #                                 dilation =    (1, 1, 1)
+        #                                 )
+
+        # self.fc0 = nn.Linear(in_features=1048576, out_features=500) #
+        self.fc0 = nn.Linear(in_features=2097152, out_features=500)  # 128x128
+        # self.fc0 = nn.Linear(in_features=4194304, out_features=500) #128x128
+        self.fc2 = nn.Linear(in_features=500, out_features=self.n_classes)
+        # self.fc1 = nn.Linear(in_features=2048, out_features=self.n_classes)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # print(f'x.shape(): {x.size()}') ##[batch_size, channels, depth, height, width]
+        # x = x.permute(0,2,1,3,4)##[batch_size, depth,channels, height, width]
+        print(f'x.shape(): {x.size()}')
+
+        x = self.conv0(x)
+        # print(f'x.shape(): {x.size()}') #x.shape(): x.shape(): torch.Size([2, 64, 60, 128, 128]) with kernel_size=(1, 1, 1)
+        # print(f'x.shape(): {x.size()}') #x.shape():torch.Size([2, 64, 51, 29, 29]) with kernel_size=(10, 100, 100)
+        print(f'conv0.size(): {x.size()}')
+
+        x = self.conv1(x)
+        # print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
+        print(f'conv1.size(): {x.size()}')
+
+        x = self.conv2(x)
+        # print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
+        print(f'conv2.size(): {x.size()}')
+
+        x = self.conv3(x)
+        # print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
+        print(f'conv3.size(): {x.size()}')
+
+        #         x = self.conv4(x)
+        #         #print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
+        #         print(f'conv4.size(): {x.size()}')
+
+        # x = self.pool0(x)
+        # print(f'x.pool0..shape(): {x.size()}')
+
+        x = self.flatten(x)
+        print(f'self.flatten(x) size() {x.size()}')  # x.shape(): torch.Size([4, 983040])
+        x = self.fc0(x)
+        # print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([4, 32])
+        # x = F.relu(self.fc1(x))
+
+        x = self.fc2(x)
+        x = F.dropout(x, p=0.5)  # dropout was included to combat overfitting
+
+        # print(f'x.shape(): {x.size()}') # x.shape(): torch.Size([4, 2])
+        # x = self.sigmoid(x)
+
+        x = self.softmax(x)
+        # print(f'x.shape(): {x.size()}')  #x.shape(): torch.Size([4, 2])
+
+        return x
+
+
+################################
+##### Define basicVGG architecture
+class basicVGG(nn.Module):
+
+    def __init__(self, input_size, n_frames_per_clip, n_classes=2):
+        """
+        Simple Video classifier to classify into two classes:
+        Args:
+            input_size:  shape of the input image. Should be a 2 element vector for a 2D video (width, height) [e.g. 128, 128].
+            n_classes: number of output classes
+        """
+
+        super(basicVGG, self).__init__()
+        self.name = 'basicVGG'
+        self.input_size = input_size
+        self.n_classes = n_classes
+        self.n_frames_per_clip = n_frames_per_clip
+        self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
 
         self.classifier = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(in_features=self.n_features, out_features=32),
+            nn.Linear(in_features=self.n_features, out_features=256),
             nn.ReLU(),
-            nn.Linear(in_features=32, out_features=self.n_classes),
-            nn.Sigmoid()
+            nn.Linear(in_features=256, out_features=n_classes),
+            # nn.Sigmoid(),
         )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # print(f'x.shape(): {x.size()}') ##[batch_size, channels, depth, height, width]
+        # x = x.permute(0,2,1,3,4)##[batch_size, depth,channels, height, width]
+        # print(f'x.shape(): {x.size()}')
+
         x = self.classifier(x)
-        #print(f'  x.size():::::::  {x.size()}')  #   x.size():::::::  torch.Size([2, 2])
-        #print(x)
-        #tensor([[0.1271, 0.6632],
-        #        [0.3063, 0.5489]], device='cuda:0', grad_fn= < SigmoidBackward >)
+
         return x
 
 class basicVGGNet(nn.Module):
@@ -81,6 +247,40 @@ class basicVGGNet(nn.Module):
         # x = F.dropout(x, p=0.5) #dropout was included to combat overfitting
         # x = self.fc1(x)
 
+        return x
+
+class BasicCNNClassifier(nn.Module):
+
+    def __init__(self, input_size, n_classes=2):
+        """
+        Simple Video classifier to classify into two classes:
+
+        Args:
+            input_size:  shape of the input image. Should be a 2 element vector for a 2D video (width, height) [e.g. 128, 128].
+            n_classes: number of output classes
+        """
+
+        super(BasicCNNClassifier, self).__init__()
+        self.name = 'BasicCNNClassifier'
+        self.input_size = input_size
+        self.n_classes = n_classes
+        self.n_frames_per_clip = 60
+        self.n_features = np.prod(self.input_size)*self.n_frames_per_clip
+
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(in_features=self.n_features, out_features=32),
+            nn.ReLU(),
+            nn.Linear(in_features=32, out_features=self.n_classes),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        x = self.classifier(x)
+        #print(f'  x.size():::::::  {x.size()}')  #   x.size():::::::  torch.Size([2, 2])
+        #print(x)
+        #tensor([[0.1271, 0.6632],
+        #        [0.3063, 0.5489]], device='cuda:0', grad_fn= < SigmoidBackward >)
         return x
 
 def train_loop(train_dataloader, model, criterion, optimizer, device):

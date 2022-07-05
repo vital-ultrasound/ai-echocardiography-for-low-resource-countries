@@ -269,3 +269,5 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     write_list_to_txtfile(label_filenames_validation, 'annotation_list_validate.txt', data_list_output_path)
 
     print(f'Files were successfully written at {data_list_output_path}')
+
+
