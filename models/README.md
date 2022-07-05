@@ -1,4 +1,0 @@
-# Models
-
-## VGG-based models
-
