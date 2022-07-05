@@ -51,7 +51,7 @@ Buffer size: 1.0
 Various images size with mainly 60 and 30 frames per second were tested.
 See all figures [here](../../figures/framegrabber/)
 
-![fig](../../figures/framegrabber/framegrabber-mirabox.png)
+![fig](../../docs/figures/framegrabber/framegrabber-mirabox.png)
 
 ### $ lsusb
 ```

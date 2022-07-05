@@ -2,7 +2,7 @@
 ## Introduction 
 The learning pipeline for the echochardiography datasets is based in the following elements: 
 Data-selection and management; Model training and tuning; Model validation (performance evaluation and clinical evaluation); AI-based device modification, and (perhaps) AI-based production model (Fig. 1).   
-![fig](../../figures/fig2-good-ml-dl-practices.png)   
+![fig](../../docs/figures/fig2-good-ml-dl-practices.png)   
 _Fig 1. Total product lifecycle (TPLC) approach on AI/ML workflow from [Good Machine Learning Practices](https://www.fda.gov/media/122535/download)_
 
 ## 1. Setting up your datasets and labels
@@ -273,7 +273,7 @@ $ tree -s
 ## 2. Learning pipeline notebook
 The jupyter nobebook [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb) involves pre-processing, segment sampling, model and hyperparameter tunning pipeline (Fig. 1).
 
-![fig](../../figures/DL-pipeline.png)       
+![fig](../../docs/figures/DL-pipeline.png)       
 _**Fig 1.** Deep learning pipeline of the AI-empowered echocardiography._
 
 * config_files/users_paths_files

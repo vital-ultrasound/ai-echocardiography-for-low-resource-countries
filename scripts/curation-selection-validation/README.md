@@ -285,18 +285,18 @@ See further instructions [here](../config_files/users_paths_files).
 
 * Temporal files will be created at `$HOME/datasets/vital-us/echocardiography/temporal-files`
 The animation illustrates clips for background and four chamber view for a specified subject and number of frames per clip. 
-![fig](../../figures/example_of_subject073_clips_1-4.gif)
+![fig](../../docs/figures/example_of_subject073_clips_1-4.gif)
 
 ## 3. Echochardiography classes
 The following figure illustrate the pipeline to create classes for background and 4CH; segments of random clips; segment sampling and frame sliding window techniques.
-![fig](../../figures/classes-windowing-sampling.png)  
+![fig](../../docs/figures/classes-windowing-sampling.png)  
 _Fig 2. Description of clips, videos and classes for 4CV_
 
 ## 3. Other scripts for curation, selection and validation 
 
 ### [`video_to_imageframes.py`](video_to_imageframes.py)
 The script converts mp4 videos to png image frames of masked videos (Fig 1).
-![fig](../../figures/masked-captured-image-frame.png)
+![fig](../../docs/figures/masked-captured-image-frame.png)
 **Fig 1** Example of masks (green geometric forms) in the capture ultrasound image.
 
 * Example for `01NVb-003-071/`  

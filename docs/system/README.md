@@ -1,6 +1,6 @@
 # Clinical system specifications  
 
-![fig](../../figures/rt-ai-system.png)
+![fig](../../docs/figures/rt-ai-system.png)
 _**Fig 1.** Real-time AI-empowered clinical system._
 
 ## Ultrasound Clinical Devices

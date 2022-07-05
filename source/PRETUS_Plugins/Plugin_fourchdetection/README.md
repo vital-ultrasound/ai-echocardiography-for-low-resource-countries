@@ -52,7 +52,7 @@ sh launcher_pretus.sh -pipeline "pnpframegrabber>pythonalgorithm>cppalgorithm>gu
 ```
 sh launcher_pretus.sh -pipeline "pnpframegrabber>imagefilewriter>gui" --pnpframegrabber_camid 2 --imagefilewriter_folder $HOME/datasets/pretus/echocardiography/ --imagefilewriter_framerate 30 --imagefilewriter_maxfiles 600 --imagefilewriter_verbose 0
 ```
-![fig](art/Screenshot-of_launcher_pretus-pipeline-pnpframegrabber-imagefilewriter-gui.png)
+![fig](../../../docs/figures/pretus_plugins/fourchdetection/Screenshot-of_launcher_pretus-pipeline-pnpframegrabber-imagefilewriter-gui.png)
 
 * Using `fourchamberdetection` 
 ```
@@ -65,5 +65,5 @@ sh launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videom
 ```
 
 ## Animated GUI
-Plugging launchs a GUI as shown below:    
-![pretus](art/pretus-echo.gif)
+Plugging launchs a GUI as shown below:
+![fig](../../../docs/figures/pretus_plugins/fourchdetection/pretus-echo.gif)

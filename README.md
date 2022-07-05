@@ -9,14 +9,14 @@ See more [here](scripts/learning-pipeline).
 1. Video data from GE Venue Go GE using Probe 3SC-RS was collected with a Portable Video Recorder. See [more](data).
 2. Creation and verification of annotations with VGG Image Annotator (VIA) software. See [more](data/labelling).
 3. Jupyter notebook :notebook: for [data curation, selection and validation](scripts/curation-selection-validation); 
-![fig](figures/data-workflow.png)     
+![fig](docs/figures/data-workflow.png)     
 _**Fig 1.** Data workflow._
 
 ## Deep learning pipeline
 1. Model training and tuning (Fig. 2). See [more](scripts/learning-pipeline).
 2. Model validation (performance evaluation and clinical evaluation). 
 3. AI-based device modification, and (perhaps) AI-based production model . 
-![fig](figures/DL-pipeline.png)     
+![fig](docs/figures/DL-pipeline.png)     
 _**Fig 2.** Deep learning pipeline of the AI-empowered echocardiography._
 
 ## Clinical system  
@@ -24,7 +24,7 @@ Figure 3 illustrates the real-time AI-empowered clinical system based on [EPIQ 7
 The software of the system is based on [Machine learning pipeline](scripts/learning-pipeline) and [Plug-in based, Real-time Ultrasound](source/PRETUS_Plugins).  
 See further details on the system [here](docs/system). 
 
-![fig](figures/rt-ai-system.png)    
+![fig](docs/figures/rt-ai-system.png)    
 _**Fig 3.** Real-time AI-empowered clinical system._  
 
 ## Clone repository
