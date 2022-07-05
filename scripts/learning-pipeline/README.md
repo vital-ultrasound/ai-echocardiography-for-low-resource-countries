@@ -270,7 +270,7 @@ $ tree -s
 ```
 </details>
 
-## 2. Learning pipeline notebook
+## 2. Learning pipeline notebook [:notebook:](learning_pipeline.py)
 The jupyter nobebook [learning_pipeline_notebook.ipynb](learning_pipeline_notebook.ipynb) involves pre-processing, segment sampling, model and hyperparameter tunning pipeline (Fig. 1).
 
 ![fig](../../docs/figures/DL-pipeline.png)       
@@ -288,7 +288,9 @@ jupyter notebook # to open *.ipynb in your web-browser
 ```
 
 * Temporal files
-`EchoClassesDataset()` creates a temporal tamp at `$HOME/datasets/vital-us/echocardiography/temporal-files/echovideodatafiles_FRAMESPERCLIP{$K}_PIXELSIZE_{$NW}W{$NH}H` where K are the `number_of_frames_per_segment_in_a_clip` and `{$NW}` and `{$NH}` are pixel size of the ultrasound image.
+`EchoClassesDataset()` creates a temporal path at 
+`$HOME/datasets/vital-us/echocardiography/temporal-files/echovideodatafiles_FRAMESPERCLIP{$K}_PIXELSIZE_{$NW}W{$NH}H` 
+where K are the `number_of_frames_per_segment_in_a_clip` and `{$NW}` and `{$NH}` are pixel size of the ultrasound image.
 
 Example:
 ```
@@ -303,3 +305,20 @@ total 1.9G
 13373958 -rw-rw-r-- 1 mx19 mx19  23M May 16 13:49 videoID_02_040-1_label_00.pth
 ```
 
+## 3. Heuristics for learning pipeline [:notebook:](heuristics_learning_pipeline_notebook.ipynb)
+* Open a terminal, load your conda environment and run the script.
+```
+cd $HOME/repositories/echocardiography/scripts/learning-pipeline
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
+conda activate rt-ai-echo-VE 
+jupyter notebook # to open *.ipynb in your web-browser
+```
+
+## 4. Evaluation of learning pipeline [:notebook:](evaluation_of_learning_pipeline_notebook.ipynb)
+* Open a terminal, load your conda environment and run the script.
+```
+cd $HOME/repositories/echocardiography/scripts/learning-pipeline
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
+conda activate rt-ai-echo-VE 
+jupyter notebook # to open *.ipynb in your web-browser
+```
