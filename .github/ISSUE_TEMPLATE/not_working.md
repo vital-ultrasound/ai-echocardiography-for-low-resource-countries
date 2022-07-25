@@ -39,10 +39,9 @@ assignees: ''
 ### System info
 Output of 
 ``` 
-conda activate ve-AICU
-python <(curl -s https://raw.githubusercontent.com/vital-ultrasound/echocardiography/master/print_system.py)`:
+conda activate rt-ai-echo-VE
+python <(curl -s https://raw.githubusercontent.com/vital-ultrasound/echocardiography/master/scripts/computer-features/print_system.py)`:
 ```
-
 
 ```
 # Paste here the output of that command in a terminal
