@@ -1,8 +1,377 @@
 import numpy as np
+import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+import torch.nn.init as init
+
+
+class fire_(nn.Module):
+    def __init__(self, inplanes, squeeze_planes, expand_planes):
+        super(fire_, self).__init__()
+        self.conv1 = nn.Conv2d(inplanes, squeeze_planes, kernel_size=1, stride=1)
+        self.bn1 = nn.BatchNorm2d(squeeze_planes)
+        self.relu1 = nn.ReLU(inplace=True)
+        self.conv2 = nn.Conv2d(squeeze_planes, expand_planes, kernel_size=1, stride=1)
+        self.bn2 = nn.BatchNorm2d(expand_planes)
+        self.conv3 = nn.Conv2d(squeeze_planes, expand_planes, kernel_size=3, stride=1, padding=1)
+        self.bn3 = nn.BatchNorm2d(expand_planes)
+        self.relu2 = nn.ReLU(inplace=True)
+
+        # using MSR initilization
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.in_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu1(x)
+        out1 = self.conv2(x)
+        out1 = self.bn2(out1)
+        out2 = self.conv3(x)
+        out2 = self.bn3(out2)
+        out = torch.cat([out1, out2], 1)
+        out = self.relu2(out)
+        return out
+
+
+class SqueezeNet_source0(nn.Module):
+    def __init__(self, num_classes: int = 1000, in_channels: int = 3):
+        """
+        SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size
+        Forrest N. Iandola, Song Han, Matthew W. Moskewicz, Khalid Ashraf, William J. Dally, Kurt Keutzer
+        [v4] Fri, 4 Nov 2016 21:26:08 UTC (533 KB)
+        https://arxiv.org/abs/1602.07360
+        https://github.com/gsp-27/pytorch_Squeezenet/blob/master/model.py
+        https://github.com/pytorch/vision/blob/main/torchvision/models/squeezenet.py
+        https://github.com/Marcovaldong/LightModels/blob/master/models/shufflenet.py
+        """
+        super(SqueezeNet_source0, self).__init__()
+        self.num_classes = num_classes
+        self.conv1 = nn.Conv2d(in_channels, 96, kernel_size=3, stride=1, padding=1)  # 32
+        self.bn1 = nn.BatchNorm2d(96)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)  # 16
+        self.fire2 = fire_(96, 16, 64)
+        self.fire3 = fire_(128, 16, 64)
+        self.fire4 = fire_(128, 32, 128)
+        self.maxpool2 = nn.MaxPool2d(kernel_size=2, stride=2)  # 8
+        self.fire5 = fire_(256, 32, 128)
+        self.fire6 = fire_(256, 48, 192)
+        self.fire7 = fire_(384, 48, 192)
+        self.fire8 = fire_(384, 64, 256)
+        self.maxpool3 = nn.MaxPool2d(kernel_size=2, stride=2)  # 4
+        self.fire9 = fire_(512, 64, 256)
+        self.conv2 = nn.Conv2d(512, 10, kernel_size=1, stride=1)
+        self.avg_pool = nn.AvgPool2d(kernel_size=4, stride=4)
+        self.softmax = nn.LogSoftmax(dim=1)
+        self.linear1 = nn.Linear(160, self.num_classes)
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.in_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = torch.squeeze(x, dim=1)
+        # print(f'X0.shape(): {x.size()}')
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.maxpool1(x)
+        x = self.fire2(x)
+        x = self.fire3(x)
+        x = self.fire4(x)
+        x = self.maxpool2(x)
+        x = self.fire5(x)
+        x = self.fire6(x)
+        x = self.fire7(x)
+        x = self.fire8(x)
+        x = self.maxpool3(x)
+        x = self.fire9(x)
+        x = self.conv2(x)
+        x = self.avg_pool(x)
+        x = self.softmax(x)
+        x = torch.flatten(x, 1)
+        x = self.linear1(x)
+        # print(f'X?.shape(): {x.size()}')
+        return x
+
+
+# def fire_layer(inp, s, e):
+#     f = fire(inp, s, e)
+#     return f
+
+# def squeezenet(pretrained=False):
+#     net = SqueezeNet()
+#     # inp = Variable(torch.randn(64,3,32,32))
+#     # out = net.forward(inp)
+#     # print(out.size())
+#     return net
+
+class fire(nn.Module):
+    def __init__(self, inplanes, squeeze_planes, expand_planes):
+        super(fire, self).__init__()
+        self.conv1 = nn.Conv2d(inplanes, squeeze_planes, kernel_size=1, stride=1)
+        self.bn1 = nn.BatchNorm2d(squeeze_planes)
+        self.relu1 = nn.ReLU(inplace=True)
+        self.conv2 = nn.Conv2d(squeeze_planes, expand_planes, kernel_size=1, stride=1)
+        self.bn2 = nn.BatchNorm2d(expand_planes)
+        self.conv3 = nn.Conv2d(squeeze_planes, expand_planes, kernel_size=3, stride=1, padding=1)
+        self.bn3 = nn.BatchNorm2d(expand_planes)
+        self.relu2 = nn.ReLU(inplace=True)
+
+        # using MSR initilization
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.in_channels
+                m.weight.data.normal_(0, math.sqrt(2./n))
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu1(x)
+        out1 = self.conv2(x)
+        out1 = self.bn2(out1)
+        out2 = self.conv3(x)
+        out2 = self.bn3(out2)
+        out = torch.cat([out1, out2], 1)
+        out = self.relu2(out)
+        return out
+
+
+#initial picture size = 256
+class SqueezeNet_source1(nn.Module):
+    def __init__(self, num_classes: int = 2, in_channels: int = 3):
+        """
+        SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size
+        Forrest N. Iandola, Song Han, Matthew W. Moskewicz, Khalid Ashraf, William J. Dally, Kurt Keutzer
+        [v4] Fri, 4 Nov 2016 21:26:08 UTC (533 KB)
+        https://github.com/thuBingo/Squeezenet_pytorch/blob/master/squeezenet.py
+        """
+        super(SqueezeNet_source1, self).__init__()
+        self.num_classes = num_classes
+        self.conv1 = nn.Conv2d(in_channels, 96, kernel_size=3, stride=1, padding=1) # 128x128
+        self.bn1 = nn.BatchNorm2d(96)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2) # 64x64
+        self.fire2 = fire(96, 16, 64)
+        self.fire3 = fire(128, 16, 64)
+        self.fire4 = fire(128, 32, 128)
+        self.maxpool2 = nn.MaxPool2d(kernel_size=2, stride=2) # 32x32
+        self.fire5 = fire(256, 32, 128)
+        self.fire6 = fire(256, 48, 192)
+        self.fire7 = fire(384, 48, 192)
+        self.fire8 = fire(384, 64, 256)
+        self.maxpool3 = nn.MaxPool2d(kernel_size=2, stride=2) # 16x16
+        self.fire9 = fire(512, 64, 256)
+        self.softmax = nn.LogSoftmax(dim=1)
+        self.classifier = nn.Sequential(
+            nn.Dropout(p=0.5),
+            nn.Conv2d(512, num_classes, kernel_size=1, stride=1),
+            nn.ReLU(inplace=True),
+            nn.AvgPool2d(kernel_size=2, stride=2),
+            nn.AvgPool2d(kernel_size=2, stride=2),
+            nn.AvgPool2d(kernel_size=2, stride=2),
+            nn.AvgPool2d(kernel_size=2, stride=2),
+        )
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.in_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+
+    def forward(self, x):
+        x = torch.squeeze(x, dim=1)
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.maxpool1(x)
+        x1 = self.fire2(x)
+        x2 = self.fire3(x1)
+        x = self.fire4(x1+x2)
+        x3 = self.maxpool2(x)
+        x4 = self.fire5(x3)
+        x5 = self.fire6(x3+x4)
+        x6 = self.fire7(x5)
+        x = self.fire8(x5+x6)
+        x7 = self.maxpool3(x)
+        x8 = self.fire9(x7)
+        x = self.classifier(x7+x8)
+        x = self.softmax(x)
+        return x.view(-1, self.num_classes)
+
+# def squeezenet(pretrained=False):
+#     net = SqueezeNet()
+#     # inp = Variable(torch.randn(32,3,256,256))
+#     # out = net.forward(inp)
+#     # print(out.size())
+#     return net
+
+
+class Fire(nn.Module):
+    """Fire Module based on SqueezeNet"""
+
+    def __init__(
+            self,
+            in_channels,
+            squeeze_channels,
+            e1x1_channels,
+            e3x3_channels
+    ):
+        super(Fire, self).__init__()
+
+        self.in_channels = in_channels
+        self.squeeze_channels = squeeze_channels
+        self.e1x1_channels = e1x1_channels
+        self.e3x3_channels = e3x3_channels
+
+        self.squeeze_layer = self.get_squeeze_layer()
+        self.expand_1x1_layer = self.get_expand_1x1_layer()
+        self.expand_3x3_layer = self.get_expand_3x3_layer()
+
+    def get_squeeze_layer(self):
+        layers = []
+
+        layers.append(nn.Conv2d(self.in_channels,
+                                self.squeeze_channels,
+                                kernel_size=1))
+        layers.append(nn.ReLU(inplace=True))
+
+        return nn.Sequential(*layers)
+
+    def get_expand_1x1_layer(self):
+        layers = []
+
+        layers.append(nn.Conv2d(self.squeeze_channels,
+                                self.e1x1_channels,
+                                kernel_size=1))
+        layers.append(nn.ReLU(inplace=True))
+
+        return nn.Sequential(*layers)
+
+    def get_expand_3x3_layer(self):
+        layers = []
+
+        layers.append(nn.Conv2d(self.squeeze_channels,
+                                self.e3x3_channels,
+                                kernel_size=3,
+                                padding=1))
+        layers.append(nn.ReLU(inplace=True))
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        y = self.squeeze_layer(x)
+        return torch.cat([
+            self.expand_1x1_layer(y),
+            self.expand_3x3_layer(y)
+        ], 1)
+
+
+class SqueezeNet_source2(nn.Module):
+    """SqueezeNet1.1"""
+
+    def __init__(
+            self,
+            channels,
+            class_count
+    ):
+        super(SqueezeNet_source2, self).__init__()
+        self.channels = channels
+        self.class_count = class_count
+
+        self.features = self.get_features()
+        self.classifier = self.get_classifier()
+
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                if m is self.final_conv:
+                    init.normal_(m.weight, mean=0.0, std=0.01)
+
+                else:
+                    init.kaiming_uniform_(m.weight)
+
+                if m.bias is not None:
+                    init.constant_(m.bias, 0)
+
+    def get_features(self):
+        layers = []
+
+        # in_channels = self.channels, out_channels = 64
+        # kernel_size = 3x3, stride = 2
+        layers.append(nn.Conv2d(self.channels, 64, kernel_size=3, stride=2))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True))
+
+        # in_channels = 64, squeeze_channels = 16
+        # e1x1_channels = 64, e3x3_channels = 64 -> out_channels = 128
+        layers.append(Fire(64, 16, 64, 64))
+
+        # in_channels = 128, squeeze_channels = 16
+        # e1x1_channels = 64, e3x3_channels = 64 -> out_channels = 128
+        layers.append(Fire(128, 16, 64, 64))
+
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True))
+
+        # in_channels = 128, squeeze_channels = 32
+        # e1x1_channels = 128, e3x3_channels = 128 -> out_channels = 256
+        layers.append(Fire(128, 32, 128, 128))
+
+        # in_channels = 256, squeeze_channels = 32
+        # e1x1_channels = 128, e3x3_channels = 128 -> out_channels = 256
+        layers.append(Fire(256, 32, 128, 128))
+
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True))
+
+        # in_channels = 256, squeeze_channels = 48
+        # e1x1_channels = 192, e3x3_channels = 192 -> out_channels = 384
+        layers.append(Fire(256, 48, 192, 192))
+
+        # in_channels = 384, squeeze_channels = 48
+        # e1x1_channels = 192, e3x3_channels = 192 -> out_channels = 384
+        layers.append(Fire(384, 48, 192, 192))
+
+        # in_channels = 384, squeeze_channels = 64
+        # e1x1_channels = 256, e3x3_channels = 256 -> out_channels = 512
+        layers.append(Fire(384, 64, 256, 256))
+
+        # in_channels = 512, squeeze_channels = 64
+        # e1x1_channels = 256, e3x3_channels = 256 -> out_channels = 512
+        layers.append(Fire(512, 64, 256, 256))
+
+        return nn.Sequential(*layers)
+
+    def get_classifier(self):
+        layers = []
+
+        self.final_conv = nn.Conv2d(512, self.class_count, kernel_size=1)
+
+        layers.append(nn.Dropout())
+        layers.append(self.final_conv)
+        layers.append(nn.ReLU(inplace=True))
+        #layers.append(nn.AvgPool2d(13, stride=1))
+
+        #layers.append(nn.AdaptiveAvgPool2d((1, 1))) # Use Adaptive Average Pooling for random input image size
+        layers.append(nn.AvgPool2d(kernel_size=2, stride=2))
+        layers.append(nn.AvgPool2d(kernel_size=2, stride=2))
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        x = torch.squeeze(x, dim=1)
+        x = self.features(x)
+        #         print(f'x.shape(): {x.size()}')
+        x = self.classifier(x)
+        x = x.view(x.size(0), self.class_count)
+        return x
 
 class LeNet5_source00(nn.Module):
     def __init__(self, n_classes=2):
