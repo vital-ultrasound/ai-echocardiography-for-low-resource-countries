@@ -1128,7 +1128,7 @@ def shufflenetv2(width_mult=1.):
     return model
 
 
-class TrompNet2022(nn.Module):
+class TrompNetV1(nn.Module):
     def __init__(self, input_pixel_size, n_batch_size_of_clips, n_frames_per_clip, n_classes=2):
         """
         Simple Video classifier by Tromp et al. 2022. DOI https://doi.org/10.1016/S2589-7500(21)00235-1
@@ -1137,20 +1137,26 @@ class TrompNet2022(nn.Module):
             * a dense layer, and
             * a softmax output layer.
         This model was trained with a categorical cross-entropy loss function.
+
+        V1 was implemented by Miguel Xochicale based on
+            Boice, Emily N., Sofia I. Hernandez-Torres, and Eric J. Snider. 2022.
+            "Comparison of Ultrasound Image Classifier Deep Learning Algorithms for Shrapnel Detection"
+            Journal of Imaging 8, no. 5: 140.
+            DOI: https://doi.org/10.3390/jimaging8050140
+
         Args:
             input_pixel_size:  shape of the input image. Should be a 2 element vector for a 2D video (width, height) [e.g. 128, 128].
             n_batch_size_of_clips: (self explanatory)
             n_frames_per_clip: (self explanatory)
             n_classes: number of output classes
         """
-        super(TrompNet2022, self).__init__()
-        self.name = 'tromp2022Net'
+        super(TrompNetV1, self).__init__()
+        self.name = 'TrompNetV1'
 
         self.input_pixel_size = input_pixel_size  # [128, 128]
         self.n_batch_size_of_clips = n_batch_size_of_clips  # BATCH_SIZE_OF_CLIPS
         self.n_frames_per_clip = n_frames_per_clip  # NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP
         self.n_classes = n_classes
-        # print(f'self.n_frames_per_clip {self.n_frames_per_clip}')
         self.n_features = np.prod(self.input_pixel_size) * self.n_frames_per_clip
 
         # self.n_batch_size_of_clips
@@ -1190,7 +1196,7 @@ class TrompNet2022(nn.Module):
                                )
 
         self.flatten = nn.Flatten()
-        # self.relu = nn.ReLU()
+        #         self.relu = nn.ReLU()
         # self.sigmoid = nn.Sigmoid()
 
         self.fc0 = nn.Linear(in_features=144000, out_features=self.n_classes)
@@ -1219,8 +1225,9 @@ class TrompNet2022(nn.Module):
         x = self.flatten(x)
         # print(f'self.flatten(x) size() {x.size()}')  # x.shape(): torch.Size([4, 983040])
         x = self.fc0(x)
+        x = F.dropout(x, p=0.5)  # dropout was included to combat overfitting
         # print(f'fc0(): {x.size()}')
-
+        #         x = self.relu(x)
         x = self.softmax(x)
         # print(f'x.shape(): {x.size()}')
         return x
