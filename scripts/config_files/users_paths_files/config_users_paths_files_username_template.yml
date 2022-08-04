@@ -31,7 +31,7 @@ crop_bounds_for_us_image:
 
 ## Size to which the cropped area is resized to.
 use_pretransform_image_size: True
-pretransform_im_size:  !!python/tuple [650, 690] #[width, height] #128*128 might be too big for 16GB GPU; [650, 690] original pixel size for VenueGO
+pretransform_im_size:  !!python/tuple [128, 128] #[width, height] #128*128 might be too big for 16GB GPU; [650, 690] original pixel size for VenueGO
 
 ## number of frames per clip
 number_of_frames_per_segment_in_a_clip: 60  # Reduce it from 60 to 30 frames!
@@ -56,6 +56,9 @@ participant_path_json_list_tbv: !join [*HOME_DIR, '/repositories/echocardiograph
 ### TRAIN LIST
 participant_videos_list_train: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_train.txt']
 participant_path_json_list_train: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_train.txt']
+### TRAIN LIST
+participant_videos_list_test: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_test.txt']
+participant_path_json_list_test: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_test.txt']
 ### VALIDATION LIST
 participant_videos_list_validation: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/video_list_validate.txt']
 participant_path_json_list_validation: !join [*HOME_DIR, '/repositories/echocardiography/scripts/config_files/data_lists/annotation_list_validate.txt']
