@@ -1,8 +1,10 @@
+import os
+
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-import os
+
 
 def get_class_distribution(dataset_obj, label_id):
     count_class_dict = {
@@ -97,26 +99,30 @@ def animate_clips(pair_clips_labels, label_id, NUMBER_OF_FRAMES_PER_SEGMENT_IN_A
     return anim
 
 
-def json2DataFrame(PATH, FILENAME, TYPE_str, FRAMES_PER_SEGMENT_IN_A_CLIP, BatchClips, LR,STR_VARIABLE_NAME):
+def json2DataFrame(PATH, FILENAME, TYPE_str, FRAMES_PER_SEGMENT_IN_A_CLIP, BatchClips, LR, STR_VARIABLE_NAME,
+                   RUN_VERSION):
     FULL_PATH_FILENAME = os.path.join(PATH, FILENAME)
-    pd_read_json=pd.read_json(
-                    FULL_PATH_FILENAME,
-                    orient='columns',
-                    typ='series')
+    pd_read_json = pd.read_json(
+        FULL_PATH_FILENAME,
+        orient='columns',
+        typ='series')
 
-    Filtered_JSON_stats=pd_read_json[TYPE_str]
-    DFDICT = pd.DataFrame.from_dict(Filtered_JSON_stats).reset_index().melt(id_vars=['index']).rename(columns={"index":"epochs"})
-    DFDICT.insert(1, 'LR', 'lr'+str(LR), True)
-    DFDICT.insert(2, 'N_BatchClips', 'bc'+str(BatchClips), True)
+    Filtered_JSON_stats = pd_read_json[TYPE_str]
+    DFDICT = pd.DataFrame.from_dict(Filtered_JSON_stats).reset_index().melt(id_vars=['index']).rename(
+        columns={"index": "epochs"})
+    DFDICT.insert(1, 'LR', 'lr' + str(LR), True)
+    DFDICT.insert(2, 'N_BatchClips', 'bc' + str(BatchClips), True)
     DFDICT.insert(3, 'FRXClips', str(FRAMES_PER_SEGMENT_IN_A_CLIP), True)
-    DFDICT.rename(columns={"variable":"datatype"} ,inplace=True)
-    DFDICT.rename(columns={"value":STR_VARIABLE_NAME} ,inplace=True)
+    DFDICT.rename(columns={"variable": "datatype"}, inplace=True)
+    DFDICT.rename(columns={"value": STR_VARIABLE_NAME}, inplace=True)
+    DFDICT.insert(6, 'RUN_NN', str(RUN_VERSION), True)
     return DFDICT
+
 
 def jsonPARAMS2DataFrame(PATH, FILENAME):
     FULL_PATH_FILENAME = os.path.join(PATH, FILENAME)
-    pd_read_json=pd.read_json(
-                    FULL_PATH_FILENAME,
-                    orient='columns',
-                    typ='series')
+    pd_read_json = pd.read_json(
+        FULL_PATH_FILENAME,
+        orient='columns',
+        typ='series')
     return pd_read_json
