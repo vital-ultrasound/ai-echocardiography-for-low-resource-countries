@@ -109,15 +109,15 @@ class EchoClassesDataset(torch.utils.data.Dataset):
             frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
             video_duration_i = frame_count / fps * S2MS
 
-            # # Print video features
-            # print(f'  ')
-            # print(f'  ')
-            # print(f'  ')
-            # print(f'  VIDEO_FEATURES')
-            # print(f'    video_name={video_name}')
-            # print(f'    Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
-            # print(f'  ')
-            # print(f'  ')
+            # Print video features
+            print(f'  ')
+            print(f'  ')
+            print(f'  ')
+            print(f'  VIDEO_FEATURES')
+            print(f'    video_name={video_name}')
+            print(f'    Frame_height={frame_height}, frame_width={frame_width} fps={fps} nframes={frame_count} ')
+            print(f'  ')
+            print(f'  ')
             cap.release()
 
             # Now read the segments in the json file

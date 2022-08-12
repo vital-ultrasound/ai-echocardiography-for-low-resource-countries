@@ -47,7 +47,7 @@ conda activate rt-ai-echo-VE
 python dataloader_4CV.py --config ../config_files/config_4cv.yml
 ```
 The following figure illustrate the pipeline to create classes for background and 4CH; segments of random clips; segment sampling and frame sliding window techniques.
-![fig](../../figures/classes-windowing-sampling.png)
+![fig](../../docs/figures/classes-windowing-sampling.png)
 
 ### Setting config file 
 For datapaths of other users, you can edit ../config_files/config_4cv.yml and add respective participant video path and json files path. 

@@ -1,4 +1,4 @@
-# Annotations for Four Chamber View (4CV) and Ejection Fraction (EF) in json files    
+# Annotations for Four Chamber View (4CV) in json files    
 This path contains `json` files of different participants for annotations of Four Chamber View (4CV) and Ejection Fraction (EF). 
 Templates are also available for the creation of new annotations.
 
@@ -35,8 +35,3 @@ xy	[]
 av	
 1	"4CV_NP"
 ``` 
-
-## 2. Ejection Fraction (EF) [:books:](EF)
-TODO 
-* [ ] add protocol on how to do annotations
- 

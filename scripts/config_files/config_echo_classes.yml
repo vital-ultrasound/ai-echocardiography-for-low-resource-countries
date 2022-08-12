@@ -15,14 +15,13 @@ crop_bounds_for_us_image:
 pretransform_im_size:  !!python/tuple [128, 128]
 
 ## number of frames per clip
-number_of_frames_per_segment_in_a_clip: 10
-sliding_window_length_in_percentage_of_frames_per_segment: !!float 1.0
+n_frames: 5
 
 ## Max duration of background clips
 max_background_duration_in_secs: 5
 
 ## Training parameters
-batch_size: 8
+batch_size: 16
 max_epochs: 100
 use_augmentation: True
 
@@ -30,6 +29,7 @@ use_augmentation: True
 #main_data_path: '/home/ag09/data/VITAL/echo'
 #participant_videos_list: '/home/ag09/data/VITAL/echo/video_list_train.txt'
 #participant_path_json_list: '/home/ag09/data/VITAL/echo/annotation_list_train.txt'
+#output_path:  '/home/ag09/data/VITAL/echo/output'
 
 ## Video paths
 main_data_path: '/home/mx19/datasets/vital-us/echocardiography/videos-echo-test'
