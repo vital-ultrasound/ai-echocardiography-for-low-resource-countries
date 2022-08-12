@@ -32,12 +32,12 @@ $ hostnamectl
 ```
 
 ## Python packages  
-See [print_system.py](../../../scripts/computer-features/print_system.py)
+See [print_system.py](../../../scripts/computer-features/print_system.py) and [README](../../../scripts/computer-features)
 ``` 
- python print_system.py
+$ python print_system.py
 Python:    3.8.11 (default, Aug  3 2021, 15:09:35) 
 [GCC 7.5.0]
-Platform:  Linux-5.15.0-41-generic-x86_64-with-glibc2.17
+Platform:  Linux-5.15.0-43-generic-x86_64-with-glibc2.17
 NumPy:     1.20.3
 opencv:    4.6.0
 PyTorch:   1.9.0

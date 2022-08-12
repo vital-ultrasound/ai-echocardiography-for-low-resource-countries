@@ -6,7 +6,7 @@ The machine learning pipeline are based on the total product lifecycle (TPLC) ap
 See more [here](scripts/learning-pipeline).
 
 ## Data collection, validation and management 
-1. Video data from GE Venue Go GE using Probe 3SC-RS was collected with a Portable Video Recorder. See [more](data).
+1. Video data from GE Venue Go GE and Probe 3SC-RS was collected  with Portable Video Recorder. See [more](data).
 2. Creation and verification of annotations with VGG Image Annotator (VIA) software. See [more](data/labelling).
 3. Jupyter notebook :notebook: for [data curation, selection and validation](scripts/curation-selection-validation); 
 ![fig](docs/figures/data-workflow.png)     
