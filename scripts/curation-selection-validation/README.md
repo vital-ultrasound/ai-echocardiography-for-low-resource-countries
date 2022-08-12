@@ -277,7 +277,7 @@ mx19@sie133-lap:~/datasets/vital-us/echocardiography/videos-echo-annotated$ tree
 ```
 cd $HOME/repositories/echocardiography/scripts/curation-selection-validation
 export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
-conda activate rt-ai-echo-VE
+conda activate rt-ai-echo-VE 
 jupyter notebook # to open *.ipynb in your web-browser
 ```
 **NOTE**. Create a new config file called `config_users_paths_files_username_$USER_validation.yml`.
@@ -303,7 +303,7 @@ The script converts mp4 videos to png image frames of masked videos (Fig 1).
 Before running the script, make sure to edit [config.yml](config.yml) file with the right paths.
 ```
 cd $HOME/repositories/echocardiography/scripts/curation-selection-validation
-conda activate rt-ai-echo-VE
+conda activate rt-ai-echo-VE 
 python video_to_imageframes.py --config ../config_files/config_v2i.yml  
 ```
 
