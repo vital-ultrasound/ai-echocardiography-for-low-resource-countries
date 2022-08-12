@@ -1,9 +1,10 @@
-import numpy as np
+
 import math
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
 import torch.nn.init as init
 
 
@@ -52,6 +53,7 @@ class SqueezeNet_source0(nn.Module):
         super(SqueezeNet_source0, self).__init__()
         self.num_classes = num_classes
         self.conv1 = nn.Conv2d(in_channels, 96, kernel_size=3, stride=1, padding=1)  # 32
+        # Input: (N, C_{in}, H_{in}, W_{in})o (C_{in}, H_{in}, W_{in})
         self.bn1 = nn.BatchNorm2d(96)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)  # 16
@@ -79,7 +81,7 @@ class SqueezeNet_source0(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = torch.squeeze(x, dim=1)
-        # print(f'X0.shape(): {x.size()}')
+        #         print(f'X0.shape(): {x.size()}')
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -99,7 +101,7 @@ class SqueezeNet_source0(nn.Module):
         x = self.softmax(x)
         x = torch.flatten(x, 1)
         x = self.linear1(x)
-        # print(f'X?.shape(): {x.size()}')
+        #         print(f'X?.shape(): {x.size()}')
         return x
 
 
@@ -113,6 +115,7 @@ class SqueezeNet_source0(nn.Module):
 #     # out = net.forward(inp)
 #     # print(out.size())
 #     return net
+
 
 class fire(nn.Module):
     def __init__(self, inplanes, squeeze_planes, expand_planes):
@@ -130,7 +133,7 @@ class fire(nn.Module):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 n = m.kernel_size[0] * m.kernel_size[1] * m.in_channels
-                m.weight.data.normal_(0, math.sqrt(2./n))
+                m.weight.data.normal_(0, math.sqrt(2. / n))
 
     def forward(self, x):
         x = self.conv1(x)
@@ -145,7 +148,7 @@ class fire(nn.Module):
         return out
 
 
-#initial picture size = 256
+# initial picture size = 256
 class SqueezeNet_source1(nn.Module):
     def __init__(self, num_classes: int = 2, in_channels: int = 3):
         """
@@ -156,19 +159,19 @@ class SqueezeNet_source1(nn.Module):
         """
         super(SqueezeNet_source1, self).__init__()
         self.num_classes = num_classes
-        self.conv1 = nn.Conv2d(in_channels, 96, kernel_size=3, stride=1, padding=1) # 128x128
+        self.conv1 = nn.Conv2d(in_channels, 96, kernel_size=3, stride=1, padding=1)  # 128x128
         self.bn1 = nn.BatchNorm2d(96)
         self.relu = nn.ReLU(inplace=True)
-        self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2) # 64x64
+        self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)  # 64x64
         self.fire2 = fire(96, 16, 64)
         self.fire3 = fire(128, 16, 64)
         self.fire4 = fire(128, 32, 128)
-        self.maxpool2 = nn.MaxPool2d(kernel_size=2, stride=2) # 32x32
+        self.maxpool2 = nn.MaxPool2d(kernel_size=2, stride=2)  # 32x32
         self.fire5 = fire(256, 32, 128)
         self.fire6 = fire(256, 48, 192)
         self.fire7 = fire(384, 48, 192)
         self.fire8 = fire(384, 64, 256)
-        self.maxpool3 = nn.MaxPool2d(kernel_size=2, stride=2) # 16x16
+        self.maxpool3 = nn.MaxPool2d(kernel_size=2, stride=2)  # 16x16
         self.fire9 = fire(512, 64, 256)
         self.softmax = nn.LogSoftmax(dim=1)
         self.classifier = nn.Sequential(
@@ -196,17 +199,18 @@ class SqueezeNet_source1(nn.Module):
         x = self.maxpool1(x)
         x1 = self.fire2(x)
         x2 = self.fire3(x1)
-        x = self.fire4(x1+x2)
+        x = self.fire4(x1 + x2)
         x3 = self.maxpool2(x)
         x4 = self.fire5(x3)
-        x5 = self.fire6(x3+x4)
+        x5 = self.fire6(x3 + x4)
         x6 = self.fire7(x5)
-        x = self.fire8(x5+x6)
+        x = self.fire8(x5 + x6)
         x7 = self.maxpool3(x)
         x8 = self.fire9(x7)
-        x = self.classifier(x7+x8)
+        x = self.classifier(x7 + x8)
         x = self.softmax(x)
         return x.view(-1, self.num_classes)
+
 
 # def squeezenet(pretrained=False):
 #     net = SqueezeNet()
@@ -357,9 +361,9 @@ class SqueezeNet_source2(nn.Module):
         layers.append(nn.Dropout())
         layers.append(self.final_conv)
         layers.append(nn.ReLU(inplace=True))
-        #layers.append(nn.AvgPool2d(13, stride=1))
+        # layers.append(nn.AvgPool2d(13, stride=1))
 
-        #layers.append(nn.AdaptiveAvgPool2d((1, 1))) # Use Adaptive Average Pooling for random input image size
+        # layers.append(nn.AdaptiveAvgPool2d((1, 1))) # Use Adaptive Average Pooling for random input image size
         layers.append(nn.AvgPool2d(kernel_size=2, stride=2))
         layers.append(nn.AvgPool2d(kernel_size=2, stride=2))
 
@@ -372,6 +376,7 @@ class SqueezeNet_source2(nn.Module):
         x = self.classifier(x)
         x = x.view(x.size(0), self.class_count)
         return x
+
 
 class LeNet5_source00(nn.Module):
     def __init__(self, n_classes=2):
