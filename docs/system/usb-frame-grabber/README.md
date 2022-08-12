@@ -156,3 +156,8 @@ equipment
 * See further hardware tests https://github.com/vital-ultrasound/echocardiography/tree/main/scripts/hardware#frame-grabber-mirabox-video-capture  
 * **NOTES**: There is no manual, forum or CE marked signs. 
 _Originally posted by @mxochicale in https://github.com/vital-ultrasound/echocardiography/issues/39#issuecomment-1091613496_
+
+References:
+* Manufacturer: https://miraboxbuy.com/collections/new-arrivals/products/hsv3211-video-capture-card 
+* Manual: http://video.hotspotek.com.cn/hsv-3211.html
+* https://www.amazon.com/dp/B08Q7CG9PZ/ref=emc_b_5_t?th=1  
