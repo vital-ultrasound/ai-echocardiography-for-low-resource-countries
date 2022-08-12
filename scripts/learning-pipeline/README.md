@@ -39,6 +39,7 @@ $ tree -s
 │       └── [ 1198707159]  01NVb-003-051-3 echo.mp4
 ```
 </details> 
+
 See more details on data curation [here](../../data)
 
 ## 2. Learning pipeline notebook [:notebook:](learning_pipeline.py)
