@@ -16,7 +16,7 @@ See more [here](scripts/learning-pipeline).
 _**Fig 1.** Workflow for data annotation and validation._
 
 ## Deep learning pipeline
-1. Model prototypes (MobileNetV1, MobileNetV2, SqueezeNet, EfficientNet, AlexNet, etc). See [more](source/models/architectures.py).
+1. Model selection (MobileNetV1, MobileNetV2, SqueezeNet, EfficientNet, SqueezeNet, AlexNet, etc). See [more](source/models/architectures.py).
 2. Model training and tuning (Fig. 2). See [more](scripts/learning-pipeline).
 3. Model validation (performance evaluation and clinical evaluation). 
 4. AI-based device modification, and (perhaps) AI-based production model . 
