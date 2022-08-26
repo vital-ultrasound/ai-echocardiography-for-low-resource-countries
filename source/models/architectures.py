@@ -7,6 +7,87 @@ import torch.nn.functional as F
 import torch.nn.init as init
 
 
+class ShrapML_replication_v00(nn.Module):
+    def __init__(self, num_classes: int = 2, in_channels: int = 1):
+        """
+        Boice, Emily N., Sofia I. Hernandez-Torres, and Eric J. Snider. 2022.
+        "Comparison of Ultrasound Image Classifier Deep Learning Algorithms for Shrapnel Detection"
+        Journal of Imaging 8, no. 5: 140. https://doi.org/10.3390/jimaging8050140
+
+        emily.n.boice.ctr@mail.mil (E.N.B.);
+        sofia.i.hernandeztorres.ctr@mail.mil (S.I.H.-T.)
+        eric.j.snider3.civ@mail.mil
+        """
+        super(ShrapML_replication_v00, self).__init__()
+        self.name = 'ShrapML_replication_v00'
+        self.softmax = nn.Softmax(dim=1)  # along the column (for linear output)
+
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(in_channels, 5, kernel_size=3, stride=1, padding=0),
+            #             nn.BatchNorm2d(5),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(5, 10, kernel_size=3, stride=1, padding=0),
+            #             nn.BatchNorm2d(10),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(10, 15, kernel_size=3, stride=1, padding=0),
+            #             nn.BatchNorm2d(384),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.layer4 = nn.Sequential(
+            nn.Conv2d(15, 20, kernel_size=3, stride=1, padding=0),
+            #             nn.BatchNorm2d(384),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.layer5 = nn.Sequential(
+            nn.Conv2d(20, 25, kernel_size=3, stride=1, padding=0),
+            #             nn.BatchNorm2d(384),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.layer6 = nn.Sequential(
+            nn.Conv2d(25, 30, kernel_size=3, stride=1, padding=0),
+            #             nn.BatchNorm2d(384),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.flatten = nn.Flatten()
+        self.fc = nn.Sequential(
+            #             nn.Dropout(0.5),
+            # nn.Linear(9216, 4096),
+            nn.Linear(1080, 214),
+            # nn.ReLU()
+        )
+        self.fc1 = nn.Sequential(
+            #             nn.Dropout(0.5),
+            nn.Linear(214, num_classes),
+            # nn.ReLU()
+        )
+
+    def forward(self, x):
+        x = torch.squeeze(x, dim=1)
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+        x = self.layer4(x)
+        x = self.layer5(x)
+        x = self.layer6(x)
+        #         print(f'layer6.shape(): {x.size()}')
+        x = F.dropout(x, p=0.3641)  # dropout was included to combat overfitting
+        x = self.flatten(x)  # flatten.shape(): torch.Size([25, 1080])
+        x = self.fc(x)
+        x = self.fc1(x)
+        x = self.softmax(x)
+        return x
+
+
 class Block(nn.Module):
     '''expand + depthwise + pointwise + squeeze-excitation'''
 
