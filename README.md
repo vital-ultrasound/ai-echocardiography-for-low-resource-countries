@@ -1,4 +1,7 @@
-# Real-time AI-empowered echocardiography
+<h1 align="center"> Real-time AI-empowered echocardiography </h1>
+<div align="center">
+ 
+</div>
 
 ## Summary 
 This repository contains documentation and code for an experimental clinical system to perform real-time artificial-intelligence-empowered echocardiography.
@@ -10,19 +13,20 @@ See more [here](scripts/learning-pipeline).
 2. Creation and verification of annotations with VGG Image Annotator (VIA) software. See [more](data/labelling).
 3. Jupyter notebook :notebook: for [data curation, selection and validation](scripts/curation-selection-validation); 
 ![fig](docs/figures/data-workflow.png)     
-_**Fig 1.** Data workflow._
+_**Fig 1.** Workflow for data annotation and validation._
 
 ## Deep learning pipeline
-1. Model training and tuning (Fig. 2). See [more](scripts/learning-pipeline).
-2. Model validation (performance evaluation and clinical evaluation). 
-3. AI-based device modification, and (perhaps) AI-based production model . 
+1. Model selection (MobileNetV1, MobileNetV2, SqueezeNet, EfficientNet, SqueezeNet, AlexNet, etc). See [more](source/models/architectures.py).
+2. Model training and tuning (Fig. 2). See [more](scripts/learning-pipeline).
+3. Model validation (performance evaluation and clinical evaluation). 
+4. AI-based device modification, and (perhaps) AI-based production model . 
 ![fig](docs/figures/DL-pipeline.png)     
 _**Fig 2.** Deep learning pipeline of the AI-empowered echocardiography._
 
-## Hardware and software of the clinical system  
+## Clinical system  
 Figure 3 illustrates the real-time AI-empowered clinical system based on [EPIQ 7 ultrasound](https://www.usa.philips.com/healthcare/product/HC795200C/epiq-7-ultrasound-system-for-cardiology), [X5-1 xMATRIX array transducer ](https://www.philips.co.uk/healthcare/product/HC989605400801/x5-1) and [USB framegrabber MiraBox Video Capture](https://miraboxbuy.com/collections/new-arrivals/products/hsv3211-video-capture-card).
 The software of the system is based on [Machine learning pipeline](scripts/learning-pipeline) and [Plug-in based, Real-time Ultrasound](source/PRETUS_Plugins). 
-See further details [here](docs/system) on laptop hardware, OS and software of the system.
+See further details [here](docs) on laptop hardware, OS and software of the system.
 
 ![fig](docs/figures/rt-ai-system.png)    
 _**Fig 3.** Real-time AI-empowered clinical system._  

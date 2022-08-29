@@ -59,6 +59,12 @@ conda activate rt-ai-echo-VE
 jupyter notebook # to open *.ipynb in your web-browser
 ```
 
+* Copying results to a different path
+```
+cd $HOME/repositories/echocardiography/scripts/learning-pipeline
+cp -r results/ ~/Desktop/results_today
+```
+
 * Temporal files
 `EchoClassesDataset()` creates a temporal path at 
 `$HOME/datasets/vital-us/echocardiography/temporal-files/echovideodatafiles_FRAMESPERCLIP{$K}_PIXELSIZE_{$NW}W{$NH}H` 
