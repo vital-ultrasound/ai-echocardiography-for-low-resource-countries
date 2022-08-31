@@ -1398,29 +1398,35 @@ class TrompNetV1(nn.Module):
         return x
 
 
-################################
-##### VGG3D architecture
-class VGG3D(nn.Module):
-
-    def __init__(self, input_size, n_frames_per_clip, n_classes=2):
+class basicVGG3D(nn.Module):
+    def __init__(self, in_channels: int = 1, num_classes: int = 2, n_frames_per_clip: int = 1):
         """
         Simple Video classifier to classify into two classes:
         Args:
             input_size:  shape of the input image. Should be a 2 element vector for a 2D video (width, height) [e.g. 128, 128].
             n_classes: number of output classes
+
+        References:
+        * downsample_factors: https://github.com/funkelab/funlib.learn.torch/blob/master/funlib/learn/torch/models/vgg3d.py
         """
 
-        super(VGG3D, self).__init__()
-        self.name = 'VGG00'
-        self.input_size = input_size
-        self.n_classes = n_classes
-        self.n_frames_per_clip = n_frames_per_clip
-        self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
+        super(basicVGG3D, self).__init__()
+        self.name = 'basicVGG3D'
+
+        self.in_channels = in_channels
+        self.num_classes = num_classes
+        #         self.n_frames_per_clip = n_frames_per_clip
+        #         self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
 
         self.flatten = nn.Flatten()
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
-        self.softmax = nn.Softmax()
+        #         self.softmax = nn.Softmax()
+        self.softmax = nn.LogSoftmax(dim=1)
+
+        # downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2), (2, 2, 2)]
+        downsample_factors = [(1, 1, 1), (1, 1, 1), (1, 1, 1), (1, 1, 1)]
+        # stride=(depth/val0, height/val1, width/val2)
 
         # NOTES
         # https://pytorch.org/docs/stable/generated/torch.nn.Conv3d.html
@@ -1428,19 +1434,19 @@ class VGG3D(nn.Module):
         # [batch_size, channels, depth, height, width].
 
         self.conv0 = nn.Sequential(
-            nn.Conv3d(in_channels=1, out_channels=32,
-                      kernel_size=(3, 1, 1),  ## (-depth, -height, -width)
-                      stride=(1, 1, 1),  ##(depth/val0, height/val1, width/val2)
+            nn.Conv3d(in_channels=in_channels, out_channels=16,
+                      kernel_size=(1, 1, 1),  ## (-depth, -height, -width)
+                      stride=downsample_factors[0],  ##(depth/val0, height/val1, width/val2)
                       padding=(0, 0, 0),
                       bias=False),
-            nn.BatchNorm3d(32),
+            nn.BatchNorm3d(16),
             nn.ReLU(True)
         )
 
         self.conv1 = nn.Sequential(
-            nn.Conv3d(in_channels=32, out_channels=32,
-                      kernel_size=(3, 1, 1),  ## (-depth, -height, -width)
-                      stride=(1, 1, 1),  ##(depth/val0, height/val1, width/val2)
+            nn.Conv3d(in_channels=16, out_channels=32,
+                      kernel_size=(1, 1, 1),  ## (-depth, -height, -width)
+                      stride=downsample_factors[1],  ##(depth/val0, height/val1, width/val2)
                       padding=(0, 0, 0),
                       bias=False),
             nn.BatchNorm3d(32),
@@ -1449,8 +1455,8 @@ class VGG3D(nn.Module):
 
         self.conv2 = nn.Sequential(
             nn.Conv3d(in_channels=32, out_channels=64,
-                      kernel_size=(3, 1, 1),  ## (-depth, -height, -width)
-                      stride=(1, 1, 1),  ##(depth/val0, height/val1, width/val2)
+                      kernel_size=(1, 1, 1),  ## (-depth, -height, -width)
+                      stride=downsample_factors[2],  ##(depth/val0, height/val1, width/val2)
                       padding=(0, 0, 0),
                       bias=False),
             nn.BatchNorm3d(64),
@@ -1459,103 +1465,63 @@ class VGG3D(nn.Module):
 
         self.conv3 = nn.Sequential(
             nn.Conv3d(in_channels=64, out_channels=128,
-                      kernel_size=(3, 1, 1),  ## (-depth, -height, -width)
-                      stride=(1, 1, 1),  ##(depth/val0, height/val1, width/val2)
+                      kernel_size=(1, 1, 1),  ## (-depth, -height, -width)
+                      stride=downsample_factors[3],  ##(depth/val0, height/val1, width/val2)
                       padding=(0, 0, 0),
                       bias=False),
             nn.BatchNorm3d(128),
             nn.ReLU(True)
         )
 
-        #         self.conv4 = nn.Sequential(
-        #                                 nn.Conv3d(in_channels=128, out_channels=256,
-        #                                     kernel_size = (3, 1, 1),  ## (-depth, -height, -width)
-        #                                     stride =      (1, 1, 1), ##(depth/val0, height/val1, width/val2)
-        #                                     padding =     (0, 0, 0),
-        #                                     bias=False),
-        #                                 nn.BatchNorm3d(256),
-        #                                 nn.ReLU(True)
-        #                                 )
+        # #         self.fc0 = nn.Linear(in_features=2097152, out_features=500)  # 128x128
+        #         self.fc0 = nn.Linear(in_features=1048576, out_features=500) #
+        #         # self.fc0 = nn.Linear(in_features=4194304, out_features=500) #128x128
+        #         self.fc2 = nn.Linear(in_features=500, out_features=self.num_classes)
+        #         # self.fc1 = nn.Linear(in_features=2048, out_features=self.num_classes)
 
-        #         self.conv0 = nn.Conv3d(in_channels=1, out_channels=64,
-        #                                kernel_size = (3, 3, 3),  ## (-depth, -height, -width)
-        #                                stride =      (3, 3, 3), ##(depth/val0, height/val1, width/val2)
-        #                                padding =     (0, 0, 0)
-        #                                )
-
-        #         self.conv1 = nn.Conv3d(in_channels=64, out_channels=128,
-        #                                kernel_size = (3, 3, 3),  # (-depth, -height, -width)
-        #                                stride =      (3, 3, 3), ##(depth/val0, height/val1, width/val2)
-        #                                padding =     (0, 0, 0)
-        #                                )
-
-        #         self.conv2 = nn.Conv3d(in_channels=128, out_channels=256,
-        #                                kernel_size =  (1, 3, 3),  # (-depth, -height, -width)
-        #                                stride =       (3, 3, 3), ##(depth/val0, height/val1, width/val2)
-        #                                padding =      (0, 0, 0)
-        #                                )
-
-        #         self.conv3 = nn.Conv3d(in_channels=256, out_channels=512,
-        #                                kernel_size=   (2, 2, 2),  # (-depth, -height, -width)
-        #                                stride=        (2, 2, 2), ##(depth/val0, height/val1, width/val2)
-        #                                padding =      (0, 0, 0)
-        #                                )
-
-        #         self.pool0 = nn.MaxPool3d(
-        #                                 kernel_size = (1, 3, 3),  # (-depth, -height, -width)
-        #                                 stride =      (1, 1, 1),
-        #                                 padding =     (0, 0, 0),
-        #                                 dilation =    (1, 1, 1)
-        #                                 )
-
-        # self.fc0 = nn.Linear(in_features=1048576, out_features=500) #
-        self.fc0 = nn.Linear(in_features=2097152, out_features=500)  # 128x128
-        # self.fc0 = nn.Linear(in_features=4194304, out_features=500) #128x128
-        self.fc2 = nn.Linear(in_features=500, out_features=self.n_classes)
-        # self.fc1 = nn.Linear(in_features=2048, out_features=self.n_classes)
+        # 1048576
+        # 16384
+        # 524288
+        # 8192
+        # 2097152
+        self.fc0 = nn.Linear(in_features=2097152, out_features=self.num_classes)  #
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # print(f'x.shape(): {x.size()}') ##[batch_size, channels, depth, height, width]
-        # x = x.permute(0,2,1,3,4)##[batch_size, depth,channels, height, width]
-        print(f'x.shape(): {x.size()}')
+        # x = x.permute(0,2,1,3,4)##[batch_size, depth, channels, height, width]
+        # print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([25, 1, 1, 128, 128])
 
         x = self.conv0(x)
         # print(f'x.shape(): {x.size()}') #x.shape(): x.shape(): torch.Size([2, 64, 60, 128, 128]) with kernel_size=(1, 1, 1)
         # print(f'x.shape(): {x.size()}') #x.shape():torch.Size([2, 64, 51, 29, 29]) with kernel_size=(10, 100, 100)
-        print(f'conv0.size(): {x.size()}')
+        # print(f'conv0.size(): {x.size()}')
 
         x = self.conv1(x)
         # print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
-        print(f'conv1.size(): {x.size()}')
+        # print(f'conv1.size(): {x.size()}')
 
         x = self.conv2(x)
         # print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
-        print(f'conv2.size(): {x.size()}')
+        # print(f'conv2.size(): {x.size()}')
 
         x = self.conv3(x)
-        # print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
-        print(f'conv3.size(): {x.size()}')
-
-        #         x = self.conv4(x)
-        #         #print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
-        #         print(f'conv4.size(): {x.size()}')
+        ## print(f'x.shape(): {x.size()}') with kernel_size=(1, 10, 10) #x.shape(): torch.Size([2, 32, 60, 20, 20])
+        # print(f'conv3.size(): {x.size()}')
 
         # x = self.pool0(x)
         # print(f'x.pool0..shape(): {x.size()}')
 
         x = self.flatten(x)
-        print(f'self.flatten(x) size() {x.size()}')  # x.shape(): torch.Size([4, 983040])
+        # print(f'self.flatten(x) size() {x.size()}')  # x.shape():
         x = self.fc0(x)
-        # print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([4, 32])
-        # x = F.relu(self.fc1(x))
+        # print(f'self.fc0(x): {x.size()}') #x.shape():
 
-        x = self.fc2(x)
+        x = F.relu(x)
         x = F.dropout(x, p=0.5)  # dropout was included to combat overfitting
-
-        # print(f'x.shape(): {x.size()}') # x.shape(): torch.Size([4, 2])
+        # x = self.softmax(x)
         # x = self.sigmoid(x)
 
-        x = self.softmax(x)
+        # x = self.fc2(x)
         # print(f'x.shape(): {x.size()}')  #x.shape(): torch.Size([4, 2])
 
         return x
@@ -1594,6 +1560,467 @@ class basicVGG(nn.Module):
         # print(f'x.shape(): {x.size()}')
 
         x = self.classifier(x)
+
+        return x
+
+
+class basicVGG2D_13layers(nn.Module):
+    def __init__(self, in_channels: int = 1, num_classes: int = 2, n_frames_per_clip: int = 1):
+        """
+
+        References:
+        * https://blog.paperspace.com/vgg-from-scratch-pytorch/
+        """
+
+        super(basicVGG2D_13layers, self).__init__()
+        self.name = 'basicVGG2D_13layers'
+
+        self.in_channels = in_channels
+        self.num_classes = num_classes
+        #         self.n_frames_per_clip = n_frames_per_clip
+        #         self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
+        self.flatten = nn.Flatten()
+
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(self.in_channels, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU())
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU())
+        self.layer4 = nn.Sequential(
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer5 = nn.Sequential(
+            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU())
+        self.layer6 = nn.Sequential(
+            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU())
+        self.layer7 = nn.Sequential(
+            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer8 = nn.Sequential(
+            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU())
+        self.layer9 = nn.Sequential(
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU())
+        self.layer10 = nn.Sequential(
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer11 = nn.Sequential(
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU())
+        self.layer12 = nn.Sequential(
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU())
+        self.layer13 = nn.Sequential(
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+
+        self.fc0 = nn.Sequential(
+            nn.Dropout(0.5),
+            # nn.Linear(262144, 4096), #layer1,2 #RuntimeError: CUDA out of memory.
+            nn.Linear(8192, 4096),  # 13layers
+            ##nn.Linear(7*7*512, 4096), #DEFAULT
+            nn.ReLU())
+        self.fc1 = nn.Sequential(
+            nn.Dropout(0.5),
+            nn.Linear(4096, 4096),
+            nn.ReLU())
+        self.fc2 = nn.Sequential(
+            nn.Linear(4096, self.num_classes))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # print(f'x.shape(): {x.size()}') ##[batch_size, channels, depth, height, width]
+        # x = x.permute(0,2,1,3,4)##[batch_size, depth, channels, height, width]
+        # print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([25, 1, 1, 128, 128])
+        x = torch.squeeze(x, dim=1)
+        # print(f'x.shape(): {x.size()}') #        x.shape(): torch.Size([5, 1, 128, 128])
+
+        x = self.layer1(x)
+        # print(f'layer1.size(): {x.size()}')
+        x = self.layer2(x)
+        # print(f'layer2.size(): {x.size()}')
+        x = self.layer3(x)
+        # print(f'layer3.size(): {x.size()}')
+        x = self.layer4(x)
+        # print(f'layer4.size(): {x.size()}')
+        x = self.layer5(x)
+        # print(f'layer5.size(): {x.size()}')
+        x = self.layer6(x)
+        # print(f'layer6.size(): {x.size()}')
+        x = self.layer7(x)
+        # print(f'layer7.size(): {x.size()}')
+        x = self.layer8(x)
+        # print(f'layer8.size(): {x.size()}')
+        x = self.layer9(x)
+        # print(f'layer9.size(): {x.size()}')
+        x = self.layer10(x)
+        # print(f'layer10.size(): {x.size()}')
+        x = self.layer11(x)
+        # print(f'layer11.size(): {x.size()}')
+        x = self.layer12(x)
+        # print(f'layer12.size(): {x.size()}')
+        x = self.layer13(x)
+        # print(f'layer13.size(): {x.size()}')
+
+        x = self.flatten(x)
+        # print(f'self.flatten(x) size() {x.size()}')  # x.shape():
+        x = self.fc0(x)
+        # print(f'self.fc0(x): {x.size()}') #x.shape():
+        x = self.fc1(x)
+        # print(f'self.fc1(x): {x.size()}') #x.shape():
+        x = self.fc2(x)
+        # print(f'self.fc2(x): {x.size()}') #x.shape():
+        # print(f'x.shape(): {x.size()}')  #x.shape(): torch.Size([4, 2])
+
+        return x
+
+
+class basicVGG2D_07layers(nn.Module):
+    def __init__(self, in_channels: int = 1, num_classes: int = 2, n_frames_per_clip: int = 1):
+        """
+
+        References:
+        * https://blog.paperspace.com/vgg-from-scratch-pytorch/
+        """
+
+        super(basicVGG2D_07layers, self).__init__()
+        self.name = 'basicVGG2D_07layers'
+
+        self.in_channels = in_channels
+        self.num_classes = num_classes
+        #         self.n_frames_per_clip = n_frames_per_clip
+        #         self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
+        self.flatten = nn.Flatten()
+
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(self.in_channels, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU())
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU())
+        self.layer4 = nn.Sequential(
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer5 = nn.Sequential(
+            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU())
+        self.layer6 = nn.Sequential(
+            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU())
+        self.layer7 = nn.Sequential(
+            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.fc0 = nn.Sequential(
+            nn.Dropout(0.5),
+            # nn.Linear(262144, 4096), #layer1,2 #RuntimeError: CUDA out of memory.
+            # nn.Linear(131072, 4096), #layer1,2,3,4
+            nn.Linear(65536, 4096),  # layer1,2,3,4,5,6,7
+            # nn.Linear(8192, 4096), #ALL nn.Linear(8192, 4096) #nn.Linear(7*7*512, 4096)
+            ##nn.Linear(7*7*512, 4096), #DEFAULT #
+            nn.ReLU())
+        self.fc1 = nn.Sequential(
+            nn.Dropout(0.5),
+            nn.Linear(4096, 4096),
+            nn.ReLU())
+        self.fc2 = nn.Sequential(
+            nn.Linear(4096, self.num_classes))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # print(f'x.shape(): {x.size()}') ##[batch_size, channels, depth, height, width]
+        # x = x.permute(0,2,1,3,4)##[batch_size, depth, channels, height, width]
+        # print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([25, 1, 1, 128, 128])
+        x = torch.squeeze(x, dim=1)
+        # print(f'x.shape(): {x.size()}') #        x.shape(): torch.Size([5, 1, 128, 128])
+
+        x = self.layer1(x)
+        # print(f'layer1.size(): {x.size()}')
+        x = self.layer2(x)
+        # print(f'layer2.size(): {x.size()}')
+        x = self.layer3(x)
+        # print(f'layer3.size(): {x.size()}')
+        x = self.layer4(x)
+        # print(f'layer4.size(): {x.size()}')
+        x = self.layer5(x)
+        # print(f'layer5.size(): {x.size()}')
+        x = self.layer6(x)
+        # print(f'layer6.size(): {x.size()}')
+        x = self.layer7(x)
+        # print(f'layer7.size(): {x.size()}')
+
+        x = self.flatten(x)
+        # print(f'self.flatten(x) size() {x.size()}')  # x.shape():
+        x = self.fc0(x)
+        # print(f'self.fc0(x): {x.size()}') #x.shape():
+        x = self.fc1(x)
+        # print(f'self.fc1(x): {x.size()}') #x.shape():
+        x = self.fc2(x)
+        # print(f'self.fc2(x): {x.size()}') #x.shape():
+        # print(f'x.shape(): {x.size()}')  #x.shape(): torch.Size([4, 2])
+
+        return x
+
+
+class basicVGG2D_04layers(nn.Module):
+    def __init__(self, in_channels: int = 1, num_classes: int = 2, n_frames_per_clip: int = 1):
+        """
+
+        References:
+        * https://blog.paperspace.com/vgg-from-scratch-pytorch/
+        """
+
+        super(basicVGG2D_04layers, self).__init__()
+        self.name = 'basicVGG2D_04layers'
+
+        self.in_channels = in_channels
+        self.num_classes = num_classes
+        #         self.n_frames_per_clip = n_frames_per_clip
+        #         self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
+        self.flatten = nn.Flatten()
+
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(self.in_channels, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU())
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU())
+        self.layer4 = nn.Sequential(
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+
+        self.fc0 = nn.Sequential(
+            nn.Dropout(0.5),
+            nn.Linear(131072, 4096),  # layer1,2,3,4
+            ##nn.Linear(7*7*512, 4096), #DEFAULT #
+            nn.ReLU())
+        self.fc1 = nn.Sequential(
+            nn.Dropout(0.5),
+            nn.Linear(4096, 4096),
+            nn.ReLU())
+        self.fc2 = nn.Sequential(
+            nn.Linear(4096, self.num_classes))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # print(f'x.shape(): {x.size()}') ##[batch_size, channels, depth, height, width]
+        # x = x.permute(0,2,1,3,4)##[batch_size, depth, channels, height, width]
+        # print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([25, 1, 1, 128, 128])
+        x = torch.squeeze(x, dim=1)
+        # print(f'x.shape(): {x.size()}') #        x.shape(): torch.Size([5, 1, 128, 128])
+
+        x = self.layer1(x)
+        # print(f'layer1.size(): {x.size()}')
+        x = self.layer2(x)
+        # print(f'layer2.size(): {x.size()}')
+        x = self.layer3(x)
+        # print(f'layer3.size(): {x.size()}')
+        x = self.layer4(x)
+        # print(f'layer4.size(): {x.size()}')
+
+        x = self.flatten(x)
+        # print(f'self.flatten(x) size() {x.size()}')  # x.shape():
+        x = self.fc0(x)
+        # print(f'self.fc0(x): {x.size()}') #x.shape():
+        x = self.fc1(x)
+        # print(f'self.fc1(x): {x.size()}') #x.shape():
+        x = self.fc2(x)
+        # print(f'self.fc2(x): {x.size()}') #x.shape():
+        # print(f'x.shape(): {x.size()}')  #x.shape(): torch.Size([4, 2])
+
+        return x
+
+
+class basicVGG2D_NNlayers_sequence(nn.Module):
+    def __init__(self, in_channels: int = 1, num_classes: int = 2, n_frames_per_clip: int = 1):
+        """
+
+        References:
+        * https://blog.paperspace.com/vgg-from-scratch-pytorch/
+        """
+
+        super(basicVGG2D_NNlayers_sequence, self).__init__()
+        self.name = 'basicVGG2D_NNlayers_sequence'
+
+        self.in_channels = in_channels
+        self.num_classes = num_classes
+        #         self.n_frames_per_clip = n_frames_per_clip
+        #         self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
+        self.flatten = nn.Flatten()
+
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(self.in_channels, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU())
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        self.layer4 = nn.Sequential(
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        #         self.layer5 = nn.Sequential(
+        #             nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(256),
+        #             nn.ReLU())
+        #         self.layer6 = nn.Sequential(
+        #             nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(256),
+        #             nn.ReLU())
+        #         self.layer7 = nn.Sequential(
+        #             nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(256),
+        #             nn.ReLU(),
+        #             nn.MaxPool2d(kernel_size=2, stride=2))
+        #         self.layer8 = nn.Sequential(
+        #             nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(512),
+        #             nn.ReLU())
+        #         self.layer9 = nn.Sequential(
+        #             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(512),
+        #             nn.ReLU())
+        #         self.layer10 = nn.Sequential(
+        #             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(512),
+        #             nn.ReLU(),
+        #             nn.MaxPool2d(kernel_size=2, stride=2))
+        #         self.layer11 = nn.Sequential(
+        #             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(512),
+        #             nn.ReLU())
+        #         self.layer12 = nn.Sequential(
+        #             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(512),
+        #             nn.ReLU())
+        #         self.layer13 = nn.Sequential(
+        #             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+        #             nn.BatchNorm2d(512),
+        #             nn.ReLU(),
+        #             nn.MaxPool2d(kernel_size=2, stride=2))
+
+        #         self.fc0 = nn.Sequential(
+        #             nn.Dropout(0.5),
+        #             nn.Linear(16384, self.num_classes),
+        #             nn.ReLU()) #INDIVICUALfc0 DONTTRAIN FOR THE 4 and 7 LAYER CASE
+
+        #         self.fc0 = nn.Sequential(
+        #             nn.Dropout(0.5),
+        #             nn.Linear(16384, 4096),  # layer1,2,3,4
+        #             nn.ReLU())
+        #         self.fc1 = nn.Sequential(
+        #             nn.Dropout(0.5),
+        #             nn.Linear(4096, self.num_classes),
+        #             nn.ReLU()) ##INDIVICUALfc0andfc1 DONTR TRIN FLAT
+
+        self.fc0 = nn.Sequential(
+            nn.Dropout(0.5),
+            # nn.Linear( 16*128, 4096),  # 13layers
+            # nn.Linear(16384, 4096),  # layer1,2,3,4,5,6,7
+            nn.Linear(256 * 128, 4096),  # layer1to4
+            ##nn.Linear(7*7*512, 4096), #DEFAULT #
+            nn.ReLU())
+        self.fc1 = nn.Sequential(
+            nn.Dropout(0.5),
+            nn.Linear(4096, 4096),
+            nn.ReLU())
+        self.fc2 = nn.Sequential(
+            nn.Linear(4096, self.num_classes))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # print(f'x.shape(): {x.size()}') ##[batch_size, channels, depth, height, width]
+        # x = x.permute(0,2,1,3,4)##[batch_size, depth, channels, height, width]
+        # print(f'x.shape(): {x.size()}') #x.shape(): torch.Size([25, 1, 1, 128, 128])
+        x = torch.squeeze(x, dim=1)
+        # print(f'x.shape(): {x.size()}') #        x.shape(): torch.Size([5, 1, 128, 128])
+
+        x = self.layer1(x)
+        # print(f'layer1.size(): {x.size()}')
+        x = self.layer2(x)
+        # print(f'layer2.size(): {x.size()}')
+        x = self.layer3(x)
+        # print(f'layer3.size(): {x.size()}')
+        x = self.layer4(x)
+        #         #print(f'layer4.size(): {x.size()}')
+        #         x = self.layer5(x)
+        #         # print(f'layer5.size(): {x.size()}')
+        #         x = self.layer6(x)
+        #         # print(f'layer6.size(): {x.size()}')
+        #         x = self.layer7(x)
+        #         # print(f'layer7.size(): {x.size()}')
+        #         x = self.layer8(x)
+        #         # print(f'layer8.size(): {x.size()}')
+        #         x = self.layer9(x)
+        #         # print(f'layer9.size(): {x.size()}')
+        #         x = self.layer10(x)
+        #         # print(f'layer10.size(): {x.size()}')
+        #         x = self.layer11(x)
+        #         # print(f'layer11.size(): {x.size()}')
+        #         x = self.layer12(x)
+        #         # print(f'layer12.size(): {x.size()}')
+        #         x = self.layer13(x)
+        #         # print(f'layer13.size(): {x.size()}')
+
+        x = self.flatten(x)
+        # print(f'self.flatten(x) size() {x.size()}')  # x.shape():
+        x = self.fc0(x)
+        # print(f'self.fc0(x): {x.size()}') #x.shape():
+        x = self.fc1(x)
+        # print(f'self.fc1(x): {x.size()}') #x.shape():
+        x = self.fc2(x)
+        # print(f'self.fc2(x): {x.size()}') #x.shape():
+        # print(f'x.shape(): {x.size()}')  #x.shape(): torch.Size([4, 2])
 
         return x
 
