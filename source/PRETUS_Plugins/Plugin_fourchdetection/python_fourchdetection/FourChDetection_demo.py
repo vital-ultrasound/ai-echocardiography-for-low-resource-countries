@@ -125,7 +125,7 @@ def main():
 
     print_model_arquitecture_and_name = True # False # True
     modelfolder = '../python_fourchdetection/models'
-    modelfilename_ = 'basicVGG2D_04layers_model_BATCH_SIZE_OF_CLIPS_10.pth'
+    modelfilename_ = 'basicVGG2D_04layers_model_trained_with_05subjects_and_BATCH_SIZE_OF_CLIPS_10.pth'
     worker.initialize(input_size= desired_size_, model_path= modelfolder, modelname = modelfilename_, verb=print_model_arquitecture_and_name)
 
     print(f'========================')
