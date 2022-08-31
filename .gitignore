@@ -25,3 +25,4 @@ config_users_paths_files_username_????*.yml
 
 ## ignore models.pth
 **/*model.pth
+**/*.pth

@@ -112,55 +112,62 @@ def main():
     parser.add_argument('--InputVideoID', required=True, help='Specify USB ID', type=int)
     args = parser.parse_args()
 
-    print(f'Input video: {args.InputVideoID}')
-    crop_bounds = (96, 25, 488, 389)
+    #print(f'Input video: {args.InputVideoID}')
+    crop_bounds_ = (96, 25, 488, 389)
 
-    start_frame = 10 #?
-    duration = 10 #?
-    desired_size = (128, 128)
-    frames = read_data_from_video(args.InputVideoID, start_frame, duration, crop_bounds, desired_size)
+    start_frame_ = 20 #?
+    #duration_ = 10 #?
+    BATCH_SIZE_OF_CLIPS = 10
+    NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP = 5;
+    desired_size_ = (128, 128)
+    frames = read_data_from_video(video_file= args.InputVideoID, start_frame= start_frame_, duration= NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP, crop_bounds = crop_bounds_, desired_size= desired_size_)
+    print(f' FourCHDetection_demo:main() Acquired frames.shape {frames.shape}')
 
+    print_model_arquitecture_and_name = True # False # True
     modelfolder = '../python_fourchdetection/models'
-    modelname = 'metric_model.pth'
-    worker.initialize(desired_size, modelfolder, modelname, verb=True)
+    modelfilename_ = 'basicVGG2D_04layers_model_BATCH_SIZE_OF_CLIPS_10.pth'
+    worker.initialize(input_size= desired_size_, model_path= modelfolder, modelname = modelfilename_, verb=print_model_arquitecture_and_name)
 
-    print('Run the model inference')
-    startt = time.time()
+    print(f'========================')
+    print(f'Run the model inference')
+    startt = time.time_ns() #Use time_ns() to avoid the precision loss caused by the float type.
     #predictions, aw, attentions = worker.dowork(frames) #predictions?, aw?, attentions?
     predictions = worker.dowork(frames)
-    endt = time.time()
-    print(f'Elapsed time: {endt - startt}s')
+    print(f' Predictions {predictions}')
+    endt = time.time_ns()
+    print(f'inference elapsed time: {(endt - startt)/1000000}ms')
+    print(f'========================')
 
-    print(predictions)
 
-    ##\/ TOREVIEW
-    # # find peaks
-    # awm0 = (attentions[0, 0,...] * (frames[-1,...]>0) ).astype(np.uint8)
-    # (_, _, _, maxLoc0) = cv2.minMaxLoc(awm0)
-    # awm1 = (attentions[0,-1, ...] * (frames[-1, ...] > 0)).astype(np.uint8)
-    # (_, _, _, maxLoc1) = cv2.minMaxLoc(awm1)
     #
-    # arrowlength = 15
-    #
-    # dir = np.array(maxLoc1)-np.array(maxLoc0)
-    # dir = dir/np.linalg.norm(dir)
-    # p1 = np.array(maxLoc1)- dir * 1
-    # p0= np.array(maxLoc1) - dir * (arrowlength +1)
-    # fr = frames[-1,...]
-    # fr2 = frames[-1,...]
-    # cv2.arrowedLine(fr2, tuple(p0.astype(np.int)), tuple(p1.astype(np.int)), (255, 255, 255), 1, tipLength=0.3)
-    ## plot attention
-    # plt.figure()
-    # plt.subplot(1, 2, 1)
-    # plt.imshow(frames, cmap='gray')
-    # plt.imshow(aw, alpha=aw.astype(np.float) / 255, cmap='jet')
-    # plt.subplot(1, 2, 2)
-    # plt.imshow(fr2)
-    # plt.show()
-    # #pred_segmentation = pred_segmentation[0, ...].squeeze()
-    # #pred_segmentation_t = (pred_segmentation.cpu().numpy() > 0.5).astype(np.uint8)
-    # #pred_area = np.sum(pred_segmentation_t)
-    ##/\ TOREVIEW
+    # ##\/ TOREVIEW
+    # # # find peaks
+    # # awm0 = (attentions[0, 0,...] * (frames[-1,...]>0) ).astype(np.uint8)
+    # # (_, _, _, maxLoc0) = cv2.minMaxLoc(awm0)
+    # # awm1 = (attentions[0,-1, ...] * (frames[-1, ...] > 0)).astype(np.uint8)
+    # # (_, _, _, maxLoc1) = cv2.minMaxLoc(awm1)
+    # #
+    # # arrowlength = 15
+    # #
+    # # dir = np.array(maxLoc1)-np.array(maxLoc0)
+    # # dir = dir/np.linalg.norm(dir)
+    # # p1 = np.array(maxLoc1)- dir * 1
+    # # p0= np.array(maxLoc1) - dir * (arrowlength +1)
+    # # fr = frames[-1,...]
+    # # fr2 = frames[-1,...]
+    # # cv2.arrowedLine(fr2, tuple(p0.astype(np.int)), tuple(p1.astype(np.int)), (255, 255, 255), 1, tipLength=0.3)
+    # ## plot attention
+    # # plt.figure()
+    # # plt.subplot(1, 2, 1)
+    # # plt.imshow(frames, cmap='gray')
+    # # plt.imshow(aw, alpha=aw.astype(np.float) / 255, cmap='jet')
+    # # plt.subplot(1, 2, 2)
+    # # plt.imshow(fr2)
+    # # plt.show()
+    # # #pred_segmentation = pred_segmentation[0, ...].squeeze()
+    # # #pred_segmentation_t = (pred_segmentation.cpu().numpy() > 0.5).astype(np.uint8)
+    # # #pred_area = np.sum(pred_segmentation_t)
+    # ##/\ TOREVIEW
 
 if __name__ == '__main__':
     main()
