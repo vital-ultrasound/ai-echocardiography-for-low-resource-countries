@@ -2,6 +2,7 @@ import numpy as np
 import torch
 
 import fcd_utils.classifiers as classifiers
+from source.models.architectures import basicVGG2D_04layers, SqueezeNet_source0
 
 classes = ["Background", "Four chamber"]
 
@@ -29,12 +30,15 @@ def initialize(input_size, model_path, modelname, verb: bool = False):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # n_frames_per_clip = 10
-    NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP = 5
+    NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP = 30
     n_classes_ = 2
     # net = classifiers.SimpleVideoClassifier(input_size, n_frames_per_clip, n_classes)
-    net = classifiers.basicVGG2D_04layers(in_channels=NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP,
-                                          num_classes=n_classes_,
-                                          n_frames_per_clip=NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP)
+    # net = basicVGG2D_04layers(in_channels=NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP,
+    #                                       num_classes=n_classes_,
+    #                                       n_frames_per_clip=NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP)
+    net = SqueezeNet_source0(num_classes= n_classes_,
+                               in_channels=NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP)
+                            # Total params: 733,580 ## Training curves look good
     net.to(device)
     net.eval()
     if verbose:
@@ -78,14 +82,15 @@ def dowork(frames: np.array, verbose=0):
         # frames = frames.transpose() # maybe do in cpp?
         # im = Image.fromarray(frames)
         # im.save("/home/ag09/data/VITAL/input.png")
-        frames = torch.from_numpy(frames).type(torch.float).to(device).unsqueeze(0).unsqueeze(0) / 255.0
         print(f' FourCHDetection_worker:dowork(): frames.size() {frames.shape}')
+        frames = torch.from_numpy(frames).type(torch.float).to(device).unsqueeze(0) / 255.0
+        print(f' FourCHDetection_worker:dowork(): torch.from_numpy(frames).size() {frames.shape}')
 
         try:
             out = net(frames)
             print(f' out {out}')
             out_index = torch.argmax(out, dim=1)
-            #print(f'out_index {out_index}')
+            print(f' out_index {out_index}')
 
         except Exception as ex:
             print('[Python exception caught] FourChDetection_worker::do_work() - {}{}'.format(ex,

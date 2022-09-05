@@ -6,6 +6,7 @@
 2. Activate conda VE and run demo:
 ``` 
 cd $HOME/repositories/echocardiography/source/PRETUS_Plugins/Plugin_fourchdetection/python_fourchdetection
+export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
 conda activate pretus # conda activate VE 
 python FourChDetection_demo.py --InputVideoID 2
 ```

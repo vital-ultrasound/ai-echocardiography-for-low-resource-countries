@@ -1,37 +1,36 @@
-
-import sys
 import argparse
-import matplotlib.pyplot as plt
-import numpy as np
-import FourChDetection_worker as worker
-import SimpleITK as sitk
 import time
-import skimage
-from skimage import transform
-import cv2
 
-
+import SimpleITK as sitk
 import cv2 as cv
+import numpy as np
+
+import FourChDetection_worker as worker
+
 
 def crop2(frames, crop_bounds):
-    croped = frames[:, crop_bounds[1]:crop_bounds[1] + crop_bounds[3], crop_bounds[0]:crop_bounds[0] + crop_bounds[2]]  # [:, 25:414, 96:584]
+    croped = frames[:, crop_bounds[1]:crop_bounds[1] + crop_bounds[3],
+             crop_bounds[0]:crop_bounds[0] + crop_bounds[2]]  # [:, 25:414, 96:584]
     return croped
+
 
 def resize(frames, size=(64, 64)):
     frames_out = []
     for i in range(frames.shape[0]):
-        #frames_out.append(cv2.resize(frames[i, :, :], size, interpolation=Image.ANTIALIAS))
-        frames_out.append(skimage.transform.resize(frames[i, :, :], output_shape=size, anti_aliasing=False, preserve_range=True))
+        frames_out.append(cv.resize(frames[i, :, :], size, interpolation=cv.INTER_AREA))
+        # frames_out.append(
+        #    skimage.transform.resize(frames[i, :, :], output_shape=size, anti_aliasing=False, preserve_range=True))
     frames_out = np.array(frames_out)
 
     return frames_out
 
+
 def normalize(frames, correct_studio_swing=False):
     frames = frames.astype(np.float)
     if correct_studio_swing:
-        #np.save('/home/ag09/data/press.npy', frames)
+        # np.save('/home/ag09/data/press.npy', frames)
         frames[frames < 3] = 3
-        #np.save('/home/ag09/data/postss.npy', frames)
+        # np.save('/home/ag09/data/postss.npy', frames)
 
     for i in range(frames.shape[0]):
         # Min Max normalization
@@ -40,9 +39,10 @@ def normalize(frames, correct_studio_swing=False):
         _max = np.amax(frames[i, :, :]) + 1e-6
         frames[i, :, :] = frames[i, :, :] / _max
 
-    #np.save('/home/ag09/data/postn.npy', frames)
-    #exit(-1)
+    # np.save('/home/ag09/data/postn.npy', frames)
+    # exit(-1)
     return frames
+
 
 def resample(image, desired_size):
     size = desired_size
@@ -61,83 +61,104 @@ def resample(image, desired_size):
     return image
 
 
-def read_data_from_video(video_file, start_frame, duration, crop_bounds, desired_size):
+def read_data_from_video(video_file, start_frame, clip_duration, crop_bounds, desired_size):
     cap = cv.VideoCapture(video_file)
     frames_np = []
     cap.set(cv.CAP_PROP_POS_FRAMES, start_frame)
-    for i in range(duration):
+    #print(f'duration {clip_duration}')
+    for i in range(clip_duration):
+        #print(f'Getting frame: {i}')
         success, frame = cap.read()
+        frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)  # frame converted to to gray
+        # print(f'video_data.shape {frame.shape}') #video_data.shape (480, 640)
         if not success:
-            print('[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to extract frame  from video')
+            print('[ERROR] [EchoViewVideoDataset.__getitem__()] Unable to extract frame from video')
             break
         # in pytorch, channels go first, then height, width
         frame_channelsfirst = np.moveaxis(frame, -1, 0)
         frames_np.append(frame_channelsfirst)
 
     # make a  tensor of the clip
-    video_data = np.stack(frames_np)
-    # convert to gray
+    video_data = np.stack(frames_np)  # numpy.ndarray video_data
+    # print(f'video_data.shape {video_data.shape}') # video_data.shape (30, 640, 480)
 
-    video_datag = video_data[:,0,...]
-    # remove text and labels
-    aa = (video_data[:, 0, ...].astype(np.float64) - video_data[:, 2, ...].astype(np.float64)).squeeze() ** 2
+    # video_datag = video_data[:, 0, ...]
+    # print(f'video_data.shape {video_data.shape}') #video_data.shape (30, 640, 480)
+
+    ## remove text and labels?
+    # aa = (video_data[:, 0, ...].astype(np.float64) - video_data[:, 2, ...].astype(np.float64)).squeeze() ** 2
+    # print(f'aa.shape {aa.shape}')
+
     # plt.subplot(1,3,1)
     # plt.imshow(aa[-1,...])
     # plt.subplot(1, 3, 2)
     # plt.imshow(video_datag[-1, ...])
-    video_datag[aa > 0] = 0
-    video_datag[...,:60,:150] = 0
+    # video_datag[aa > 0] = 0
+    # video_datag[..., :60, :150] = 0
+    # print(f'video_data.shape {video_data.shape}')
 
     # plt.subplot(1, 3, 3)
     # plt.imshow(video_datag[-1, ...])
     # plt.show()
 
-    video_datag[ aa >0 ]=0
+    # video_datag[aa > 0] = 0
 
+    # cv.imwrite('{}_original.png'.format(video_file[:-4]), video_data[0,...])
+    # video_data = crop(video_data)
+    # print(f'video_data.shape {video_data.shape}') #video_data.shape (30, 640, 480)
 
+    video_datag = crop2(video_data, crop_bounds)
+    # print(f'video_datag.shape {video_datag.shape}') #video_datag.shape (30, 389, 384)
+    # cv.imwrite('{}_cropped.png'.format(video_file[:-4]), video_data[0, ...])
 
-    #cv.imwrite('{}_original.png'.format(video_file[:-4]), video_data[0,...])
-    #video_data = crop(video_data)
-    video_datag = crop2(video_datag, crop_bounds)
-    #cv.imwrite('{}_cropped.png'.format(video_file[:-4]), video_data[0, ...])
     video_datag = resize(video_datag, desired_size)
-    #cv.imwrite('{}_cropped_resized.png'.format(video_file[:-4]), video_data[0, ...])
-    #video_data = normalize(video_data)
-    #cv.imwrite('{}_cropped_resized_normalised.png'.format(video_file[:-4]), video_data[0, ...] * 255)
+    # print(f'video_datag.shape {video_datag.shape}') #video_datag.shape (30, 128, 128)
+    # cv.imwrite('{}_cropped_resized.png'.format(video_file[:-4]), video_data[0, ...])
+    # video_data = normalize(video_data)
+    # cv.imwrite('{}_cropped_resized_normalised.png'.format(video_file[:-4]), video_data[0, ...] * 255)
 
     return video_datag
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--InputVideoID', required=True, help='Specify USB ID', type=int)
     args = parser.parse_args()
 
-    #print(f'Input video: {args.InputVideoID}')
+    # print(f'Input video: {args.InputVideoID}')
     crop_bounds_ = (96, 25, 488, 389)
 
-    start_frame_ = 20 #?
-    #duration_ = 10 #?
+    start_frame_ = 5  # ?
+    # duration_ = 10 #?
     BATCH_SIZE_OF_CLIPS = 10
-    NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP = 5;
+    NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP = 30
     desired_size_ = (128, 128)
-    frames = read_data_from_video(video_file= args.InputVideoID, start_frame= start_frame_, duration= NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP, crop_bounds = crop_bounds_, desired_size= desired_size_)
+    frames = read_data_from_video(video_file=args.InputVideoID,
+                                  start_frame=start_frame_,
+                                  clip_duration=NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP,
+                                  crop_bounds=crop_bounds_,
+                                  desired_size=desired_size_)
     print(f' FourCHDetection_demo:main() Acquired frames.shape {frames.shape}')
+    # FourCHDetection_demo:main() Acquired frames.shape (30, 128, 128)
 
-    print_model_arquitecture_and_name = True # False # True
-    modelfolder = '../python_fourchdetection/models'
-    modelfilename_ = 'basicVGG2D_04layers_model_trained_with_05subjects_and_BATCH_SIZE_OF_CLIPS_10.pth'
-    worker.initialize(input_size= desired_size_, model_path= modelfolder, modelname = modelfilename_, verb=print_model_arquitecture_and_name)
+    print_model_arquitecture_and_name = True  # False # True
+    modelfolder = '../../../../data/models'
+    # modelfilename_ = 'metric_model_SqueezeNet_source0_for_31-subjects_with_NUMBER_OF_FRAMES_01BATCH_SIZE_OF_CLIPS01EPOCHS_500_train00.pth'
+    modelfilename_ = 'metric_model_SqueezeNet_source0_for_31-subjects_with_NUMBER_OF_FRAMES_30BATCH_SIZE_OF_CLIPS01EPOCHS_500_train00.pth'
+    worker.initialize(input_size=desired_size_,
+                      model_path=modelfolder,
+                      modelname=modelfilename_,
+                      verb=print_model_arquitecture_and_name)
 
     print(f'========================')
     print(f'Run the model inference')
-    startt = time.time_ns() #Use time_ns() to avoid the precision loss caused by the float type.
-    #predictions, aw, attentions = worker.dowork(frames) #predictions?, aw?, attentions?
+    startt = time.time_ns()  # Use time_ns() to avoid the precision loss caused by the float type.
+    # predictions, aw, attentions = worker.dowork(frames) #predictions?, aw?, attentions?
     predictions = worker.dowork(frames)
     print(f' Predictions {predictions}')
     endt = time.time_ns()
-    print(f'inference elapsed time: {(endt - startt)/1000000}ms')
+    print(f'inference elapsed time: {(endt - startt) / 1000000}ms')
     print(f'========================')
-
 
     #
     # ##\/ TOREVIEW
@@ -169,6 +190,6 @@ def main():
     # # #pred_area = np.sum(pred_segmentation_t)
     # ##/\ TOREVIEW
 
+
 if __name__ == '__main__':
     main()
-
