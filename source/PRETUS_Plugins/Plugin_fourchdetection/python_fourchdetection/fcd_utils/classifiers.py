@@ -20,27 +20,17 @@ class SimpleVideoClassifier(nn.Module):
         self.n_classes = n_classes
         self.n_frames_per_clip = n_frames_per_clip
         self.n_features = np.prod(self.input_size) * self.n_frames_per_clip
+        # n_temporal_features = n_spatial_features_out * n_frames
 
         # extract features from each frame
         self.classifier = nn.Sequential(
             nn.Flatten(),
             nn.Linear(in_features=self.n_features, out_features=256),
+            # nn.Linear(in_features=n_temporal_features, out_features=32),
             nn.ReLU(),
             nn.Linear(in_features=256, out_features=n_classes),
             # nn.Sigmoid(),
         )
-
-        ##\/ TOREVIEW
-        # n_temporal_features = n_spatial_features_out * n_frames
-        #
-        # self.classifier = nn.Sequential(
-        #     nn.Flatten(),
-        #     nn.Linear(in_features=n_temporal_features, out_features=32),
-        #     nn.ReLU(),
-        #     nn.Linear(in_features=32, out_features=self.n_output_classes),
-        #     #nn.Sigmoid(),
-        # )
-        ##/\ TOREVIEW
 
     def get_name(self):
         return self.name
@@ -48,8 +38,6 @@ class SimpleVideoClassifier(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # print(f'x.shape(): {x.size()}') ##[batch_size, channels, depth, height, width]
         # x = x.permute(0,2,1,3,4)##[batch_size, depth,channels, height, width]
-        # print(f'x.shape(): {x.size()}')
-
         x = self.classifier(x)
 
         return x

@@ -15,6 +15,7 @@ channels:
   - jmcmurray #https://anaconda.org/jmcmurray/json
   - anaconda # seaborn; pandas; scikit-learn; jupyter; h5py
   - conda-forge # torchinfo; ipywidgets
+  - simpleitk
 dependencies:
   - python=3.8.*
   - pytorch=1.9.* #1.9.* with cudatoolkit=11.1#OK
@@ -35,7 +36,8 @@ dependencies:
   - pandas=1.*
   - torchinfo
   - ipywidgets
-  - h5py=3.* ##current version 3.6.0  ##1.10.4 pretus-compatibility   
+  - h5py=3.* ##current version 3.6.0  ##1.10.4 pretus-compatibility
+  - simpleitk
   ##ERROR- scikit-learn=* #https://anaconda.org/anaconda/scikit-learn SOLUTION within the VE: conda install -n rt-ai-echo-VE scikit-learn
   - pip:
      - pydicom

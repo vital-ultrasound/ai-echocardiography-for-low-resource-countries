@@ -7,6 +7,7 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import SimpleITK as sitk
 
 
 def plot_image_numpy_array(numpy_image, frame_index_i=None) -> None:
@@ -157,6 +158,60 @@ def cropped_frame(image_frame_array_3ch: np.ndarray, crop_bounds: List) -> np.nd
     return cropped_image_frame_
 
 
+def cropped_video_frame(image_frame_array_3ch: np.ndarray, crop_bounds: List) -> np.ndarray:
+    """
+    Hard crop of US image with bounds: (start_x, start_y, width, height)
+    """
+    cropped_video_frame_ = image_frame_array_3ch[
+                           :,
+                           int(crop_bounds[1]):int(crop_bounds[1] + crop_bounds[3]),
+                           int(crop_bounds[0]):int(crop_bounds[0] + crop_bounds[2])]
+
+    return cropped_video_frame_
+
+
+def resize(frames, size=(64, 64)):
+    frames_out = []
+    for i in range(frames.shape[0]):
+        frames_out.append(cv.resize(frames[i, :, :], size, interpolation=cv.INTER_AREA))
+        # frames_out.append(
+        #    skimage.transform.resize(frames[i, :, :], output_shape=size, anti_aliasing=False, preserve_range=True))
+    frames_out = np.array(frames_out)
+
+    return frames_out
+
+
+def normalize(frames, correct_studio_swing=False):
+    frames = frames.astype(np.float)
+    if correct_studio_swing:
+        frames[frames < 3] = 3
+
+    for i in range(frames.shape[0]):
+        # Min Max normalization
+        _min = np.amin(frames[i, :, :])
+        frames[i, :, :] = frames[i, :, :] - _min
+        _max = np.amax(frames[i, :, :]) + 1e-6
+        frames[i, :, :] = frames[i, :, :] / _max
+
+    return frames
+
+
+def resample(image, desired_size):
+    size = desired_size
+    origin = image.GetOrigin()
+    spacing = [(s2 - 1) * sp2 / (s1 - 1) for s1, s2, sp2 in zip(desired_size, image.GetSize(), image.GetSpacing())]
+
+    ref = sitk.Image(size, sitk.sitkInt8)
+    ref.SetOrigin(origin)
+    ref.SetSpacing(spacing)
+
+    identity_transform = sitk.AffineTransform(image.GetDimension())
+    identity_transform.SetIdentity()
+    image = sitk.Resample(image, ref, identity_transform, sitk.sitkLinear, 0)
+
+    return image
+
+
 def masks_us_image(image_frame_array_1ch: np.ndarray) -> np.ndarray:
     """
     Hard mask pixels outside of scanning sector
@@ -251,11 +306,11 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     video_filenames_train = video_filenames[:int(N * ntraining)]
     label_filenames_train = label_filenames[:int(N * ntraining)]
 
-    video_filenames_test = video_filenames[int(N * ntraining):int(N * (ntraining+ntest))]
-    label_filenames_test = label_filenames[int(N * ntraining):int(N * (ntraining+ntest))]
+    video_filenames_test = video_filenames[int(N * ntraining):int(N * (ntraining + ntest))]
+    label_filenames_test = label_filenames[int(N * ntraining):int(N * (ntraining + ntest))]
 
-    video_filenames_validation = video_filenames[int(N * (ntraining+ntest)):]
-    label_filenames_validation = label_filenames[int(N * (ntraining+ntest)):]
+    video_filenames_validation = video_filenames[int(N * (ntraining + ntest)):]
+    label_filenames_validation = label_filenames[int(N * (ntraining + ntest)):]
 
     ## Display filenames
     print(f'---------------------------------------------')
@@ -284,5 +339,3 @@ def split_train_validate_sets(echodataset_path: str, data_list_output_path: str,
     write_list_to_txtfile(label_filenames_validation, 'annotation_list_validate.txt', data_list_output_path)
 
     print(f'Files were successfully written at {data_list_output_path}')
-
-
