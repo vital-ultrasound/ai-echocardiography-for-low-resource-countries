@@ -9,11 +9,11 @@ import FourChDetection_worker as worker
 from source.helpers.various import cropped_video_frame, resize, normalize, resample
 
 
-def read_data_from_video(video_file_id: int, start_frame: int, clip_duration: int, crop_bounds: List, desired_size: int):
+def read_data_from_video(video_file_id: str, start_frame: int, clip_duration: int, crop_bounds: List, desired_size: int):
     cap = cv.VideoCapture(video_file_id)
     frames_np = []
     cap.set(cv.CAP_PROP_POS_FRAMES, start_frame)
-    #print(f'duration {clip_duration}')
+    # print(f'duration {clip_duration}')
     for i in range(clip_duration):
         #print(f'Getting frame: {i}')
         success, frame = cap.read()
@@ -69,7 +69,8 @@ def read_data_from_video(video_file_id: int, start_frame: int, clip_duration: in
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--InputVideoID', required=False, help='Specify USB ID', type=int, default=2)
+    parser.add_argument('--InputVideoID', required=False, help='Specify USB ID', type=str)
+    parser.add_argument('--modelfilename', required=False, help='Specify USB ID', type=str)
     args = parser.parse_args()
 
     start_frame_ = 5  # ?
@@ -87,13 +88,11 @@ def main():
 
     num_classes = 2
     modelpath_ = '../../../../data/models'
-    # modelfilename_ = 'metric_model_SqueezeNet_source0_for_31-subjects_with_NUMBER_OF_FRAMES_01BATCH_SIZE_OF_CLIPS01EPOCHS_500_train00.pth'
-    modelfilename_ = 'metric_model_SqueezeNet_source0_for_31-subjects_with_NUMBER_OF_FRAMES_30BATCH_SIZE_OF_CLIPS01EPOCHS_500_train00.pth'
     print_model_arquitecture_and_name = False
 
     worker.initialize(
                         model_path=modelpath_,
-                        modelname=modelfilename_,
+                        modelname=args.modelfilename,
                         verb=print_model_arquitecture_and_name,
                         input_size=desired_size_,
                         clip_duration=NUMBER_OF_FRAMES_PER_SEGMENT_IN_A_CLIP,
