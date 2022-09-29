@@ -1,18 +1,15 @@
-# Plug-in based, Real-time Ultrasound (PRETUS) Plugins
-These [PRETUS](https://github.com/gomezalberto/pretus) plug-ins for the echocardiography ultrasound. 
-
-## Content
-* [Plugin_fourchdetection](Plugin_fourchdetection) which contains the four chamber detection plug-in that differentiates between 4 chamber and background classes in real-time.
-
-## Installation and dependencies
-See https://github.com/gomezalberto/pretus
+# Plug-in based, Real-time Ultrasound (PRETUS) Plugins for 4 chamber view
+[PRETUS](https://github.com/gomezalberto/pretus) [Plugin_fourchdetection](Plugin_fourchdetection) contains the four chamber detection plug-in that differentiates between 4 chamber and background classes in real-time.
 
 ## Building plug-in
+* Install PRETUS and its dependencies
+See https://github.com/gomezalberto/pretus 
 
 * Open terminal with conda environment
 ``` 
 conda activate pretus
 ```
+
 * Creating building paths
 ``` 
 mkdir -p $HOME/build/pretus/4cv/ && cd $HOME/build/pretus/4cv/ 
@@ -29,13 +26,11 @@ MAKE_INSTALL_PREFIX ~/local/pretus-vital-echo
 
 ```
 
-
 * build pretus and plugins
 ``` 
 * ~/build/pretus/release$ make
 * ~/build/pretus/4cv$ make; make install
 ```
-
 
 * Edit `~/.config/iFIND/PRETUS.conf`
 ```
@@ -48,6 +43,7 @@ plugin_folder="/home/mx19/build/pretus/release/lib;/home/mx19/local/pretus-vital
 cd $HOME/repositories/echocardiography/source/PRETUS_Plugins
 cmake-gui .
 ```
+
 * Creating building paths
 ``` 
 Source code: $HOME/repositories/echocardiography/source/PRETUS_Plugins
@@ -84,8 +80,7 @@ cd $HOME/build/pretus/4cv
 conda activate pretus
 make
 make install 
-```  
-
+```
 
 ## References
 ```

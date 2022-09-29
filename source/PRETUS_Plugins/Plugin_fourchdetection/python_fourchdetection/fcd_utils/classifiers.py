@@ -40,19 +40,17 @@ class SimpleVideoClassifier(nn.Module):
         # x = x.permute(0,2,1,3,4)##[batch_size, depth,channels, height, width]
         x = self.classifier(x)
 
-        return x
+        ##\/ TOREVIEW
+        #     n_frames = data.shape[2]
+        #     features = []
+        #     for f in range(n_frames):
+        #         feat_i = self.frame_features(data[:, :, f, ...])
+        #         features.append(feat_i)
+        #
+        #     feature_vector = torch.stack(features, dim=1)
+        #
+        #     x = self.classifier(feature_vector)
+        #     return x
+        ##/\ TOREVIEW
 
-    ##\/ TOREVIEW
-    # def forward(self, data):
-    #
-    #     n_frames = data.shape[2]
-    #     features = []
-    #     for f in range(n_frames):
-    #         feat_i = self.frame_features(data[:, :, f, ...])
-    #         features.append(feat_i)
-    #
-    #     feature_vector = torch.stack(features, dim=1)
-    #
-    #     out = self.classifier(feature_vector)
-    #     return out
-    ##/\ TOREVIEW
+        return x

@@ -67,9 +67,9 @@ sh launcher_pretus.sh -pipeline "pnpframegrabber>fourchamberdetection>gui" --pnp
 
 * Using video loop  
 ```
-sh launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/datasets/echocardiography-vital/videos-echo-annotated-06-subjects/01NVb-003-042/T1/01NVb-003-042-1\ echo.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
+sh launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/datasets/echocardiography-vital/videos-echo-annotated-06-subjects/01NVb-003-042/T1/01NVb-003-042-1-echo.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
 ```
 
 ## Animated GUI
-Pretus Plugging:
-![fig](../../../docs/figures/pretus_plugins/fourchdetection/pretus-echo.gif)
+Pretus Plugging     
+![fig](../../../docs/figures/pretus_plugins/fourchdetection/pretus-echo.gif)  

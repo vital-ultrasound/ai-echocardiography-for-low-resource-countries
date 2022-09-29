@@ -66,5 +66,5 @@ This work follows the [all-contributors](https://github.com/all-contributors/all
 Contributions of any kind welcome!
 
 ## Contact and issue report
-If you have specific questions about the content of this repository, you can contact [Miguel Xochicale](mailto:miguel.xochicale@kcl.ac.uk?subject="[ai-echochardiography]"). 
+If you have specific questions about the content of this repository, you can contact [Miguel Xochicale](https://github.com/mxochicale). 
 If your question might be relevant to other people, please instead [open an issue](https://github.com/vital-ultrasound/echocardiography/issues).  
