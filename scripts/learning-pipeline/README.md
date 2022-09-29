@@ -53,8 +53,8 @@ See [README](../config_files/users_paths_files)
 
 * Open a terminal, load your conda environment and run the script.
 ```
-cd $HOME/repositories/echocardiography/scripts/learning-pipeline
-export PYTHONPATH=$HOME/repositories/echocardiography/ #set PYTHONPATH environment variable
+cd $HOME/repositories/vital-ultrasound/ai-assisted-echocardiography-for-low-resource-countries/scripts/learning-pipeline
+export PYTHONPATH=$HOME/repositories/vital-ultrasound/ai-assisted-echocardiography-for-low-resource-countries/ #set PYTHONPATH environment variable
 conda activate rt-ai-echo-VE 
 jupyter notebook # to open *.ipynb in your web-browser
 ```
