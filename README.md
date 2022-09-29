@@ -1,12 +1,11 @@
-<h1 align="center"> Real-time AI-empowered echocardiography </h1>
+<h1 align="center"> Real-time AI-assisted echocardiography </h1>
 <div align="center">
  
 </div>
 
 ## Summary 
-This repository contains documentation and code for an experimental clinical system to perform real-time artificial-intelligence-empowered echocardiography.
-The machine learning pipeline are based on the total product lifecycle (TPLC) approach on AI/ML workflow from Good Machine Learning Practices by the U.S. Food and Drug Administration , Health Canada, and the UK's Medicines and Healthcare products Regulatory Agency (MHRA).
-See more [here](scripts/learning-pipeline).
+This repository contains documentation and code for an experimental clinical system to perform real-time artificial-intelligence-assisted echocardiography for low resource countries.
+This work is based on the total product lifecycle (TPLC) approach on AI/ML workflow from [Good Machine Learning Practices](scripts/learning-pipeline) established by the U.S. Food and Drug Administration, Health Canada, and the UK's Medicines and Healthcare products Regulatory Agency (MHRA).
 
 ## Data collection, validation and management 
 1. Video data from GE Venue Go GE and Probe 3SC-RS was collected  with Portable Video Recorder. See [more](data).
@@ -23,7 +22,7 @@ _**Fig 1.** Workflow for data annotation and validation._
 ![fig](docs/figures/DL-pipeline.png)     
 _**Fig 2.** Deep learning pipeline of the AI-empowered echocardiography._
 
-## Clinical system  
+## AI-based research system
 Figure 3 illustrates the real-time AI-empowered clinical system based on [EPIQ 7 ultrasound](https://www.usa.philips.com/healthcare/product/HC795200C/epiq-7-ultrasound-system-for-cardiology), [X5-1 xMATRIX array transducer ](https://www.philips.co.uk/healthcare/product/HC989605400801/x5-1) and [USB framegrabber MiraBox Video Capture](https://miraboxbuy.com/collections/new-arrivals/products/hsv3211-video-capture-card).
 The software of the system is based on [Machine learning pipeline](scripts/learning-pipeline) and [Plug-in based, Real-time Ultrasound](source/PRETUS_Plugins). 
 See further details [here](docs) on laptop hardware, OS and software of the system.
@@ -66,5 +65,5 @@ This work follows the [all-contributors](https://github.com/all-contributors/all
 Contributions of any kind welcome!
 
 ## Contact and issue report
-If you have specific questions about the content of this repository, you can contact [Miguel Xochicale](mailto:miguel.xochicale@kcl.ac.uk?subject="[ai-echochardiography]"). 
+If you have specific questions about the content of this repository, you can contact [Miguel Xochicale](https://github.com/mxochicale). 
 If your question might be relevant to other people, please instead [open an issue](https://github.com/vital-ultrasound/echocardiography/issues).  

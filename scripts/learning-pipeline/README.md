@@ -14,7 +14,7 @@ It is suggested that files follow this organisation and localisation.
   <summary>Click to expand and see files organisation and location! </summary>
   
 ```
-$ cd /media/mx19/vitaluskcl/datasets/echocardiography/videos-echo-annotated-ALL
+$ cd ~/vitaluskcl/datasets/echocardiography/videos-echo-annotated-ALL # Alternatively: ~/datasets/echocardiography-vital/videos-echo-annotated-06-subjects
 $ tree -s
 .
 ├── [       4096]  01NVb-003-050

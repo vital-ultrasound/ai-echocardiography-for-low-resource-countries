@@ -42,13 +42,19 @@ sh launcher_pretus.sh -h
 
 
 ## Launching plug-ins
-* Using `pnpframegrabber` with and without `pythonalgorithm`, `cppalgorithm`
+* `videomanager` with and without `pythonalgorithm`, `cppalgorithm`
+``` 
+sh launcher_pretus.sh -pipeline "videomanager>gui" --videomanager_input ~/datasets/echocardiography-vital/videos-echo-annotated-06-subjects/01NVb-003-042/T1/01NVb-003-042-1-echo.mp4 --videomanager_loop 1
+sh launcher_pretus.sh -pipeline "videomanager>pythonalgorithm>cppalgorithm>gui" --videomanager_input ~/datasets/echocardiography-vital/videos-echo-annotated-06-subjects/01NVb-003-042/T1/01NVb-003-042-1-echo.mp4 --videomanager_loop 1
+```
+
+*`pnpframegrabber` with and without `pythonalgorithm`, `cppalgorithm`
 ```
 sh launcher_pretus.sh -pipeline "pnpframegrabber>gui" --pnpframegrabber_camid 2
 sh launcher_pretus.sh -pipeline "pnpframegrabber>pythonalgorithm>cppalgorithm>gui" --pnpframegrabber_camid 2
 ```
 
-* Recording data
+* Recording data with `imagefilewriter`
 ```
 sh launcher_pretus.sh -pipeline "pnpframegrabber>imagefilewriter>gui" --pnpframegrabber_camid 2 --imagefilewriter_folder $HOME/datasets/pretus/echocardiography/ --imagefilewriter_framerate 30 --imagefilewriter_maxfiles 600 --imagefilewriter_verbose 0
 ```
@@ -61,9 +67,9 @@ sh launcher_pretus.sh -pipeline "pnpframegrabber>fourchamberdetection>gui" --pnp
 
 * Using video loop  
 ```
-sh launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/data/VITAL/echo/01NVb-003-004-1lus.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
+sh launcher_pretus.sh -pipeline "videomanager>fourchamberdetection>gui" --videomanager_input ~/datasets/echocardiography-vital/videos-echo-annotated-06-subjects/01NVb-003-042/T1/01NVb-003-042-1-echo.mp4 --videomanager_loop 1 --fourchamberdetection_nframes 5
 ```
 
 ## Animated GUI
-Plugging launchs a GUI as shown below:
-![fig](../../../docs/figures/pretus_plugins/fourchdetection/pretus-echo.gif)
+Pretus Plugging     
+![fig](../../../docs/figures/pretus_plugins/fourchdetection/pretus-echo.gif)  
