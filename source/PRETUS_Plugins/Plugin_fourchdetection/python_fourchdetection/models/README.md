@@ -1,7 +1,7 @@
 # Model information
 
 ## Models
-Models are temporarily saved in [data/models](../../../../../data/models)
+Trained models with different [architectures.py](../../../../models/architectures.py) are temporarily saved in [data/models](../../../../../data/models)
 Terminal log:
 ``` 
 mx19@sie133-lap:~/repositories/echocardiography/data/models$ tree -s

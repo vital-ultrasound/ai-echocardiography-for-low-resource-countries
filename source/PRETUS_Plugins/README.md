@@ -2,7 +2,7 @@
 [PRETUS](https://github.com/gomezalberto/pretus) [Plugin_fourchdetection](Plugin_fourchdetection) contains the four chamber detection plug-in that differentiates between 4 chamber and background classes in real-time.
 
 ## Building plug-in
-* Install PRETUS and its dependencies
+* Install PRETUS covering all dependencies and same packages versions:    
 See https://github.com/gomezalberto/pretus 
 
 * Open terminal with conda environment
