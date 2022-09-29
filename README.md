@@ -1,10 +1,10 @@
-<h1 align="center"> Real-time AI-assisted echocardiography </h1>
+<h1 align="center"> AI-assisted echocardiography for low-resource countries  </h1>
 <div align="center">
  
 </div>
 
 ## Summary 
-This repository contains documentation and code for an experimental clinical system to perform real-time artificial-intelligence-assisted echocardiography for low resource countries.
+This repository contains documentation and code for AI-assisted echocardiography for low-resource countries.
 This work is based on the total product lifecycle (TPLC) approach on AI/ML workflow from [Good Machine Learning Practices](scripts/learning-pipeline) established by the U.S. Food and Drug Administration, Health Canada, and the UK's Medicines and Healthcare products Regulatory Agency (MHRA).
 
 ## Data collection, validation and management 
@@ -34,8 +34,8 @@ _**Fig 3.** Real-time AI-empowered clinical system._
 ## Clone repository
 After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), you can then clone the repository by typing (or copying) the following lines in a terminal:
 ```
-mkdir -p $HOME/repositories/ && cd $HOME/repositories/ ## suggested path
-git clone git@github.com:vital-ultrasound/echocardiography.git
+mkdir -p $HOME/repositories/vital-ultrasound  && cd $HOME/repositories/vital-ultrasound  ## suggested path
+git clone git@github.com:vital-ultrasound/ai-assisted-echocardiography-for-low-resource-countries.git
 ```
 
 ## Contributors
@@ -49,7 +49,6 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
     <td align="center"><a href="https://github.com/mxochicale"><img src="https://avatars1.githubusercontent.com/u/11370681?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Miguel Xochicale</b></sub>           </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=fepegar" title="Code">💻</a> <a href="https://github.com/fepegar/torchio/commits?author=mxochicale" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/hamidehkerdegari"><img src="https://avatars1.githubusercontent.com/u/30697849?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hamideh Kerdegari </b></sub>   </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=hamidehkerdegari" title="Code">💻</a> </td>
     <td align="center"><a href="https://github.com/huynhatd13"><img src="https://avatars1.githubusercontent.com/u/33121364?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nhat Phung Tran Huy</b></sub>        </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=huynhatd13" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/"><img src="https://avatars1.githubusercontent.com/u/23114020?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Linda Denehy</b></sub>        </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=" title="Research">  🔬 🤔  </a></td>
     <td align="center"><a href="https://github.com/"><img src="https://avatars1.githubusercontent.com/u/23114020?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Louise Thwaites</b></sub>        </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=" title="Research">  🔬 🤔  </a></td>
     <td align="center"><a href="https://github.com/"><img src="https://avatars1.githubusercontent.com/u/23114020?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sophie Yacoub</b></sub>        </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=" title="Research">  🔬 🤔  </a></td>
     <td align="center"><a href="https://github.com/atoandy"><img src="https://avatars1.githubusercontent.com/u/38954988?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andrew King</b></sub>        </a><br /><a href="https://github.com/vital-ultrasound/nnUNet-for-PRETUS/commits?author=atoandy" title="Research">  🔬🤔  </a></td>
@@ -66,4 +65,4 @@ Contributions of any kind welcome!
 
 ## Contact and issue report
 If you have specific questions about the content of this repository, you can contact [Miguel Xochicale](https://github.com/mxochicale). 
-If your question might be relevant to other people, please instead [open an issue](https://github.com/vital-ultrasound/echocardiography/issues).  
+If your question might be relevant to other people, please instead [open an issue](https://github.com/vital-ultrasound/ai-assisted-echocardiography-for-low-resource-countries/issues).  
