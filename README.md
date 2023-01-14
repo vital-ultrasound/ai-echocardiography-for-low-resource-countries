@@ -8,7 +8,7 @@ This repository contains documentation and code for AI-assisted echocardiography
 This work is based on the total product lifecycle (TPLC) approach on AI/ML workflow from [Good Machine Learning Practices](scripts/learning-pipeline) established by the U.S. Food and Drug Administration, Health Canada, and the UK's Medicines and Healthcare products Regulatory Agency (MHRA).
 
 ## Data collection, validation and management 
-1. Video data from GE Venue Go GE and Probe 3SC-RS was collected  with Portable Video Recorder. See [more](data).
+1. Video data from GE Venue Go GE and Probe 3SC-RS was collected  with Portable Video Recorder. See [more](data/rawdata).
 2. Creation and verification of annotations with VGG Image Annotator (VIA) software. See [more](data/labelling).
 3. Jupyter notebook :notebook: for [data curation, selection and validation](scripts/curation-selection-validation); 
 ![fig](docs/figures/data-workflow.png)     
