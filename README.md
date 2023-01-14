@@ -1,4 +1,5 @@
-<h1 align="center"> AI-assisted echocardiography for low-resource countries  </h1>
+<h1 align="center"> AI-assisted echocardiography </h1>
+<h1 align="center"> for low-resource countries  </h1>
 <div align="center">
  
 </div>
@@ -31,11 +32,42 @@ See further details [here](docs) on laptop hardware, OS and software of the syst
 _**Fig 3.** Real-time AI-empowered clinical system._  
 
 
+## Licence and Citation 
+This work is under Creative Commons Attribution-Share Alike license [![License: CC BY-SA 4.0](https://licensebuttons.net/l/by-sa/4.0/80x15.png)](https://creativecommons.org/licenses/by-sa/4.0/). 
+Hence, you are free to reuse it and modify it as much as you want and as long as you cite [this work](https://github.com/budai4medtech/miua2022) as original reference and you re-share your work under the same terms.
+
 ## Clone repository
 After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), you can then clone the repository by typing (or copying) the following lines in a terminal:
 ```
 mkdir -p $HOME/repositories/vital-ultrasound  && cd $HOME/repositories/vital-ultrasound
 git clone git@github.com:vital-ultrasound/ai-echocardiography-for-low-resource-countries.git
+```
+
+### BibTeX to cite
+```
+@misc{https://doi.org/10.48550/arxiv.2212.14510,
+  author = {Xochicale, Miguel and 
+	    Thwaites, Louise and 
+            Yacoub, Sophie and 
+            Pisani, Luigi and 
+            Phung, Tran Huy Nhat and 
+            Kerdegari, Hamideh and 
+            King, Andrew and 
+            Gomez, Alberto}, 
+  title = {A Machine Learning Case Study for AI-empowered echocardiography of 
+           Intensive Care Unit Patients in low- and middle-income countries},
+  doi = {10.48550/ARXIV.2212.14510},
+  url = {https://arxiv.org/abs/2212.14510},
+  keywords = {Medical Physics (physics.med-ph), 
+	      Machine Learning (cs.LG), 
+	      Image and Video Processing (eess.IV), 
+              FOS: Physical sciences, 
+	      FOS: Computer and information sciences, 
+	      FOS: Electrical engineering, electronic engineering, information engineering},
+  publisher = {arXiv},
+  year = {2022},
+  copyright = {Creative Commons Attribution 4.0 International}
+}
 ```
 
 ## Contributors
@@ -46,7 +78,7 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/mxochicale"><img src="https://avatars1.githubusercontent.com/u/11370681?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Miguel Xochicale</b></sub>           </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=fepegar" title="Code">💻</a> <a href="https://github.com/fepegar/torchio/commits?author=mxochicale" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/mxochicale"><img src="https://avatars1.githubusercontent.com/u/11370681?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Miguel Xochicale</b></sub>           </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=mxochicale" title="Code">💻 🔬 🤔 </a> <a href="https://github.com/fepegar/torchio/commits?author=mxochicale" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/hamidehkerdegari"><img src="https://avatars1.githubusercontent.com/u/30697849?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hamideh Kerdegari </b></sub>   </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=hamidehkerdegari" title="Code">💻</a> </td>
     <td align="center"><a href="https://github.com/huynhatd13"><img src="https://avatars1.githubusercontent.com/u/33121364?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nhat Phung Tran Huy</b></sub>        </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=huynhatd13" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/"><img src="https://avatars1.githubusercontent.com/u/23114020?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Louise Thwaites</b></sub>        </a><br /><a href="https://github.com/vital-ultrasound/echocardiography/commits?author=" title="Research">  🔬 🤔  </a></td>
