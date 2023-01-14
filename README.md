@@ -1,8 +1,8 @@
-<h3 align="center">
+<h2 align="center">
 	<p>
 	AI-assisted echocardiography for low-resource countries  
 	</p>
-</h3>
+</h2>
 
 <p align="center">	
 	<a href="https://arxiv.org/abs/2212.14510">
@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-(This work is 100% Reproducible, lead by [@mxochicale](https://github.com/mxochicale))    
+This work is 100% Reproducible, lead by https://github.com/mxochicale 
 </p>
 
 ## Summary 
