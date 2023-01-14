@@ -1,14 +1,23 @@
-<p align="center">
-	<br>
+<h3 align="center">
+	<p>
 	AI-assisted echocardiography for low-resource countries  
-    	<br>
-<p>
+	</p>
+</h3>
 
-<div align="center">
-[![article](https://img.shields.io/badge/article-arXiv-orange.svg)](https://arxiv.org/abs/2212.14510)   
- 
+<p align="center">
+    <a href="https://arxiv.org/abs/2212.14510">
+        <img alt="arXiv" src="https://img.shields.io/badge/article-arXiv-orange.svg">
+    </a>
+    <a href="https://github.com/vital-ultrasound/ai-echocardiography-for-low-resource-countries/releases">
+        <img alt="GitHub release" src="https://img.shields.io/github/release/repo/repo.svg">
+    </a>
+    <a href="https://github.com/vital-ultrasound/ai-echocardiography-for-low-resource-countries/blob/main/CODE_OF_CONDUCT.md">
+        <img alt="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg">
+    </a>
+    <a href="https://zenodo.org/badge/latestdoi/ADDLINK"><img src="https://zenodo.org/badge/155220641.svg" alt="DOI"></a>
+
 (This work is 100% Reproducible, lead by [@mxochicale](https://github.com/mxochicale))    
-</div>
+</p>
 
 ## Summary 
 This repository contains documentation and code for AI-assisted echocardiography for low-resource countries.
