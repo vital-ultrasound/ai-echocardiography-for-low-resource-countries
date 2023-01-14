@@ -34,8 +34,8 @@ _**Fig 3.** Real-time AI-empowered clinical system._
 ## Clone repository
 After generating your SSH keys as suggested [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), you can then clone the repository by typing (or copying) the following lines in a terminal:
 ```
-mkdir -p $HOME/repositories/vital-ultrasound  && cd $HOME/repositories/vital-ultrasound  ## suggested path
-git clone git@github.com:vital-ultrasound/ai-assisted-echocardiography-for-low-resource-countries.git
+mkdir -p $HOME/repositories/vital-ultrasound  && cd $HOME/repositories/vital-ultrasound
+git clone git@github.com:vital-ultrasound/ai-echocardiography-for-low-resource-countries.git
 ```
 
 ## Contributors
