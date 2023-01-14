@@ -1,10 +1,12 @@
-<h1 align="center"> 
-AI-assisted echocardiography 
-for low-resource countries  
-</h1>
-<div align="center">
+<p align="center">
+	<br>
+	AI-assisted echocardiography for low-resource countries  
+    	<br>
+<p>
 
-[![article](https://img.shields.io/badge/article-arXiv-orange.svg)](https://arxiv.org/abs/2212.14510) 
+<div align="center">
+[![article](https://img.shields.io/badge/article-arXiv-orange.svg)](https://arxiv.org/abs/2212.14510)   
+ 
 (This work is 100% Reproducible, lead by [@mxochicale](https://github.com/mxochicale))    
 </div>
 
