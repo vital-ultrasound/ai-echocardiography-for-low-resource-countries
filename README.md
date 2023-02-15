@@ -8,14 +8,14 @@
 	<a href="https://arxiv.org/abs/2212.14510">
         <img alt="arXiv" src="https://img.shields.io/badge/article-arXiv-orange.svg">
 	</a>
-	<a href="https://github.com/vital-ultrasound/ai-echocardiography-for-low-resource-countries/releases">
+	<a href="https://github.com/vital-ultrasound/ai-echocardiography-for-low-resource-countries/releases/tag/1.0.0">
         <img alt="GitHub release" src="https://img.shields.io/github/release/repo/repo.svg">
 	</a>
 	<a href="https://github.com/vital-ultrasound/ai-echocardiography-for-low-resource-countries/blob/main/CODE_OF_CONDUCT.md">
         <img alt="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg">
 	</a>
-	<a href="https://zenodo.org/badge/latestdoi/ADDLINK">
-	<img src="https://zenodo.org/badge/155220641.svg" alt="DOI">
+	<a href="https://doi.org/10.5281/zenodo.7644311">
+	<img src="https://zenodo.org/badge/DOI/10.5281/zenodo.7644311.svg" alt="DOI">
 	</a>
 </p>
 
